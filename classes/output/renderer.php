@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\output;
+namespace format_coursify\output;
 
 use core_courseformat\output\section_renderer;
 use moodle_page;
 
 /**
- * Renderer of the Formatium course format.
+ * Renderer of the Coursify course format.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

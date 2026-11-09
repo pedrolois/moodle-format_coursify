@@ -16,17 +16,17 @@
 /**
  * Filters of the tiles: all, to do, done.
  *
- * @module     format_formatium/filters
+ * @module     format_coursify/filters
  * @copyright  2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 const SELECTORS = {
-    FILTERS: '[data-region="formatium-filters"]',
-    TILES: '[data-region="formatium-tiles"]',
-    TILE: '[data-region="formatium-tile"]',
-    GROUP: '[data-region="formatium-group"]',
-    NOMATCH: '[data-region="formatium-nomatch"]',
+    FILTERS: '[data-region="coursify-filters"]',
+    TILES: '[data-region="coursify-tiles"]',
+    TILE: '[data-region="coursify-tile"]',
+    GROUP: '[data-region="coursify-group"]',
+    NOMATCH: '[data-region="coursify-nomatch"]',
 };
 
 /**

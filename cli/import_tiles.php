@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Switch courses from the Tiles format to Formatium, keeping their tile photos, icons and colour.
+ * Switch courses from the Tiles format to Coursify, keeping their tile photos, icons and colour.
  *
  * Usage:
- *   php course/format/formatium/cli/import_tiles.php --courseid=12
- *   php course/format/formatium/cli/import_tiles.php --all
+ *   php course/format/coursify/cli/import_tiles.php --courseid=12
+ *   php course/format/coursify/cli/import_tiles.php --all
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -38,7 +38,7 @@ require_once($CFG->dirroot . '/course/lib.php');
 );
 
 if ($options['help'] || (!$options['courseid'] && !$options['all'])) {
-    cli_writeln("Switch courses from the Tiles format to Formatium, keeping their tile photos, icons and colour.
+    cli_writeln("Switch courses from the Tiles format to Coursify, keeping their tile photos, icons and colour.
 
 Options:
 -c, --courseid=ID   Course to switch
@@ -53,7 +53,7 @@ if ($options['courseid']) {
 }
 $courses = $DB->get_records('course', $conditions, 'id', 'id');
 if (!$courses) {
-    cli_writeln(get_string('importtiles_none', 'format_formatium'));
+    cli_writeln(get_string('importtiles_none', 'format_coursify'));
     exit(0);
 }
 
@@ -61,9 +61,9 @@ if (!$courses) {
 foreach ($courses as $record) {
     // The options the course had with Tiles, before the switch.
     $old = (array) course_get_format($record->id)->get_course();
-    // The switch imports the look through format_formatium::update_course_format_options().
-    update_course((object) ['id' => $record->id, 'format' => 'formatium']);
-    $counts = \format_formatium\local\tiles_importer::$lastcounts;
+    // The switch imports the look through format_coursify::update_course_format_options().
+    update_course((object) ['id' => $record->id, 'format' => 'coursify']);
+    $counts = \format_coursify\local\tiles_importer::$lastcounts;
     $counts['course'] = format_string($old['fullname']);
-    cli_writeln(get_string('importtiles_done', 'format_formatium', (object) $counts));
+    cli_writeln(get_string('importtiles_done', 'format_coursify', (object) $counts));
 }

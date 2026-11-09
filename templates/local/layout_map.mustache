@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/layout_map
+    @template format_coursify/local/layout_map
 
-    Tiles as stops on a winding trail, like a board game. The trail is drawn by format_formatium/map through the
+    Tiles as stops on a winding trail, like a board game. The trail is drawn by format_coursify/map through the
     stops, so it fits any width; the list of stops keeps the course order for keyboards and screen readers.
 
     Example context (json):
@@ -34,30 +34,30 @@
         ]
     }
 }}
-<div class="formatium-map formatium-map--{{maptheme}}" data-region="formatium-map">
-    <svg class="formatium-map__trail" aria-hidden="true" focusable="false">
-        <path class="formatium-map__base" data-path="all"></path>
-        <path class="formatium-map__done" data-path="done"></path>
-        <path class="formatium-map__line" data-path="all"></path>
+<div class="coursify-map coursify-map--{{maptheme}}" data-region="coursify-map">
+    <svg class="coursify-map__trail" aria-hidden="true" focusable="false">
+        <path class="coursify-map__base" data-path="all"></path>
+        <path class="coursify-map__done" data-path="done"></path>
+        <path class="coursify-map__line" data-path="all"></path>
     </svg>
-    <ol class="formatium-map__list" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+    <ol class="coursify-map__list" aria-label="{{#str}}tiles, format_coursify{{/str}}">
         {{#tiles}}
-        <li class="formatium-map__stop formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#isnext}} formatium-tile--next{{/isnext}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
-            data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
+        <li class="coursify-map__stop coursify-tile--{{color}}{{#locked}} coursify-tile--locked{{/locked}}{{#isnext}} coursify-tile--next{{/isnext}}{{#progress.complete}} coursify-tile--complete{{/progress.complete}}"
+            data-sectionid="{{id}}" data-number="{{num}}" data-region="coursify-tile"
             data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
-            {{#mapgroup}}<span class="formatium-map__group">{{mapgroup}}</span>{{/mapgroup}}
-            {{#url}}<a class="formatium-map__link" href="{{url}}">{{/url}}
-            {{^url}}<div class="formatium-map__link" aria-disabled="true">{{/url}}
-                <span class="formatium-map__node{{#imageurl}} formatium-map__node--image{{/imageurl}}" data-region="formatium-map-node"
+            {{#mapgroup}}<span class="coursify-map__group">{{mapgroup}}</span>{{/mapgroup}}
+            {{#url}}<a class="coursify-map__link" href="{{url}}">{{/url}}
+            {{^url}}<div class="coursify-map__link" aria-disabled="true">{{/url}}
+                <span class="coursify-map__node{{#imageurl}} coursify-map__node--image{{/imageurl}}" data-region="coursify-map-node"
                       {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
                     {{#progress}}{{#total}}
-                    <svg class="formatium-map__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
-                        <circle class="formatium-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
-                        {{#started}}<circle class="formatium-ring__value" cx="18" cy="18" r="16.5" pathLength="100" stroke-dasharray="{{percent}} 100"></circle>{{/started}}
+                    <svg class="coursify-map__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+                        <circle class="coursify-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
+                        {{#started}}<circle class="coursify-ring__value" cx="18" cy="18" r="16.5" pathLength="100" stroke-dasharray="{{percent}} 100"></circle>{{/started}}
                     </svg>
                     {{/total}}{{/progress}}
                     {{^imageurl}}
-                    <span class="formatium-map__icon" aria-hidden="true">
+                    <span class="coursify-map__icon" aria-hidden="true">
                         {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
                         {{^locked}}
                         {{#progress.complete}}<i class="fa fa-solid fa-star"></i>{{/progress.complete}}
@@ -69,23 +69,23 @@
                     </span>
                     {{/imageurl}}
                     {{#imageurl}}
-                    {{#locked}}<span class="formatium-map__badge"><i class="fa fa-solid fa-lock" aria-hidden="true"></i></span>{{/locked}}
-                    {{#progress.complete}}<span class="formatium-map__badge formatium-map__badge--done"><i class="fa fa-solid fa-star" aria-hidden="true"></i></span>{{/progress.complete}}
+                    {{#locked}}<span class="coursify-map__badge"><i class="fa fa-solid fa-lock" aria-hidden="true"></i></span>{{/locked}}
+                    {{#progress.complete}}<span class="coursify-map__badge coursify-map__badge--done"><i class="fa fa-solid fa-star" aria-hidden="true"></i></span>{{/progress.complete}}
                     {{/imageurl}}
                     {{#isnext}}
-                    <span class="formatium-map__avatar" aria-hidden="true">
+                    <span class="coursify-map__avatar" aria-hidden="true">
                         {{#mapavatar}}<img src="{{mapavatar}}" alt="">{{/mapavatar}}
                     </span>
                     {{/isnext}}
                 </span>
-                <span class="formatium-map__label">
-                    <span class="formatium-map__step">
-                        {{#str}}stepof, format_formatium, { "step": "{{steplabel}}", "steps": "{{steps}}" }{{/str}}
+                <span class="coursify-map__label">
+                    <span class="coursify-map__step">
+                        {{#str}}stepof, format_coursify, { "step": "{{steplabel}}", "steps": "{{steps}}" }{{/str}}
                     </span>
-                    <span class="formatium-map__title">{{name}}</span>
-                    <span class="formatium-map__meta">
-                        {{#isnext}}<span class="badge formatium-badge-next">{{#str}}upnext, format_formatium{{/str}}</span>{{/isnext}}
-                        {{#locked}}{{#str}}locked, format_formatium{{/str}}{{/locked}}
+                    <span class="coursify-map__title">{{name}}</span>
+                    <span class="coursify-map__meta">
+                        {{#isnext}}<span class="badge coursify-badge-next">{{#str}}upnext, format_coursify{{/str}}</span>{{/isnext}}
+                        {{#locked}}{{#str}}locked, format_coursify{{/str}}{{/locked}}
                         {{^locked}}{{#progress.label}}{{progress.label}}{{/progress.label}}{{/locked}}
                         {{#daterange}}· {{daterange}}{{/daterange}}
                     </span>
@@ -96,5 +96,5 @@
         </li>
         {{/tiles}}
     </ol>
-    <span class="formatium-map__finish" aria-hidden="true"><i class="fa fa-solid fa-flag-checkered"></i></span>
+    <span class="coursify-map__finish" aria-hidden="true"><i class="fa fa-solid fa-flag-checkered"></i></span>
 </div>

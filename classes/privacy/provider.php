@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\privacy;
+namespace format_coursify\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\writer;
-use format_formatium\local\tiles;
+use format_coursify\local\tiles;
 
 /**
  * Privacy provider: the format keeps, as a user preference, the last section page of each course the user visited.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -53,8 +53,8 @@ class provider implements
                 continue;
             }
             $courseid = (int) substr($name, strlen(tiles::PREF_LASTSECTION));
-            writer::export_user_preference('format_formatium', $name, $value,
-                get_string('privacy:lastsection', 'format_formatium', ['course' => $courseid, 'section' => $value]));
+            writer::export_user_preference('format_coursify', $name, $value,
+                get_string('privacy:lastsection', 'format_coursify', ['course' => $courseid, 'section' => $value]));
         }
     }
 }

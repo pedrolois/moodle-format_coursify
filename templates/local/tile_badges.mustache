@@ -15,20 +15,20 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/tile_badges
+    @template format_coursify/local/tile_badges
 
     Badges of a tile: up next, this week, current, opens on, hidden from students; and its dates.
 
     Example context (json):
     {"isnext": true, "iscurrent": false, "hiddenfromstudents": false, "daterange": "3 March - 9 March", "isthisweek": true}
 }}
-<div class="formatium-tile__badges">
-    {{#isnext}}<span class="badge formatium-badge-next">{{#str}}upnext, format_formatium{{/str}}</span>{{/isnext}}
-    {{#isthisweek}}<span class="badge text-bg-info">{{#str}}thisweek, format_formatium{{/str}}</span>{{/isthisweek}}
-    {{^isthisweek}}{{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_formatium{{/str}}</span>{{/iscurrent}}{{/isthisweek}}
-    {{#opens}}<span class="badge text-bg-light border">{{#str}}opens, format_formatium, {{opens}}{{/str}}</span>{{/opens}}
+<div class="coursify-tile__badges">
+    {{#isnext}}<span class="badge coursify-badge-next">{{#str}}upnext, format_coursify{{/str}}</span>{{/isnext}}
+    {{#isthisweek}}<span class="badge text-bg-info">{{#str}}thisweek, format_coursify{{/str}}</span>{{/isthisweek}}
+    {{^isthisweek}}{{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_coursify{{/str}}</span>{{/iscurrent}}{{/isthisweek}}
+    {{#opens}}<span class="badge text-bg-light border">{{#str}}opens, format_coursify, {{opens}}{{/str}}</span>{{/opens}}
     {{#hiddenfromstudents}}<span class="badge text-bg-secondary">{{#str}}hiddenfromstudents{{/str}}</span>{{/hiddenfromstudents}}
 </div>
 {{#daterange}}
-<span class="formatium-tile__dates"><i class="fa fa-regular fa-calendar" aria-hidden="true"></i> {{daterange}}</span>
+<span class="coursify-tile__dates"><i class="fa fa-regular fa-calendar" aria-hidden="true"></i> {{daterange}}</span>
 {{/daterange}}

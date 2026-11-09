@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\local;
+namespace format_coursify\local;
 
 /**
  * Brings the look of a course that used the Tiles format (format_tiles): tile photos, icons and base colour.
  *
  * Nothing of the original course is changed or removed, so the course can go back to Tiles.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,7 +32,7 @@ class tiles_importer {
     /** Tiles option type of a section icon. */
     const TILES_ICON = 3;
 
-    /** Tiles icons => Formatium icons. */
+    /** Tiles icons => Coursify icons. */
     const ICON_MAP = [
         'address-book-o' => 'users',
         'assessment_graded' => 'clipboard-check',
@@ -152,12 +152,12 @@ class tiles_importer {
                 continue;
             }
             $done[$sectionid] = true;
-            if (!$fs->is_area_empty($context->id, 'format_formatium', tiles::FILEAREA, $sectionid)) {
+            if (!$fs->is_area_empty($context->id, 'format_coursify', tiles::FILEAREA, $sectionid)) {
                 continue;
             }
             $fs->create_file_from_storedfile([
                 'contextid' => $context->id,
-                'component' => 'format_formatium',
+                'component' => 'format_coursify',
                 'filearea' => tiles::FILEAREA,
                 'itemid' => $sectionid,
                 'filepath' => '/',

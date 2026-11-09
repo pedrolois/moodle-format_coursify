@@ -15,14 +15,14 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/group_heading
+    @template format_coursify/local/group_heading
 
     Heading of a group of tiles, with how many of its sections are complete.
 
     Example context (json):
-    {"id": "formatium-group-0", "name": "Unit 1", "done": 1, "count": 3}
+    {"id": "coursify-group-0", "name": "Unit 1", "done": 1, "count": 3}
 }}
-<div class="formatium-group">
-    <h3 class="formatium-group__title" id="{{id}}">{{name}}</h3>
-    <span class="formatium-group__count">{{#str}}groupdone, format_formatium, { "done": {{done}}, "count": {{count}} }{{/str}}</span>
+<div class="coursify-group">
+    <h3 class="coursify-group__title" id="{{id}}">{{name}}</h3>
+    <span class="coursify-group__count">{{#str}}groupdone, format_coursify, { "done": {{done}}, "count": {{count}} }{{/str}}</span>
 </div>

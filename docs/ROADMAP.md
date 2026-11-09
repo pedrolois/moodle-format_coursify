@@ -1,4 +1,4 @@
-# Formatium roadmap
+# Coursify roadmap
 
 This roadmap comes from a study of the six most installed course formats on Moodle 5.3:
 
@@ -13,9 +13,9 @@ This roadmap comes from a study of the six most installed course formats on Mood
 
 **None of them supports the Moodle app.**
 
-## What Formatium takes from each, improved
+## What Coursify takes from each, improved
 
-| Idea | From | Formatium version | Status |
+| Idea | From | Coursify version | Status |
 |---|---|---|---|
 | Tiles with photo, icon and colour | Tiles | Theme colours, palettes, image or icon | Done |
 | Progress per tile and overall | Tiles, Edwiser | Rings and bar. Text changes with progress: Start, x of y, Done | Done |

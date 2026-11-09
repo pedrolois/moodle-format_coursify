@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\form;
+namespace format_coursify\form;
 
-use format_formatium\local\tiles;
+use format_coursify\local\tiles;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -25,7 +25,7 @@ require_once($CFG->dirroot . '/course/editsection_form.php');
 /**
  * Section edit form that also loads and saves the tile image.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,7 +44,7 @@ class editsection_form extends \editsection_form {
             'tileimage',
             tiles::image_options(),
             $context,
-            'format_formatium',
+            'format_coursify',
             tiles::FILEAREA,
             $defaultvalues->id ?? null
         );
@@ -65,7 +65,7 @@ class editsection_form extends \editsection_form {
                 'tileimage',
                 tiles::image_options(),
                 $context,
-                'format_formatium',
+                'format_coursify',
                 tiles::FILEAREA,
                 $data->id
             );

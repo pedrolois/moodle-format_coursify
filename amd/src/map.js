@@ -17,16 +17,16 @@
  * Map layout: places the stops in a winding order (left to right, then right to left) for the width available and
  * draws the trail through them, the part already done in its own colour.
  *
- * @module     format_formatium/map
+ * @module     format_coursify/map
  * @copyright  2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 const SELECTORS = {
-    MAP: '[data-region="formatium-map"]',
-    STOP: '[data-region="formatium-tile"]',
-    NODE: '[data-region="formatium-map-node"]',
-    FINISH: '.formatium-map__finish',
+    MAP: '[data-region="coursify-map"]',
+    STOP: '[data-region="coursify-tile"]',
+    NODE: '[data-region="coursify-map-node"]',
+    FINISH: '.coursify-map__finish',
 };
 
 /**
@@ -53,7 +53,7 @@ const columnsFor = width => {
  * @param {number} columns
  */
 const placeStops = (map, stops, columns) => {
-    map.style.setProperty('--formatium-map-columns', columns);
+    map.style.setProperty('--coursify-map-columns', columns);
     stops.forEach((stop, index) => {
         const row = Math.floor(index / columns);
         const position = index % columns;
@@ -127,7 +127,7 @@ const draw = map => {
     const all = [...points, end];
     const bend = Math.min(70, width / 8);
     // The part done goes up to the stop with the next activity, or to the last stop completed.
-    let doneupto = stops.findIndex(stop => stop.classList.contains('formatium-tile--next'));
+    let doneupto = stops.findIndex(stop => stop.classList.contains('coursify-tile--next'));
     if (doneupto < 0) {
         doneupto = stops.reduce((found, stop, index) => (stop.dataset.status === 'done' ? index : found), -1);
     }

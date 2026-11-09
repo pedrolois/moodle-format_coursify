@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Restore of the Formatium course format: the tile images.
+ * Restore of the Coursify course format: the tile images.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class restore_format_formatium_plugin extends restore_format_plugin {
+class restore_format_coursify_plugin extends restore_format_plugin {
     /**
      * Path of the tile element of each section.
      *
      * @return restore_path_element[]
      */
     protected function define_section_plugin_structure() {
-        return [new restore_path_element('formatium_tile', $this->get_pathfor('/'))];
+        return [new restore_path_element('coursify_tile', $this->get_pathfor('/'))];
     }
 
     /**
@@ -37,13 +37,13 @@ class restore_format_formatium_plugin extends restore_format_plugin {
      * @param array $data
      * @return void
      */
-    public function process_formatium_tile($data) {
+    public function process_coursify_tile($data) {
         $oldsectionid = (int) ($data['sectionid'] ?? 0);
         $newsectionid = (int) $this->task->get_sectionid();
         if (!$oldsectionid || !$newsectionid) {
             return;
         }
-        $this->set_mapping('formatium_tile', $oldsectionid, $newsectionid, true);
-        $this->add_related_files('format_formatium', \format_formatium\local\tiles::FILEAREA, 'formatium_tile');
+        $this->set_mapping('coursify_tile', $oldsectionid, $newsectionid, true);
+        $this->add_related_files('format_coursify', \format_coursify\local\tiles::FILEAREA, 'coursify_tile');
     }
 }

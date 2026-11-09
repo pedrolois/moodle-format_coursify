@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Spanish strings of the Formatium course format.
+ * Spanish strings of the Coursify course format.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -118,8 +118,8 @@ $string['palette_none'] = 'Ninguna (color del tema)';
 $string['palette_ocean'] = 'Océano';
 $string['palette_rainbow'] = 'Arcoíris';
 $string['palette_sunset'] = 'Atardecer';
-$string['plugin_description'] = 'El curso es una rejilla de tiles, una por sección, con imágenes, colores, iconos, progreso y un botón para continuar donde se quedó el estudiante.';
-$string['pluginname'] = 'Formatium';
+$string['plugin_description'] = 'Crea. Organiza. Aprende. Muestra el curso como tiles, una ruta de aprendizaje, una lista o un mapa, con imágenes, colores, progreso, fechas y un botón para continuar donde se quedó el estudiante.';
+$string['pluginname'] = 'Coursify';
 $string['position_bottom'] = 'Abajo';
 $string['position_lower'] = 'Parte inferior';
 $string['position_middle'] = 'Centro';

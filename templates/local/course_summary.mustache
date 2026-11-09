@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/course_summary
+    @template format_coursify/local/course_summary
 
     Progress of the course, the button to continue and the "course complete" message.
 
@@ -26,35 +26,35 @@
     }
 }}
 {{#overallprogress}}
-<div class="formatium-summary__progress">
-    <div class="formatium-summary__label">
-        <span>{{#str}}courseprogress, format_formatium{{/str}}</span>
+<div class="coursify-summary__progress">
+    <div class="coursify-summary__label">
+        <span>{{#str}}courseprogress, format_coursify{{/str}}</span>
         <strong>{{percent}}%</strong>
     </div>
-    <div class="progress formatium-bar" role="progressbar" aria-label="{{#str}}courseprogress, format_formatium{{/str}}"
+    <div class="progress coursify-bar" role="progressbar" aria-label="{{#str}}courseprogress, format_coursify{{/str}}"
          aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-bar" style="width: {{percent}}%"></div>
     </div>
-    <div class="formatium-summary__count small">
-        {{#str}}activitiesdone, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}
+    <div class="coursify-summary__count small">
+        {{#str}}activitiesdone, format_coursify, { "done": {{done}}, "total": {{total}} }{{/str}}
     </div>
 </div>
 {{/overallprogress}}
 {{#continue}}
-<a class="btn btn-primary formatium-continue" href="{{url}}">
-    <span class="formatium-continue__text">
-        <span class="formatium-continue__label">
-            {{#issection}}{{#str}}resume, format_formatium{{/str}}{{/issection}}
-            {{^issection}}{{#str}}continue, format_formatium{{/str}}{{/issection}}
+<a class="btn btn-primary coursify-continue" href="{{url}}">
+    <span class="coursify-continue__text">
+        <span class="coursify-continue__label">
+            {{#issection}}{{#str}}resume, format_coursify{{/str}}{{/issection}}
+            {{^issection}}{{#str}}continue, format_coursify{{/str}}{{/issection}}
         </span>
-        <span class="formatium-continue__name">{{name}}</span>
+        <span class="coursify-continue__name">{{name}}</span>
     </span>
     <i class="fa fa-solid fa-arrow-right" aria-hidden="true"></i>
 </a>
 {{/continue}}
 {{#coursecomplete}}
-<div class="formatium-done">
+<div class="coursify-done">
     <i class="fa fa-solid fa-trophy" aria-hidden="true"></i>
-    <span>{{#str}}coursecomplete, format_formatium{{/str}}</span>
+    <span>{{#str}}coursecomplete, format_coursify{{/str}}</span>
 </div>
 {{/coursecomplete}}

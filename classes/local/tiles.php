@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\local;
+namespace format_coursify\local;
 
 use cm_info;
 use completion_info;
@@ -26,7 +26,7 @@ use section_info;
 /**
  * Data of the tiles of a course: look, progress, locks and the next activity to do.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -90,7 +90,7 @@ class tiles {
     const DATES_WEEKLY = 'weekly';
 
     /** User preference with the last section page the user visited in a course (suffix: course id). */
-    const PREF_LASTSECTION = 'format_formatium_lastsection_';
+    const PREF_LASTSECTION = 'format_coursify_lastsection_';
 
     /** @var course_format */
     protected $format;
@@ -127,7 +127,7 @@ class tiles {
      */
     public static function column_options(): array {
         return [
-            0 => get_string('tilecolumns_auto', 'format_formatium'),
+            0 => get_string('tilecolumns_auto', 'format_coursify'),
             2 => 2,
             3 => 3,
             4 => 4,
@@ -141,10 +141,10 @@ class tiles {
      */
     public static function layout_options(): array {
         return [
-            self::LAYOUT_GRID => get_string('layout_grid', 'format_formatium'),
-            self::LAYOUT_PATH => get_string('layout_path', 'format_formatium'),
-            self::LAYOUT_LIST => get_string('layout_list', 'format_formatium'),
-            self::LAYOUT_MAP => get_string('layout_map', 'format_formatium'),
+            self::LAYOUT_GRID => get_string('layout_grid', 'format_coursify'),
+            self::LAYOUT_PATH => get_string('layout_path', 'format_coursify'),
+            self::LAYOUT_LIST => get_string('layout_list', 'format_coursify'),
+            self::LAYOUT_MAP => get_string('layout_map', 'format_coursify'),
         ];
     }
 
@@ -156,7 +156,7 @@ class tiles {
     public static function maptheme_options(): array {
         $options = [];
         foreach (self::MAP_THEMES as $theme) {
-            $options[$theme] = get_string('maptheme_' . $theme, 'format_formatium');
+            $options[$theme] = get_string('maptheme_' . $theme, 'format_coursify');
         }
         return $options;
     }
@@ -167,9 +167,9 @@ class tiles {
      * @return array
      */
     public static function palette_options(): array {
-        $options = ['' => get_string('palette_none', 'format_formatium')];
+        $options = ['' => get_string('palette_none', 'format_coursify')];
         foreach (array_keys(self::PALETTES) as $palette) {
-            $options[$palette] = get_string('palette_' . $palette, 'format_formatium');
+            $options[$palette] = get_string('palette_' . $palette, 'format_coursify');
         }
         return $options;
     }
@@ -181,8 +181,8 @@ class tiles {
      */
     public static function style_options(): array {
         return [
-            self::STYLE_CARD => get_string('tilestyle_card', 'format_formatium'),
-            self::STYLE_PHOTO => get_string('tilestyle_photo', 'format_formatium'),
+            self::STYLE_CARD => get_string('tilestyle_card', 'format_coursify'),
+            self::STYLE_PHOTO => get_string('tilestyle_photo', 'format_coursify'),
         ];
     }
 
@@ -193,9 +193,9 @@ class tiles {
      */
     public static function numbering_options(): array {
         return [
-            self::NUMBERING_NUMBER => get_string('numbering_number', 'format_formatium'),
-            self::NUMBERING_LETTER => get_string('numbering_letter', 'format_formatium'),
-            self::NUMBERING_ROMAN => get_string('numbering_roman', 'format_formatium'),
+            self::NUMBERING_NUMBER => get_string('numbering_number', 'format_coursify'),
+            self::NUMBERING_LETTER => get_string('numbering_letter', 'format_coursify'),
+            self::NUMBERING_ROMAN => get_string('numbering_roman', 'format_coursify'),
         ];
     }
 
@@ -206,11 +206,11 @@ class tiles {
      */
     public static function position_options(): array {
         return [
-            0 => get_string('position_top', 'format_formatium'),
-            25 => get_string('position_upper', 'format_formatium'),
-            50 => get_string('position_middle', 'format_formatium'),
-            75 => get_string('position_lower', 'format_formatium'),
-            100 => get_string('position_bottom', 'format_formatium'),
+            0 => get_string('position_top', 'format_coursify'),
+            25 => get_string('position_upper', 'format_coursify'),
+            50 => get_string('position_middle', 'format_coursify'),
+            75 => get_string('position_lower', 'format_coursify'),
+            100 => get_string('position_bottom', 'format_coursify'),
         ];
     }
 
@@ -221,8 +221,8 @@ class tiles {
      */
     public static function dates_options(): array {
         return [
-            self::DATES_NONE => get_string('sectiondates_none', 'format_formatium'),
-            self::DATES_WEEKLY => get_string('sectiondates_weekly', 'format_formatium'),
+            self::DATES_NONE => get_string('sectiondates_none', 'format_coursify'),
+            self::DATES_WEEKLY => get_string('sectiondates_weekly', 'format_coursify'),
         ];
     }
 
@@ -232,11 +232,11 @@ class tiles {
      * @return array
      */
     public static function duration_options(): array {
-        $options = [0 => get_string('duration_none', 'format_formatium')];
+        $options = [0 => get_string('duration_none', 'format_coursify')];
         for ($weeks = 1; $weeks <= 6; $weeks++) {
             $options[$weeks] = get_string('numweeks', 'moodle', $weeks);
         }
-        $options[1] = get_string('oneweek', 'format_formatium');
+        $options[1] = get_string('oneweek', 'format_coursify');
         return $options;
     }
 
@@ -276,9 +276,9 @@ class tiles {
      * @return array
      */
     public static function color_options(): array {
-        $options = ['' => get_string('tilecolor_default', 'format_formatium')];
+        $options = ['' => get_string('tilecolor_default', 'format_coursify')];
         foreach (self::COLORS as $color) {
-            $options[$color] = get_string('color_' . $color, 'format_formatium');
+            $options[$color] = get_string('color_' . $color, 'format_coursify');
         }
         return $options;
     }
@@ -289,9 +289,9 @@ class tiles {
      * @return array
      */
     public static function icon_options(): array {
-        $options = ['' => get_string('tileicon_none', 'format_formatium')];
+        $options = ['' => get_string('tileicon_none', 'format_coursify')];
         foreach (self::ICONS as $icon) {
-            $options[$icon] = get_string('icon_' . str_replace('-', '', $icon), 'format_formatium');
+            $options[$icon] = get_string('icon_' . str_replace('-', '', $icon), 'format_coursify');
         }
         return $options;
     }
@@ -370,7 +370,7 @@ class tiles {
             $groups[] = $current;
         }
         foreach ($groups as $i => $group) {
-            $groups[$i]['id'] = 'formatium-group-' . $i;
+            $groups[$i]['id'] = 'coursify-group-' . $i;
             $groups[$i]['hasname'] = $group['name'] !== '';
         }
         return $groups;
@@ -454,7 +454,7 @@ class tiles {
         if ($dates) {
             [$start, $end] = $dates;
             $format = get_string('strftimedateshort', 'langconfig');
-            $tile['daterange'] = get_string('daterange', 'format_formatium',
+            $tile['daterange'] = get_string('daterange', 'format_coursify',
                 ['start' => userdate($start, $format), 'end' => userdate($end, $format)]);
             $now = time();
             $tile['isthisweek'] = $now >= $start && $now <= $end;
@@ -572,11 +572,11 @@ class tiles {
         if (!$total) {
             $label = '';
         } else if ($complete) {
-            $label = get_string('progress_done', 'format_formatium');
+            $label = get_string('progress_done', 'format_coursify');
         } else if (!$done) {
-            $label = get_string('progress_start', 'format_formatium');
+            $label = get_string('progress_start', 'format_coursify');
         } else {
-            $label = get_string('progress_some', 'format_formatium', ['done' => $done, 'total' => $total]);
+            $label = get_string('progress_some', 'format_coursify', ['done' => $done, 'total' => $total]);
         }
         return [
             'total' => $total,
@@ -712,7 +712,7 @@ class tiles {
         if ($this->images === null) {
             $this->images = [];
             $context = \context_course::instance($this->format->get_courseid());
-            $files = get_file_storage()->get_area_files($context->id, 'format_formatium', self::FILEAREA, false,
+            $files = get_file_storage()->get_area_files($context->id, 'format_coursify', self::FILEAREA, false,
                 'itemid, filepath, filename', false);
             foreach ($files as $file) {
                 if (!isset($this->images[$file->get_itemid()]) && $file->is_valid_image()) {
@@ -724,7 +724,7 @@ class tiles {
         if (!$file) {
             return null;
         }
-        return moodle_url::make_pluginfile_url($file->get_contextid(), 'format_formatium', self::FILEAREA,
+        return moodle_url::make_pluginfile_url($file->get_contextid(), 'format_coursify', self::FILEAREA,
             $file->get_itemid(), $file->get_filepath(), $file->get_filename());
     }
 }

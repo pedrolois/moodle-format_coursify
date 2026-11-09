@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/content
+    @template format_coursify/local/content
 
-    Course page of the Formatium format. With tilesmode it shows the general section, the progress of the course,
+    Course page of the Coursify format. With tilesmode it shows the general section, the progress of the course,
     the next activity to do and a tile per section; otherwise it is the standard course content (edit mode and
     section pages), plus links to the previous and next tiles on section pages.
 
@@ -44,36 +44,36 @@
     }
 }}
 {{#tilesmode}}
-<div id="course-format-{{uniqid}}" class="formatium">
+<div id="course-format-{{uniqid}}" class="coursify">
     <h2 class="visually-hidden">{{{title}}}</h2>
     {{#banner}}
-    <section class="formatium-banner{{^hasimage}} formatium-banner--generated{{/hasimage}}"
+    <section class="coursify-banner{{^hasimage}} coursify-banner--generated{{/hasimage}}"
              style="background-image: url('{{imageurl}}'); background-position: center {{position}}%;"
-             aria-label="{{#str}}coursebanner, format_formatium{{/str}}">
-        <div class="formatium-banner__scrim">
-            {{#summary}}<p class="formatium-banner__summary">{{summary}}</p>{{/summary}}
+             aria-label="{{#str}}coursebanner, format_coursify{{/str}}">
+        <div class="coursify-banner__scrim">
+            {{#summary}}<p class="coursify-banner__summary">{{summary}}</p>{{/summary}}
             {{#hascontacts}}
-            <ul class="formatium-banner__contacts" aria-label="{{#str}}coursecontacts, format_formatium{{/str}}">
+            <ul class="coursify-banner__contacts" aria-label="{{#str}}coursecontacts, format_coursify{{/str}}">
                 {{#contacts}}
                 <li>
-                    <a href="{{url}}" class="formatium-banner__contact">
+                    <a href="{{url}}" class="coursify-banner__contact">
                         {{{picture}}}
-                        <span><span class="formatium-banner__contactname">{{name}}</span><span class="formatium-banner__contactrole">{{role}}</span></span>
+                        <span><span class="coursify-banner__contactname">{{name}}</span><span class="coursify-banner__contactrole">{{role}}</span></span>
                     </a>
                 </li>
                 {{/contacts}}
             </ul>
             {{/hascontacts}}
             {{#hassummary}}
-            <div class="formatium-banner__summarybox">
-                {{> format_formatium/local/course_summary }}
+            <div class="coursify-banner__summarybox">
+                {{> format_coursify/local/course_summary }}
             </div>
             {{/hassummary}}
         </div>
     </section>
     {{/banner}}
     {{#initialsection}}
-    <ul class="{{format}} section-list formatium-general" data-for="course_sectionlist">
+    <ul class="{{format}} section-list coursify-general" data-for="course_sectionlist">
         {{$ core_courseformat/local/content/section }}
             {{< core_courseformat/local/content/section }}
                 {{$ core_courseformat/local/content/section/collapsemenu }}{{/ core_courseformat/local/content/section/collapsemenu }}
@@ -84,31 +84,31 @@
 
     {{^banner}}
     {{#hassummary}}
-    <div class="formatium-summary">
-        {{> format_formatium/local/course_summary }}
+    <div class="coursify-summary">
+        {{> format_coursify/local/course_summary }}
     </div>
     {{/hassummary}}
     {{/banner}}
 
     {{#showfilters}}
-    <div class="formatium-filters" role="group" aria-label="{{#str}}filtertiles, format_formatium{{/str}}" data-region="formatium-filters">
-        <button type="button" class="btn btn-sm formatium-filter" data-filter="all" aria-pressed="true">{{#str}}filter_all, format_formatium{{/str}}</button>
-        <button type="button" class="btn btn-sm formatium-filter" data-filter="todo" aria-pressed="false">{{#str}}filter_todo, format_formatium{{/str}}</button>
-        <button type="button" class="btn btn-sm formatium-filter" data-filter="done" aria-pressed="false">{{#str}}filter_done, format_formatium{{/str}}</button>
+    <div class="coursify-filters" role="group" aria-label="{{#str}}filtertiles, format_coursify{{/str}}" data-region="coursify-filters">
+        <button type="button" class="btn btn-sm coursify-filter" data-filter="all" aria-pressed="true">{{#str}}filter_all, format_coursify{{/str}}</button>
+        <button type="button" class="btn btn-sm coursify-filter" data-filter="todo" aria-pressed="false">{{#str}}filter_todo, format_coursify{{/str}}</button>
+        <button type="button" class="btn btn-sm coursify-filter" data-filter="done" aria-pressed="false">{{#str}}filter_done, format_coursify{{/str}}</button>
     </div>
     {{/showfilters}}
 
     {{#hastiles}}
-    <div class="formatium-tiles" data-region="formatium-tiles">
-    {{#isgrid}}{{> format_formatium/local/layout_grid }}{{/isgrid}}
-    {{#ispath}}{{> format_formatium/local/layout_path }}{{/ispath}}
-    {{#islist}}{{> format_formatium/local/layout_list }}{{/islist}}
-    {{#ismap}}{{> format_formatium/local/layout_map }}{{/ismap}}
-    <p class="formatium-empty text-muted" data-region="formatium-nomatch" hidden>{{#str}}nomatch, format_formatium{{/str}}</p>
+    <div class="coursify-tiles" data-region="coursify-tiles">
+    {{#isgrid}}{{> format_coursify/local/layout_grid }}{{/isgrid}}
+    {{#ispath}}{{> format_coursify/local/layout_path }}{{/ispath}}
+    {{#islist}}{{> format_coursify/local/layout_list }}{{/islist}}
+    {{#ismap}}{{> format_coursify/local/layout_map }}{{/ismap}}
+    <p class="coursify-empty text-muted" data-region="coursify-nomatch" hidden>{{#str}}nomatch, format_coursify{{/str}}</p>
     </div>
     {{/hastiles}}
     {{^hastiles}}
-    <p class="formatium-empty text-muted">{{#str}}notiles, format_formatium{{/str}}</p>
+    <p class="coursify-empty text-muted">{{#str}}notiles, format_coursify{{/str}}</p>
     {{/hastiles}}
 </div>
 {{#js}}
@@ -118,51 +118,51 @@ require(['core_courseformat/local/content'], function(component) {
 {{/js}}
 {{/tilesmode}}
 {{^tilesmode}}
-{{#formatiumstrip}}
-<nav class="formatium-strip" aria-label="{{#str}}sectionnavigation, format_formatium{{/str}}">
-    <a class="formatium-strip__all" href="{{courseurl}}" title="{{#str}}alltiles, format_formatium{{/str}}">
+{{#coursifystrip}}
+<nav class="coursify-strip" aria-label="{{#str}}sectionnavigation, format_coursify{{/str}}">
+    <a class="coursify-strip__all" href="{{courseurl}}" title="{{#str}}alltiles, format_coursify{{/str}}">
         <i class="fa fa-solid fa-table-cells-large" aria-hidden="true"></i>
-        <span class="visually-hidden">{{#str}}alltiles, format_formatium{{/str}}</span>
+        <span class="visually-hidden">{{#str}}alltiles, format_coursify{{/str}}</span>
     </a>
-    <ol class="formatium-strip__list">
+    <ol class="coursify-strip__list">
         {{#tiles}}
-        <li class="formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}">
-            {{#url}}<a class="formatium-strip__item" href="{{url}}"{{#iscurrentpage}} aria-current="page"{{/iscurrentpage}} title="{{name}}">{{/url}}
-            {{^url}}<span class="formatium-strip__item" aria-disabled="true" title="{{name}} ({{#str}}locked, format_formatium{{/str}})">{{/url}}
-                <span class="formatium-strip__chip" aria-hidden="true">
+        <li class="coursify-tile--{{color}}{{#locked}} coursify-tile--locked{{/locked}}{{#progress.complete}} coursify-tile--complete{{/progress.complete}}">
+            {{#url}}<a class="coursify-strip__item" href="{{url}}"{{#iscurrentpage}} aria-current="page"{{/iscurrentpage}} title="{{name}}">{{/url}}
+            {{^url}}<span class="coursify-strip__item" aria-disabled="true" title="{{name}} ({{#str}}locked, format_coursify{{/str}})">{{/url}}
+                <span class="coursify-strip__chip" aria-hidden="true">
                     {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
                     {{^locked}}{{#progress.complete}}<i class="fa fa-solid fa-check"></i>{{/progress.complete}}{{^progress.complete}}{{steplabel}}{{/progress.complete}}{{/locked}}
                 </span>
-                <span class="formatium-strip__name">{{name}}</span>
+                <span class="coursify-strip__name">{{name}}</span>
             {{#url}}</a>{{/url}}
             {{^url}}</span>{{/url}}
         </li>
         {{/tiles}}
     </ol>
 </nav>
-{{/formatiumstrip}}
+{{/coursifystrip}}
 {{> core_courseformat/local/content }}
-{{#formatiumnav}}
-<nav class="formatium-sectionnav" aria-label="{{#str}}sectionnavigation, format_formatium{{/str}}">
-    <div class="formatium-sectionnav__side">
+{{#coursifynav}}
+<nav class="coursify-sectionnav" aria-label="{{#str}}sectionnavigation, format_coursify{{/str}}">
+    <div class="coursify-sectionnav__side">
         {{#previous}}
         <a class="btn btn-outline-secondary" href="{{url}}">
             <i class="fa fa-solid fa-arrow-left" aria-hidden="true"></i>
-            <span class="visually-hidden">{{#str}}previous, format_formatium{{/str}}:</span> {{name}}
+            <span class="visually-hidden">{{#str}}previous, format_coursify{{/str}}:</span> {{name}}
         </a>
         {{/previous}}
     </div>
     <a class="btn btn-link" href="{{courseurl}}">
-        <i class="fa fa-solid fa-table-cells-large" aria-hidden="true"></i> {{#str}}alltiles, format_formatium{{/str}}
+        <i class="fa fa-solid fa-table-cells-large" aria-hidden="true"></i> {{#str}}alltiles, format_coursify{{/str}}
     </a>
-    <div class="formatium-sectionnav__side formatium-sectionnav__side--end">
+    <div class="coursify-sectionnav__side coursify-sectionnav__side--end">
         {{#next}}
         <a class="btn btn-outline-secondary" href="{{url}}">
-            <span class="visually-hidden">{{#str}}next, format_formatium{{/str}}:</span> {{name}}
+            <span class="visually-hidden">{{#str}}next, format_coursify{{/str}}:</span> {{name}}
             <i class="fa fa-solid fa-arrow-right" aria-hidden="true"></i>
         </a>
         {{/next}}
     </div>
 </nav>
-{{/formatiumnav}}
+{{/coursifynav}}
 {{/tilesmode}}

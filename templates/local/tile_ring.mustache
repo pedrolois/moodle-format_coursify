@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/tile_ring
+    @template format_coursify/local/tile_ring
 
     Progress ring of a tile (the context is the progress of the tile).
 
@@ -23,15 +23,15 @@
     {"total": 4, "done": 1, "percent": 25, "started": true}
 }}
 {{#total}}
-<span class="formatium-ring" role="img"
-      aria-label="{{#str}}tileprogress, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}">
+<span class="coursify-ring" role="img"
+      aria-label="{{#str}}tileprogress, format_coursify, { "done": {{done}}, "total": {{total}} }{{/str}}">
     <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false">
-        <circle class="formatium-ring__track" cx="18" cy="18" r="15.5" pathLength="100"></circle>
+        <circle class="coursify-ring__track" cx="18" cy="18" r="15.5" pathLength="100"></circle>
         {{#started}}
-        <circle class="formatium-ring__value" cx="18" cy="18" r="15.5" pathLength="100"
+        <circle class="coursify-ring__value" cx="18" cy="18" r="15.5" pathLength="100"
                 stroke-dasharray="{{percent}} 100"></circle>
         {{/started}}
     </svg>
-    <span class="formatium-ring__text" aria-hidden="true">{{percent}}%</span>
+    <span class="coursify-ring__text" aria-hidden="true">{{percent}}%</span>
 </span>
 {{/total}}

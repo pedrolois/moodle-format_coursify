@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/layout_path
+    @template format_coursify/local/layout_path
 
     Tiles as a learning path: numbered steps along a line, the cards alternating sides on wide screens. Group names
     are milestones on the line.
@@ -23,7 +23,7 @@
     Example context (json):
     {
         "groups": [
-            {"id": "formatium-group-0", "name": "Unit 1", "hasname": true, "done": 1, "count": 1, "tiles": [
+            {"id": "coursify-group-0", "name": "Unit 1", "hasname": true, "done": 1, "count": 1, "tiles": [
                 {"id": 35, "num": 1, "step": 1, "steplabel": "1", "steps": "2", "side": "start", "name": "Getting started",
                  "url": "#", "summary": "First steps.", "color": "blue", "icon": "rocket", "activities": 4,
                  "progress": {"total": 4, "done": 4, "percent": 100, "complete": true, "started": true, "label": "Done"} }
@@ -31,55 +31,55 @@
         ]
     }
 }}
-<ol class="formatium-path" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+<ol class="coursify-path" aria-label="{{#str}}tiles, format_coursify{{/str}}">
     {{#groups}}
     {{#hasname}}
-    <li class="formatium-path__group" data-region="formatium-group">
-        {{> format_formatium/local/group_heading }}
+    <li class="coursify-path__group" data-region="coursify-group">
+        {{> format_coursify/local/group_heading }}
     </li>
     {{/hasname}}
     {{#tiles}}
-    <li class="formatium-step formatium-tile--{{color}} formatium-step--{{side}}{{#locked}} formatium-tile--locked{{/locked}}{{#isnext}} formatium-tile--next{{/isnext}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}{{#islast}} formatium-step--last{{/islast}}"
-        data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
+    <li class="coursify-step coursify-tile--{{color}} coursify-step--{{side}}{{#locked}} coursify-tile--locked{{/locked}}{{#isnext}} coursify-tile--next{{/isnext}}{{#iscurrent}} coursify-tile--current{{/iscurrent}}{{#progress.complete}} coursify-tile--complete{{/progress.complete}}{{#islast}} coursify-step--last{{/islast}}"
+        data-sectionid="{{id}}" data-number="{{num}}" data-region="coursify-tile"
         data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
-        <div class="formatium-step__node" aria-hidden="true">
+        <div class="coursify-step__node" aria-hidden="true">
             {{#progress}}
             {{#total}}
-            <svg class="formatium-step__ring" viewBox="0 0 36 36" focusable="false">
-                <circle class="formatium-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
+            <svg class="coursify-step__ring" viewBox="0 0 36 36" focusable="false">
+                <circle class="coursify-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
                 {{#started}}
-                <circle class="formatium-ring__value" cx="18" cy="18" r="16.5" pathLength="100"
+                <circle class="coursify-ring__value" cx="18" cy="18" r="16.5" pathLength="100"
                         stroke-dasharray="{{percent}} 100"></circle>
                 {{/started}}
             </svg>
             {{/total}}
             {{/progress}}
-            <span class="formatium-step__icon">
+            <span class="coursify-step__icon">
                 {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
                 {{^locked}}
                 {{#progress.complete}}<i class="fa fa-solid fa-check"></i>{{/progress.complete}}
                 {{^progress.complete}}
                 {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
-                {{^icon}}<span class="formatium-tile__number">{{steplabel}}</span>{{/icon}}
+                {{^icon}}<span class="coursify-tile__number">{{steplabel}}</span>{{/icon}}
                 {{/progress.complete}}
                 {{/locked}}
             </span>
         </div>
-        {{#url}}<a class="formatium-step__card" href="{{url}}">{{/url}}
-        {{^url}}<div class="formatium-step__card" aria-disabled="true">{{/url}}
-            {{#imageurl}}<span class="formatium-step__image" style="background-image: url('{{imageurl}}')"></span>{{/imageurl}}
-            <span class="formatium-step__content">
-                <span class="formatium-step__label">
-                    {{#str}}stepof, format_formatium, { "step": "{{steplabel}}", "steps": "{{steps}}" }{{/str}}
-                    {{#locked}}· {{#str}}locked, format_formatium{{/str}}{{/locked}}
-                    {{#progress.complete}}· {{#str}}tilecomplete, format_formatium{{/str}}{{/progress.complete}}
+        {{#url}}<a class="coursify-step__card" href="{{url}}">{{/url}}
+        {{^url}}<div class="coursify-step__card" aria-disabled="true">{{/url}}
+            {{#imageurl}}<span class="coursify-step__image" style="background-image: url('{{imageurl}}')"></span>{{/imageurl}}
+            <span class="coursify-step__content">
+                <span class="coursify-step__label">
+                    {{#str}}stepof, format_coursify, { "step": "{{steplabel}}", "steps": "{{steps}}" }{{/str}}
+                    {{#locked}}· {{#str}}locked, format_coursify{{/str}}{{/locked}}
+                    {{#progress.complete}}· {{#str}}tilecomplete, format_coursify{{/str}}{{/progress.complete}}
                 </span>
-                {{> format_formatium/local/tile_badges }}
-                <span class="formatium-step__title h5">{{name}}</span>
-                {{#summary}}<span class="formatium-step__summary">{{summary}}</span>{{/summary}}
-                {{#lockinfo}}<span class="formatium-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
-                <span class="formatium-step__meta">
-                    {{^locked}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/locked}}
+                {{> format_coursify/local/tile_badges }}
+                <span class="coursify-step__title h5">{{name}}</span>
+                {{#summary}}<span class="coursify-step__summary">{{summary}}</span>{{/summary}}
+                {{#lockinfo}}<span class="coursify-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
+                <span class="coursify-step__meta">
+                    {{^locked}}{{#str}}activitiescount, format_coursify, {{activities}}{{/str}}{{/locked}}
                     {{#progress.label}} · {{progress.label}}{{/progress.label}}
                 </span>
             </span>

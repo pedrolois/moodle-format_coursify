@@ -15,29 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Backup of the Formatium course format: the tile images.
+ * Backup of the Coursify course format: the tile images.
  *
  * The colour and icon of each tile are section format options, which the core backup already includes.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class backup_format_formatium_plugin extends backup_format_plugin {
+class backup_format_coursify_plugin extends backup_format_plugin {
     /**
      * The tile image of each section.
      *
      * @return backup_plugin_element
      */
     protected function define_section_plugin_structure() {
-        $plugin = $this->get_plugin_element(null, $this->get_format_condition(), 'formatium');
+        $plugin = $this->get_plugin_element(null, $this->get_format_condition(), 'coursify');
         // The restore only processes elements with at least one field, so the section number goes with the id.
         $tile = new backup_nested_element($this->get_recommended_name(), ['sectionid'], ['sectionnum']);
         $tile->set_source_sql(
             'SELECT id AS sectionid, section AS sectionnum FROM {course_sections} WHERE id = ?',
             [backup::VAR_SECTIONID]
         );
-        $tile->annotate_files('format_formatium', \format_formatium\local\tiles::FILEAREA, 'sectionid');
+        $tile->annotate_files('format_coursify', \format_coursify\local\tiles::FILEAREA, 'sectionid');
         $plugin->add_child($tile);
         return $plugin;
     }

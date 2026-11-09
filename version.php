@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Formatium course format version details.
+ * Coursify course format version details.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @author    Pedro Luis Garcia Leiva
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'format_formatium';
-$plugin->version   = 2026110904;
+$plugin->component = 'format_coursify';
+$plugin->version   = 2026110905;
 $plugin->requires  = 2026100500; // Moodle 5.3: anchored drawers, course/section.php pages.
-$plugin->release   = '0.3.0';
+$plugin->release   = '0.4.0';
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->supported = [503, 503];

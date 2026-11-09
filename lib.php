@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Formatium course format: the course is a grid of tiles, one per section.
+ * Coursify course format: the course is a grid of tiles, one per section.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,15 +27,15 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/format/lib.php');
 
 use core\lang_string;
-use format_formatium\local\tiles;
+use format_coursify\local\tiles;
 
 /**
- * Main class of the Formatium course format.
+ * Main class of the Coursify course format.
  *
  * Students see the course as tiles that open each section on its own page (course/section.php). In edit mode the
  * course page is the standard Moodle course editor, so drag and drop, bulk editing and subsections all keep working.
  */
-class format_formatium extends core_courseformat\base {
+class format_coursify extends core_courseformat\base {
     /**
      * The format uses sections.
      *
@@ -87,9 +87,9 @@ class format_formatium extends core_courseformat\base {
     public function get_default_section_name($section) {
         $section = $this->get_section($section);
         if ($section->sectionnum == 0) {
-            return get_string('section0name', 'format_formatium');
+            return get_string('section0name', 'format_coursify');
         }
-        return get_string('newsection', 'format_formatium');
+        return get_string('newsection', 'format_coursify');
     }
 
     /**
@@ -210,7 +210,7 @@ class format_formatium extends core_courseformat\base {
      */
     public function course_format_options($foreditform = false) {
         static $options = false;
-        $config = get_config('format_formatium');
+        $config = get_config('format_coursify');
         if ($options === false) {
             $options = [
                 'layout' => ['default' => $config->layout ?? tiles::LAYOUT_GRID, 'type' => PARAM_ALPHA],
@@ -261,11 +261,11 @@ class format_formatium extends core_courseformat\base {
      */
     protected static function select_element(string $name, array $choices): array {
         return [
-            'label' => new lang_string($name, 'format_formatium'),
+            'label' => new lang_string($name, 'format_coursify'),
             'element_type' => 'select',
             'element_attributes' => [$choices],
             'help' => $name,
-            'help_component' => 'format_formatium',
+            'help_component' => 'format_coursify',
         ];
     }
 
@@ -286,11 +286,11 @@ class format_formatium extends core_courseformat\base {
             $options['tilecolor'] += self::select_element('tilecolor', tiles::color_options());
             $options['tileicon'] += self::select_element('tileicon', tiles::icon_options());
             $options['groupname'] += [
-                'label' => new lang_string('groupname', 'format_formatium'),
+                'label' => new lang_string('groupname', 'format_coursify'),
                 'element_type' => 'text',
                 'element_attributes' => [['size' => 30, 'maxlength' => 100]],
                 'help' => 'groupname',
-                'help_component' => 'format_formatium',
+                'help_component' => 'format_coursify',
             ];
             $options['duration'] += self::select_element('duration', tiles::duration_options());
         }
@@ -307,8 +307,8 @@ class format_formatium extends core_courseformat\base {
     public function create_edit_form_elements(&$mform, $forsection = false) {
         global $COURSE;
         if ($forsection) {
-            $mform->addElement('header', 'formatiumtile', get_string('tile', 'format_formatium'));
-            $mform->setExpanded('formatiumtile', true);
+            $mform->addElement('header', 'coursifytile', get_string('tile', 'format_coursify'));
+            $mform->setExpanded('coursifytile', true);
         }
         $elements = parent::create_edit_form_elements($mform, $forsection);
 
@@ -316,11 +316,11 @@ class format_formatium extends core_courseformat\base {
             $elements[] = $mform->addElement(
                 'filemanager',
                 'tileimage_filemanager',
-                get_string('tileimage', 'format_formatium'),
+                get_string('tileimage', 'format_coursify'),
                 null,
                 tiles::image_options()
             );
-            $mform->addHelpButton('tileimage_filemanager', 'tileimage', 'format_formatium');
+            $mform->addHelpButton('tileimage_filemanager', 'tileimage', 'format_coursify');
         } else if (empty($COURSE->id) || $COURSE->id == SITEID) {
             // New courses are created with the default number of sections.
             $element = $mform->addElement('hidden', 'numsections');
@@ -336,7 +336,7 @@ class format_formatium extends core_courseformat\base {
      *
      * @param mixed $action
      * @param array $customdata
-     * @return \format_formatium\form\editsection_form
+     * @return \format_coursify\form\editsection_form
      */
     public function editsection_form($action, $customdata = []) {
         global $CFG;
@@ -344,7 +344,7 @@ class format_formatium extends core_courseformat\base {
         if (!array_key_exists('course', $customdata)) {
             $customdata['course'] = $this->get_course();
         }
-        return new \format_formatium\form\editsection_form($action, $customdata);
+        return new \format_coursify\form\editsection_form($action, $customdata);
     }
 
     /**
@@ -367,7 +367,7 @@ class format_formatium extends core_courseformat\base {
         $changed = $this->update_format_options($data);
         // A course coming from the Tiles format keeps its tile photos, icons and colour.
         if ($oldcourse !== null && ($oldcourse['format'] ?? '') === 'tiles') {
-            \format_formatium\local\tiles_importer::import($this->courseid, $oldcourse);
+            \format_coursify\local\tiles_importer::import($this->courseid, $oldcourse);
         }
         return $changed;
     }
@@ -386,7 +386,7 @@ class format_formatium extends core_courseformat\base {
         if ($deleted) {
             get_file_storage()->delete_area_files(
                 context_course::instance($this->courseid)->id,
-                'format_formatium',
+                'format_coursify',
                 tiles::FILEAREA,
                 $sectionid
             );
@@ -443,13 +443,13 @@ class format_formatium extends core_courseformat\base {
  * @param mixed $newvalue
  * @return \core\output\inplace_editable|null
  */
-function format_formatium_inplace_editable($itemtype, $itemid, $newvalue) {
+function format_coursify_inplace_editable($itemtype, $itemid, $newvalue) {
     global $DB, $CFG;
     require_once($CFG->dirroot . '/course/lib.php');
     if ($itemtype === 'sectionname' || $itemtype === 'sectionnamenl') {
         $section = $DB->get_record_sql(
             'SELECT s.* FROM {course_sections} s JOIN {course} c ON s.course = c.id WHERE s.id = ? AND c.format = ?',
-            [$itemid, 'formatium'],
+            [$itemid, 'coursify'],
             MUST_EXIST
         );
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
@@ -469,7 +469,7 @@ function format_formatium_inplace_editable($itemtype, $itemid, $newvalue) {
  * @param array $options
  * @return bool false when the file is not found
  */
-function format_formatium_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+function format_coursify_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     if ($context->contextlevel != CONTEXT_COURSE || $filearea !== tiles::FILEAREA) {
         return false;
     }
@@ -477,7 +477,7 @@ function format_formatium_pluginfile($course, $cm, $context, $filearea, $args, $
     $sectionid = (int) array_shift($args);
     $filename = array_pop($args);
     $filepath = $args ? '/' . implode('/', $args) . '/' : '/';
-    $file = get_file_storage()->get_file($context->id, 'format_formatium', $filearea, $sectionid, $filepath, $filename);
+    $file = get_file_storage()->get_file($context->id, 'format_coursify', $filearea, $sectionid, $filepath, $filename);
     if (!$file || $file->is_directory()) {
         return false;
     }

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Formatium course format: the course page (included by course/view.php and course/section.php).
+ * Coursify course format: the course page (included by course/view.php and course/section.php).
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,7 +44,7 @@ if (($marker >= 0) && has_capability('moodle/course:setcurrentsection', $context
 // Make sure section 0 is created.
 course_create_sections_if_missing($course, 0);
 
-$renderer = $PAGE->get_renderer('format_formatium');
+$renderer = $PAGE->get_renderer('format_coursify');
 
 if (!is_null($displaysection)) {
     $format->set_sectionnum($displaysection);

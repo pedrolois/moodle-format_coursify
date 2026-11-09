@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace format_formatium\output\courseformat;
+namespace format_coursify\output\courseformat;
 
 use core_courseformat\output\local\content as content_base;
-use format_formatium\local\tiles;
+use format_coursify\local\tiles;
 use renderer_base;
 
 /**
- * Course page of the Formatium format.
+ * Course page of the Coursify format.
  *
  * Outside edit mode the course page shows the general section and then the tiles; a section page shows the standard
  * section with links to the previous and next tiles. In edit mode everything is the standard course editor.
  *
- * @package   format_formatium
+ * @package   format_coursify
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -50,7 +50,7 @@ class content extends content_base {
      * @return string
      */
     public function get_template_name(renderer_base $renderer): string {
-        return 'format_formatium/local/content';
+        return 'format_coursify/local/content';
     }
 
     /**
@@ -64,8 +64,8 @@ class content extends content_base {
             $data = parent::export_for_template($output);
             $sectionid = $this->format->get_sectionid();
             if ($sectionid && !$this->format->show_editor()) {
-                $data->formatiumnav = $this->export_section_navigation();
-                $data->formatiumstrip = $this->export_section_strip($sectionid);
+                $data->coursifynav = $this->export_section_navigation();
+                $data->coursifystrip = $this->export_section_strip($sectionid);
                 (new tiles($this->format))->remember_section($sectionid);
             }
             return $data;
@@ -146,7 +146,7 @@ class content extends content_base {
                 $previous = $tile['groupname'] !== '' ? $tile['groupname'] : $previous;
             }
             unset($tile);
-            $PAGE->requires->js_call_amd('format_formatium/map', 'init');
+            $PAGE->requires->js_call_amd('format_coursify/map', 'init');
         }
 
         // Groups: a section with a group name starts one; tile titles go one heading level down inside named groups.
@@ -163,7 +163,7 @@ class content extends content_base {
         // Filters: all, to do, done; only worth it when progress is shown and there are enough tiles.
         $data->showfilters = !empty($course->showfilters) && !empty($data->overallprogress) && count($data->tiles) > 3;
         if ($data->showfilters) {
-            $PAGE->requires->js_call_amd('format_formatium/filters', 'init');
+            $PAGE->requires->js_call_amd('format_coursify/filters', 'init');
         }
         return $data;
     }

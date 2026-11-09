@@ -15,14 +15,14 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_formatium/local/layout_list
+    @template format_coursify/local/layout_list
 
     Tiles as a compact list, one row per section, by groups.
 
     Example context (json):
     {
         "groups": [
-            {"id": "formatium-group-0", "name": "", "hasname": false, "tiles": [
+            {"id": "coursify-group-0", "name": "", "hasname": false, "tiles": [
                 {"id": 35, "num": 1, "steplabel": "1", "name": "Getting started", "url": "#", "summary": "First steps.",
                  "color": "blue", "icon": "rocket", "activities": 4,
                  "progress": {"total": 4, "done": 2, "percent": 50, "started": true, "label": "2 of 4"} }
@@ -31,16 +31,16 @@
     }
 }}
 {{#groups}}
-<section class="formatium-groupblock" data-region="formatium-group"{{#hasname}} aria-labelledby="{{id}}"{{/hasname}}>
-{{#hasname}}{{> format_formatium/local/group_heading }}{{/hasname}}
-<ul class="formatium-list" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+<section class="coursify-groupblock" data-region="coursify-group"{{#hasname}} aria-labelledby="{{id}}"{{/hasname}}>
+{{#hasname}}{{> format_coursify/local/group_heading }}{{/hasname}}
+<ul class="coursify-list" aria-label="{{#str}}tiles, format_coursify{{/str}}">
     {{#tiles}}
-    <li class="formatium-row formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#isnext}} formatium-tile--next{{/isnext}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
-        data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
+    <li class="coursify-row coursify-tile--{{color}}{{#locked}} coursify-tile--locked{{/locked}}{{#isnext}} coursify-tile--next{{/isnext}}{{#iscurrent}} coursify-tile--current{{/iscurrent}}{{#progress.complete}} coursify-tile--complete{{/progress.complete}}"
+        data-sectionid="{{id}}" data-number="{{num}}" data-region="coursify-tile"
         data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
-        {{#url}}<a class="formatium-row__link" href="{{url}}">{{/url}}
-        {{^url}}<div class="formatium-row__link" aria-disabled="true">{{/url}}
-            <span class="formatium-row__icon{{#imageurl}} formatium-row__icon--image{{/imageurl}}" aria-hidden="true"
+        {{#url}}<a class="coursify-row__link" href="{{url}}">{{/url}}
+        {{^url}}<div class="coursify-row__link" aria-disabled="true">{{/url}}
+            <span class="coursify-row__icon{{#imageurl}} coursify-row__icon--image{{/imageurl}}" aria-hidden="true"
                   {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
                 {{^imageurl}}
                 {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
@@ -48,35 +48,35 @@
                 {{#progress.complete}}<i class="fa fa-solid fa-check"></i>{{/progress.complete}}
                 {{^progress.complete}}
                 {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
-                {{^icon}}<span class="formatium-tile__number">{{steplabel}}</span>{{/icon}}
+                {{^icon}}<span class="coursify-tile__number">{{steplabel}}</span>{{/icon}}
                 {{/progress.complete}}
                 {{/locked}}
                 {{/imageurl}}
             </span>
-            <span class="formatium-row__content">
-                <span class="formatium-row__title">
+            <span class="coursify-row__content">
+                <span class="coursify-row__title">
                     {{name}}
-                    {{#isnext}}<span class="badge formatium-badge-next">{{#str}}upnext, format_formatium{{/str}}</span>{{/isnext}}
-                    {{#isthisweek}}<span class="badge text-bg-info">{{#str}}thisweek, format_formatium{{/str}}</span>{{/isthisweek}}
-                    {{^isthisweek}}{{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_formatium{{/str}}</span>{{/iscurrent}}{{/isthisweek}}
-                    {{#opens}}<span class="badge text-bg-light border">{{#str}}opens, format_formatium, {{opens}}{{/str}}</span>{{/opens}}
+                    {{#isnext}}<span class="badge coursify-badge-next">{{#str}}upnext, format_coursify{{/str}}</span>{{/isnext}}
+                    {{#isthisweek}}<span class="badge text-bg-info">{{#str}}thisweek, format_coursify{{/str}}</span>{{/isthisweek}}
+                    {{^isthisweek}}{{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_coursify{{/str}}</span>{{/iscurrent}}{{/isthisweek}}
+                    {{#opens}}<span class="badge text-bg-light border">{{#str}}opens, format_coursify, {{opens}}{{/str}}</span>{{/opens}}
                     {{#hiddenfromstudents}}<span class="badge text-bg-secondary">{{#str}}hiddenfromstudents{{/str}}</span>{{/hiddenfromstudents}}
-                    {{#locked}}<span class="visually-hidden">{{#str}}locked, format_formatium{{/str}}</span>{{/locked}}
+                    {{#locked}}<span class="visually-hidden">{{#str}}locked, format_coursify{{/str}}</span>{{/locked}}
                 </span>
-                {{#summary}}<span class="formatium-row__summary">{{summary}}</span>{{/summary}}
-                {{#daterange}}<span class="formatium-tile__dates"><i class="fa fa-regular fa-calendar" aria-hidden="true"></i> {{daterange}}</span>{{/daterange}}
-                {{#lockinfo}}<span class="formatium-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
+                {{#summary}}<span class="coursify-row__summary">{{summary}}</span>{{/summary}}
+                {{#daterange}}<span class="coursify-tile__dates"><i class="fa fa-regular fa-calendar" aria-hidden="true"></i> {{daterange}}</span>{{/daterange}}
+                {{#lockinfo}}<span class="coursify-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
             </span>
-            <span class="formatium-row__meta">
+            <span class="coursify-row__meta">
                 {{^locked}}
-                <span class="formatium-row__count">
+                <span class="coursify-row__count">
                     {{#progress.label}}{{progress.label}}{{/progress.label}}
-                    {{^progress.label}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/progress.label}}
+                    {{^progress.label}}{{#str}}activitiescount, format_coursify, {{activities}}{{/str}}{{/progress.label}}
                 </span>
                 {{/locked}}
-                {{#progress}}{{> format_formatium/local/tile_ring }}{{/progress}}
+                {{#progress}}{{> format_coursify/local/tile_ring }}{{/progress}}
             </span>
-            {{#url}}<i class="fa fa-solid fa-chevron-right formatium-row__chevron" aria-hidden="true"></i>{{/url}}
+            {{#url}}<i class="fa fa-solid fa-chevron-right coursify-row__chevron" aria-hidden="true"></i>{{/url}}
         {{#url}}</a>{{/url}}
         {{^url}}</div>{{/url}}
     </li>
