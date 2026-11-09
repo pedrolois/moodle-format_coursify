@@ -35,4 +35,4 @@ This roadmap comes from a study of the six most installed course formats on Mood
 | Subsection display (cards / list) | Onetopic | Subsections shown as mini tiles | Later |
 | Inline activity links in summaries | Onetopic | Linked by activity id, with completion state | Maybe |
 | Style tokens editor | Onetopic | Validated tokens turned into CSS variables. No raw CSS | Maybe |
-| Moodle app support | (none) | `db/mobile.php` with tiles and progress | In progress |
+| Moodle app support | (none) | `db/mobile.php`: tiles, groups, dates, progress, Continue, section pages | Done |

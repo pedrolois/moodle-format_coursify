@@ -1,0 +1,144 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_coursify/mobile_course
+
+    Course page in the Moodle app (an Angular template: the app fills it with the sections of the course, and
+    CONTENT_OTHERDATA.coursify has the look and progress of each tile). Mustache only switches its delimiters, so
+    the Angular expressions reach the app as they are.
+
+    Example context (json):
+    {}
+}}
+{{=<% %>=}}
+<div class="coursify-app" *ngIf="CONTENT_OTHERDATA.coursify as cf">
+
+    <!-- Course page: progress, Continue, the general section and the tiles. -->
+    <ng-container *ngIf="!cf.selected">
+        <ion-card class="coursify-app-summary" *ngIf="cf.progress >= 0 || cf.continueurl">
+            <ion-card-content>
+                <div class="coursify-app-progress" *ngIf="cf.progress >= 0">
+                    <div class="coursify-app-progress-label">
+                        <span>{{ 'plugin.format_coursify.courseprogress' | translate }}</span>
+                        <strong>{{ cf.progress }}%</strong>
+                    </div>
+                    <ion-progress-bar [value]="cf.progress / 100"></ion-progress-bar>
+                    <p class="coursify-app-muted">
+                        {{ 'plugin.format_coursify.activitiesdone' | translate: {$a: {done: cf.progressdone, total: cf.progresstotal} } }}
+                    </p>
+                </div>
+                <ion-button expand="block" *ngIf="cf.continueurl" core-link [href]="cf.continueurl" [capture]="true">
+                    <span class="coursify-app-continue">
+                        <small>{{ 'plugin.format_coursify.continue' | translate }}</small>
+                        <span>{{ cf.continuename }}</span>
+                    </span>
+                    <ion-icon name="fas-arrow-right" slot="end" aria-hidden="true"></ion-icon>
+                </ion-button>
+                <p class="coursify-app-done" *ngIf="cf.complete">
+                    <ion-icon name="fas-trophy" aria-hidden="true"></ion-icon>
+                    {{ 'plugin.format_coursify.coursecomplete' | translate }}
+                </p>
+            </ion-card-content>
+        </ion-card>
+
+        <ng-container *ngFor="let section of sections">
+            <ion-list class="coursify-app-general" *ngIf="section.section === 0 && section.modules && section.modules.length">
+                <core-course-module *ngFor="let module of section.modules" [module]="module" [section]="section"
+                    [showActivityDates]="true" [showCompletionConditions]="true">
+                </core-course-module>
+            </ion-list>
+        </ng-container>
+
+        <div class="coursify-app-grid">
+            <ng-container *ngFor="let section of sections">
+                <ng-container *ngIf="section.section > 0 && cf.tiles[section.id] as tile">
+                    <h2 class="coursify-app-group" *ngIf="tile.group">{{ tile.group }}</h2>
+                    <button type="button" class="coursify-app-tile coursify-color-{{ tile.color }}"
+                        [class.coursify-app-locked]="tile.locked" [class.coursify-app-next]="tile.next"
+                        [class.coursify-app-complete]="tile.complete" [disabled]="tile.locked"
+                        (click)="cf.selected = section.id">
+                        <span class="coursify-app-media">
+                            <img *ngIf="tile.image" [src]="tile.image" core-external-content alt="">
+                            <span class="coursify-app-icon" *ngIf="!tile.image" aria-hidden="true">
+                                <ion-icon *ngIf="tile.icon" name="fas-{{ tile.icon }}"></ion-icon>
+                                <span *ngIf="!tile.icon">{{ tile.number }}</span>
+                            </span>
+                            <span class="coursify-app-badge" *ngIf="tile.locked"><ion-icon name="fas-lock" aria-hidden="true"></ion-icon></span>
+                            <span class="coursify-app-badge coursify-app-badge-done" *ngIf="tile.complete"><ion-icon name="fas-check" aria-hidden="true"></ion-icon></span>
+                        </span>
+                        <span class="coursify-app-body">
+                            <span class="coursify-app-chips">
+                                <span class="coursify-app-chip coursify-app-chip-next" *ngIf="tile.next">{{ 'plugin.format_coursify.upnext' | translate }}</span>
+                                <span class="coursify-app-chip" *ngIf="tile.thisweek">{{ 'plugin.format_coursify.thisweek' | translate }}</span>
+                            </span>
+                            <span class="coursify-app-title"><core-format-text [text]="section.name" contextLevel="course" [contextInstanceId]="course.id" [wsNotFiltered]="true"></core-format-text></span>
+                            <span class="coursify-app-muted" *ngIf="tile.dates">{{ tile.dates }}</span>
+                            <span class="coursify-app-muted" *ngIf="tile.locked && tile.lockinfo">{{ tile.lockinfo }}</span>
+                            <span class="coursify-app-foot" *ngIf="!tile.locked">
+                                <span>{{ tile.progresslabel || ('plugin.format_coursify.activitiescount' | translate: {$a: tile.activities}) }}</span>
+                                <span class="coursify-app-ring" *ngIf="tile.progress >= 0"
+                                    [style.background]="'conic-gradient(var(--coursify-accent) ' + (tile.progress * 3.6) + 'deg, var(--coursify-track) 0deg)'">
+                                    <span>{{ tile.progress }}%</span>
+                                </span>
+                            </span>
+                        </span>
+                    </button>
+                </ng-container>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <!-- A section: its summary and activities, with previous, all sections and next. -->
+    <ng-container *ngFor="let section of sections; let i = index">
+        <div class="coursify-app-section" *ngIf="cf.selected === section.id">
+            <ion-button fill="clear" (click)="cf.selected = 0">
+                <ion-icon name="fas-table-cells-large" slot="start" aria-hidden="true"></ion-icon>
+                {{ 'plugin.format_coursify.alltiles' | translate }}
+            </ion-button>
+            <h2 class="coursify-app-sectiontitle">
+                <core-format-text [text]="section.name" contextLevel="course" [contextInstanceId]="course.id"></core-format-text>
+            </h2>
+            <div class="coursify-app-sectionsummary" *ngIf="section.summary">
+                <core-format-text [text]="section.summary" contextLevel="course" [contextInstanceId]="course.id"></core-format-text>
+            </div>
+            <ion-list>
+                <core-course-module *ngFor="let module of section.modules" [module]="module" [section]="section"
+                    [showActivityDates]="true" [showCompletionConditions]="true">
+                </core-course-module>
+            </ion-list>
+            <div class="coursify-app-nav">
+                <ng-container *ngFor="let other of sections; let j = index">
+                    <ion-button fill="outline" size="small" *ngIf="j === i - 1 && other.section > 0 && cf.tiles[other.id] && !cf.tiles[other.id].locked"
+                        (click)="cf.selected = other.id">
+                        <ion-icon name="fas-arrow-left" slot="start" aria-hidden="true"></ion-icon>
+                        <core-format-text [text]="other.name" contextLevel="course" [contextInstanceId]="course.id"></core-format-text>
+                    </ion-button>
+                </ng-container>
+                <span class="coursify-app-spacer"></span>
+                <ng-container *ngFor="let other of sections; let j = index">
+                    <ion-button fill="outline" size="small" *ngIf="j === i + 1 && cf.tiles[other.id] && !cf.tiles[other.id].locked"
+                        (click)="cf.selected = other.id">
+                        <core-format-text [text]="other.name" contextLevel="course" [contextInstanceId]="course.id"></core-format-text>
+                        <ion-icon name="fas-arrow-right" slot="end" aria-hidden="true"></ion-icon>
+                    </ion-button>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+
+    <p class="coursify-app-muted ion-padding" *ngIf="!sections || !sections.length">{{ 'plugin.format_coursify.notiles' | translate }}</p>
+</div>

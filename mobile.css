@@ -1,0 +1,248 @@
+/* Coursify in the Moodle app. Uses the app's Ionic colours, so light and dark mode follow the app. */
+
+.coursify-app {
+    --coursify-accent: var(--ion-color-primary, #0f6cbf);
+    --coursify-track: var(--ion-color-step-150, #d9d9d9);
+    padding-bottom: 1rem;
+}
+
+.coursify-color-blue { --coursify-accent: #0d6efd; }
+.coursify-color-indigo { --coursify-accent: #6610f2; }
+.coursify-color-purple { --coursify-accent: #6f42c1; }
+.coursify-color-pink { --coursify-accent: #d63384; }
+.coursify-color-red { --coursify-accent: #dc3545; }
+.coursify-color-orange { --coursify-accent: #fd7e14; }
+.coursify-color-yellow { --coursify-accent: #e0a800; }
+.coursify-color-green { --coursify-accent: #198754; }
+.coursify-color-teal { --coursify-accent: #20c997; }
+.coursify-color-cyan { --coursify-accent: #0aa2c0; }
+.coursify-color-gray { --coursify-accent: #6c757d; }
+
+.coursify-app-muted {
+    margin: .25rem 0 0;
+    font-size: .85rem;
+    color: var(--ion-color-medium, #6a737b);
+}
+
+.coursify-app-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .4rem;
+}
+
+.coursify-app-continue {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    text-align: left;
+    text-transform: none;
+}
+
+.coursify-app-continue small {
+    font-size: .7rem;
+    text-transform: uppercase;
+    opacity: .85;
+}
+
+.coursify-app-continue span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.coursify-app-done {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    margin: .75rem 0 0;
+    font-weight: 600;
+    color: var(--ion-color-success, #198754);
+}
+
+.coursify-app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+    gap: .75rem;
+    padding: .75rem;
+}
+
+.coursify-app-group {
+    grid-column: 1 / -1;
+    padding-bottom: .3rem;
+    margin: .75rem 0 0;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--coursify-track);
+}
+
+.coursify-app-tile {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    color: var(--ion-text-color, #1d2125);
+    text-align: left;
+    background: var(--ion-item-background, var(--ion-background-color, #fff));
+    border: 1px solid var(--coursify-track);
+    border-radius: 12px;
+}
+
+.coursify-app-next {
+    border-color: var(--coursify-accent);
+    box-shadow: 0 0 0 2px var(--coursify-accent);
+}
+
+.coursify-app-locked {
+    opacity: .75;
+}
+
+.coursify-app-media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--coursify-accent) 16%, transparent);
+    border-bottom: 4px solid var(--coursify-accent);
+}
+
+.coursify-app-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.coursify-app-locked .coursify-app-media img {
+    filter: grayscale(1);
+}
+
+.coursify-app-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--coursify-accent);
+    border-radius: 50%;
+}
+
+.coursify-app-badge {
+    position: absolute;
+    top: .4rem;
+    right: .4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    color: #fff;
+    background: rgba(0, 0, 0, .6);
+    border-radius: 50%;
+}
+
+.coursify-app-badge-done {
+    background: var(--ion-color-success, #198754);
+}
+
+.coursify-app-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: .2rem;
+    padding: .6rem .7rem .7rem;
+}
+
+.coursify-app-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+}
+
+.coursify-app-chips:empty {
+    display: none;
+}
+
+.coursify-app-chip {
+    padding: .1rem .45rem;
+    font-size: .7rem;
+    font-weight: 700;
+    color: #fff;
+    background: #0a7d93;
+    border-radius: 1rem;
+}
+
+.coursify-app-chip-next {
+    background: var(--coursify-accent);
+}
+
+.coursify-app-title {
+    font-weight: 600;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.coursify-app-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+    padding-top: .3rem;
+    margin-top: auto;
+    font-size: .8rem;
+    color: var(--ion-color-medium, #6a737b);
+}
+
+.coursify-app-ring {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
+}
+
+.coursify-app-ring span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: .55rem;
+    font-weight: 700;
+    color: var(--ion-text-color, #1d2125);
+    background: var(--ion-item-background, var(--ion-background-color, #fff));
+    border-radius: 50%;
+}
+
+.coursify-app-complete .coursify-app-ring {
+    --coursify-accent: var(--ion-color-success, #198754);
+}
+
+.coursify-app-sectiontitle {
+    padding: 0 1rem;
+    margin: .25rem 0 .5rem;
+}
+
+.coursify-app-sectionsummary {
+    padding: 0 1rem;
+    color: var(--ion-color-medium, #6a737b);
+}
+
+.coursify-app-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
+    padding: .75rem 1rem;
+}
+
+.coursify-app-spacer {
+    flex: 1;
+}

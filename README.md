@@ -24,6 +24,7 @@ Coursify shows a course as tiles, a learning path, a list or a map, one stop per
 - **Standard Moodle course editor in edit mode:** drag and drop, bulk editing, subsections and the course index all work as usual.
 - **Theme colours,** so dark mode and branded themes work.
 - **Backup and restore,** tile images included.
+- **Moodle app support.** The app shows the tiles with their images, colours, groups, dates and progress, plus Continue and the course progress. Each section opens with its activities and previous/next buttons.
 - **Supported languages:** English and Spanish.
 
 ## Requirements
