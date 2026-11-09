@@ -62,6 +62,12 @@ class tiles {
         'rocket', 'flag-checkered', 'globe', 'leaf', 'heart', 'star', 'trophy', 'compass', 'briefcase', 'gear',
     ];
 
+    /** Tile style: card with the image on top and the text below. */
+    const STYLE_CARD = 'card';
+
+    /** Tile style: the image fills the tile, with the title on a coloured band. */
+    const STYLE_PHOTO = 'photo';
+
     /** Numbering: 1, 2, 3. */
     const NUMBERING_NUMBER = 'number';
 
@@ -146,6 +152,18 @@ class tiles {
             $options[$palette] = get_string('palette_' . $palette, 'format_formatium');
         }
         return $options;
+    }
+
+    /**
+     * Options of the style of the tiles of the grid.
+     *
+     * @return array
+     */
+    public static function style_options(): array {
+        return [
+            self::STYLE_CARD => get_string('tilestyle_card', 'format_formatium'),
+            self::STYLE_PHOTO => get_string('tilestyle_photo', 'format_formatium'),
+        ];
     }
 
     /**

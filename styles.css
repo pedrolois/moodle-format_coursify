@@ -979,3 +979,91 @@ a.formatium-strip__item:focus-visible {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Photo tiles: the image fills the tile and the title sits on a band of the tile colour. */
+.formatium-grid--photo .formatium-tile__link {
+    border: 0;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .12);
+}
+
+.formatium-grid--photo .formatium-tile__media {
+    flex: 1;
+    min-height: 11rem;
+    aspect-ratio: 4 / 3;
+    border-bottom: 0;
+}
+
+.formatium-grid--photo .formatium-tile__media:not(.formatium-tile__media--image) {
+    background: color-mix(in srgb, var(--formatium-accent) 75%, #000);
+}
+
+.formatium-grid--photo .formatium-tile__icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 2rem;
+    color: var(--formatium-accent);
+    background: #fff;
+}
+
+.formatium-grid--photo .formatium-tile__body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    gap: .2rem;
+    padding: .6rem .9rem;
+    color: #fff;
+    text-align: center;
+    background: var(--formatium-accent);
+}
+
+.formatium-grid--photo .formatium-tile__title {
+    font-size: 1.15rem;
+    color: #fff;
+}
+
+.formatium-grid--photo .formatium-tile__summary,
+.formatium-grid--photo .formatium-tile__lockinfo,
+.formatium-grid--photo .formatium-tile__dates,
+.formatium-grid--photo .formatium-tile__count {
+    display: none;
+}
+
+.formatium-grid--photo .formatium-tile__badges {
+    position: absolute;
+    top: -2.1rem;
+    left: .6rem;
+}
+
+.formatium-grid--photo .formatium-tile__footer {
+    position: absolute;
+    top: -3.1rem;
+    right: .6rem;
+    padding: 0;
+    margin: 0;
+}
+
+.formatium-grid--photo .formatium-ring {
+    background: rgba(255, 255, 255, .92);
+    border-radius: 50%;
+}
+
+.formatium-grid--photo .formatium-tile__lock,
+.formatium-grid--photo .formatium-tile__check {
+    top: .6rem;
+    right: .6rem;
+}
+
+.formatium-grid--photo .formatium-tile--complete .formatium-tile__footer,
+.formatium-grid--photo .formatium-tile--locked .formatium-tile__footer {
+    display: none;
+}
+
+.formatium-grid--photo .formatium-tile--locked .formatium-tile__title {
+    color: rgba(255, 255, 255, .8);
+}
+
+.formatium-grid--photo a.formatium-tile__link:hover,
+.formatium-grid--photo a.formatium-tile__link:focus-visible {
+    box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .2);
+}

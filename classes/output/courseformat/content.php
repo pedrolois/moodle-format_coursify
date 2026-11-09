@@ -130,6 +130,7 @@ class content extends content_base {
         $data->isgrid = $data->layout === tiles::LAYOUT_GRID;
         $data->ispath = $data->layout === tiles::LAYOUT_PATH;
         $data->islist = $data->layout === tiles::LAYOUT_LIST;
+        $data->isphoto = ($course->tilestyle ?? tiles::STYLE_CARD) === tiles::STYLE_PHOTO;
 
         // Groups: a section with a group name starts one; tile titles go one heading level down inside named groups.
         $data->groups = tiles::group_tiles($data->tiles);

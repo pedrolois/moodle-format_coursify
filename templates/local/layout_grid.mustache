@@ -34,7 +34,7 @@
 {{#groups}}
 <section class="formatium-groupblock" data-region="formatium-group"{{#hasname}} aria-labelledby="{{id}}"{{/hasname}}>
 {{#hasname}}{{> format_formatium/local/group_heading }}{{/hasname}}
-<ul class="formatium-grid formatium-grid--cols-{{columns}}" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+<ul class="formatium-grid formatium-grid--cols-{{columns}}{{#isphoto}} formatium-grid--photo{{/isphoto}}" aria-label="{{#str}}tiles, format_formatium{{/str}}">
     {{#tiles}}
     <li class="formatium-tile formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#isnext}} formatium-tile--next{{/isnext}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
         data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
