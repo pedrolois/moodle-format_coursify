@@ -51,7 +51,8 @@ class format_formatium extends core_courseformat\base {
      * @return bool
      */
     public function uses_course_index() {
-        return true;
+        $course = $this->get_course();
+        return !isset($course->courseindex) || !empty($course->courseindex);
     }
 
     /**
@@ -209,57 +210,59 @@ class format_formatium extends core_courseformat\base {
      */
     public function course_format_options($foreditform = false) {
         static $options = false;
+        $config = get_config('format_formatium');
         if ($options === false) {
-            $config = get_config('format_formatium');
             $options = [
                 'layout' => ['default' => $config->layout ?? tiles::LAYOUT_GRID, 'type' => PARAM_ALPHA],
                 'tilepalette' => ['default' => $config->tilepalette ?? '', 'type' => PARAM_ALPHA],
                 'tilecolumns' => ['default' => (int) ($config->tilecolumns ?? 0), 'type' => PARAM_INT],
+                'numbering' => ['default' => tiles::NUMBERING_NUMBER, 'type' => PARAM_ALPHA],
+                'showbanner' => ['default' => (int) ($config->showbanner ?? 1), 'type' => PARAM_BOOL],
+                'bannerposition' => ['default' => 50, 'type' => PARAM_INT],
                 'showprogress' => ['default' => (int) ($config->showprogress ?? 1), 'type' => PARAM_BOOL],
                 'showcontinue' => ['default' => (int) ($config->showcontinue ?? 1), 'type' => PARAM_BOOL],
+                'showfilters' => ['default' => 1, 'type' => PARAM_BOOL],
+                'sectiondates' => ['default' => tiles::DATES_NONE, 'type' => PARAM_ALPHA],
+                'courseindex' => ['default' => 1, 'type' => PARAM_BOOL],
             ];
         }
-        if ($foreditform && !isset($options['tilecolumns']['label'])) {
+        if ($foreditform && !isset($options['layout']['label'])) {
             $yesno = [0 => new lang_string('no'), 1 => new lang_string('yes')];
-            $options = array_merge_recursive($options, [
-                'layout' => [
-                    'label' => new lang_string('layout', 'format_formatium'),
-                    'element_type' => 'select',
-                    'element_attributes' => [tiles::layout_options()],
-                    'help' => 'layout',
-                    'help_component' => 'format_formatium',
-                ],
-                'tilepalette' => [
-                    'label' => new lang_string('tilepalette', 'format_formatium'),
-                    'element_type' => 'select',
-                    'element_attributes' => [tiles::palette_options()],
-                    'help' => 'tilepalette',
-                    'help_component' => 'format_formatium',
-                ],
-                'tilecolumns' => [
-                    'label' => new lang_string('tilecolumns', 'format_formatium'),
-                    'element_type' => 'select',
-                    'element_attributes' => [tiles::column_options()],
-                    'help' => 'tilecolumns',
-                    'help_component' => 'format_formatium',
-                ],
-                'showprogress' => [
-                    'label' => new lang_string('showprogress', 'format_formatium'),
-                    'element_type' => 'select',
-                    'element_attributes' => [$yesno],
-                    'help' => 'showprogress',
-                    'help_component' => 'format_formatium',
-                ],
-                'showcontinue' => [
-                    'label' => new lang_string('showcontinue', 'format_formatium'),
-                    'element_type' => 'select',
-                    'element_attributes' => [$yesno],
-                    'help' => 'showcontinue',
-                    'help_component' => 'format_formatium',
-                ],
-            ]);
+            $edit = [
+                'layout' => tiles::layout_options(),
+                'tilepalette' => tiles::palette_options(),
+                'tilecolumns' => tiles::column_options(),
+                'numbering' => tiles::numbering_options(),
+                'showbanner' => $yesno,
+                'bannerposition' => tiles::position_options(),
+                'showprogress' => $yesno,
+                'showcontinue' => $yesno,
+                'showfilters' => $yesno,
+                'sectiondates' => tiles::dates_options(),
+                'courseindex' => $yesno,
+            ];
+            foreach ($edit as $name => $choices) {
+                $options[$name] += self::select_element($name, $choices);
+            }
         }
         return $options;
+    }
+
+    /**
+     * Definition of a select element of the edit forms.
+     *
+     * @param string $name option name, also the string of its label and help
+     * @param array $choices
+     * @return array
+     */
+    protected static function select_element(string $name, array $choices): array {
+        return [
+            'label' => new lang_string($name, 'format_formatium'),
+            'element_type' => 'select',
+            'element_attributes' => [$choices],
+            'help' => $name,
+            'help_component' => 'format_formatium',
+        ];
     }
 
     /**
@@ -272,22 +275,20 @@ class format_formatium extends core_courseformat\base {
         $options = [
             'tilecolor' => ['default' => '', 'type' => PARAM_ALPHA],
             'tileicon' => ['default' => '', 'type' => PARAM_ALPHANUMEXT],
+            'groupname' => ['default' => '', 'type' => PARAM_TEXT],
+            'duration' => ['default' => 1, 'type' => PARAM_INT],
         ];
         if ($foreditform) {
-            $options['tilecolor'] += [
-                'label' => new lang_string('tilecolor', 'format_formatium'),
-                'element_type' => 'select',
-                'element_attributes' => [tiles::color_options()],
-                'help' => 'tilecolor',
+            $options['tilecolor'] += self::select_element('tilecolor', tiles::color_options());
+            $options['tileicon'] += self::select_element('tileicon', tiles::icon_options());
+            $options['groupname'] += [
+                'label' => new lang_string('groupname', 'format_formatium'),
+                'element_type' => 'text',
+                'element_attributes' => [['size' => 30, 'maxlength' => 100]],
+                'help' => 'groupname',
                 'help_component' => 'format_formatium',
             ];
-            $options['tileicon'] += [
-                'label' => new lang_string('tileicon', 'format_formatium'),
-                'element_type' => 'select',
-                'element_attributes' => [tiles::icon_options()],
-                'help' => 'tileicon',
-                'help_component' => 'format_formatium',
-            ];
+            $options['duration'] += self::select_element('duration', tiles::duration_options());
         }
         return $options;
     }

@@ -62,8 +62,29 @@ class tiles {
         'rocket', 'flag-checkered', 'globe', 'leaf', 'heart', 'star', 'trophy', 'compass', 'briefcase', 'gear',
     ];
 
+    /** Numbering: 1, 2, 3. */
+    const NUMBERING_NUMBER = 'number';
+
+    /** Numbering: A, B, C. */
+    const NUMBERING_LETTER = 'letter';
+
+    /** Numbering: I, II, III. */
+    const NUMBERING_ROMAN = 'roman';
+
+    /** Section dates: none. */
+    const DATES_NONE = 'none';
+
+    /** Section dates: one after another from the course start, each lasting its duration in weeks. */
+    const DATES_WEEKLY = 'weekly';
+
+    /** User preference with the last section page the user visited in a course (suffix: course id). */
+    const PREF_LASTSECTION = 'format_formatium_lastsection_';
+
     /** @var course_format */
     protected $format;
+
+    /** @var array|null dates of the sections: section id => [start, end] */
+    protected $dates = null;
 
     /** @var completion_info|null completion of the course, null when not tracked for this user */
     protected $completion = null;
@@ -128,6 +149,90 @@ class tiles {
     }
 
     /**
+     * Options of the numbering style.
+     *
+     * @return array
+     */
+    public static function numbering_options(): array {
+        return [
+            self::NUMBERING_NUMBER => get_string('numbering_number', 'format_formatium'),
+            self::NUMBERING_LETTER => get_string('numbering_letter', 'format_formatium'),
+            self::NUMBERING_ROMAN => get_string('numbering_roman', 'format_formatium'),
+        ];
+    }
+
+    /**
+     * Options of the vertical position of the banner image.
+     *
+     * @return array
+     */
+    public static function position_options(): array {
+        return [
+            0 => get_string('position_top', 'format_formatium'),
+            25 => get_string('position_upper', 'format_formatium'),
+            50 => get_string('position_middle', 'format_formatium'),
+            75 => get_string('position_lower', 'format_formatium'),
+            100 => get_string('position_bottom', 'format_formatium'),
+        ];
+    }
+
+    /**
+     * Options of the section dates.
+     *
+     * @return array
+     */
+    public static function dates_options(): array {
+        return [
+            self::DATES_NONE => get_string('sectiondates_none', 'format_formatium'),
+            self::DATES_WEEKLY => get_string('sectiondates_weekly', 'format_formatium'),
+        ];
+    }
+
+    /**
+     * Options of the duration of a section, in weeks.
+     *
+     * @return array
+     */
+    public static function duration_options(): array {
+        $options = [0 => get_string('duration_none', 'format_formatium')];
+        for ($weeks = 1; $weeks <= 6; $weeks++) {
+            $options[$weeks] = get_string('numweeks', 'moodle', $weeks);
+        }
+        $options[1] = get_string('oneweek', 'format_formatium');
+        return $options;
+    }
+
+    /**
+     * A number written in the numbering style of the course.
+     *
+     * @param int $number
+     * @param string $style
+     * @return string
+     */
+    public static function format_number(int $number, string $style): string {
+        if ($style === self::NUMBERING_LETTER) {
+            $label = '';
+            for ($n = $number; $n > 0; $n = intdiv($n - 1, 26)) {
+                $label = chr(65 + ($n - 1) % 26) . $label;
+            }
+            return $label;
+        }
+        if ($style === self::NUMBERING_ROMAN) {
+            $numerals = ['M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50,
+                'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1];
+            $label = '';
+            foreach ($numerals as $numeral => $value) {
+                while ($number >= $value) {
+                    $label .= $numeral;
+                    $number -= $value;
+                }
+            }
+            return $label;
+        }
+        return (string) $number;
+    }
+
+    /**
      * Options of the tile colour.
      *
      * @return array
@@ -175,7 +280,9 @@ class tiles {
      */
     public function export_tiles(): array {
         $modinfo = $this->format->get_modinfo();
-        $palette = self::PALETTES[$this->format->get_course()->tilepalette ?? ''] ?? [];
+        $course = $this->format->get_course();
+        $palette = self::PALETTES[$course->tilepalette ?? ''] ?? [];
+        $numbering = $course->numbering ?? self::NUMBERING_NUMBER;
         $tiles = [];
         foreach ($modinfo->get_listed_section_info_all() as $section) {
             if (!$section->section || !$this->format->is_section_visible($section)) {
@@ -186,15 +293,79 @@ class tiles {
                 $tile['color'] = $palette[count($tiles) % count($palette)];
             }
             $tile['step'] = count($tiles) + 1;
+            $tile['steplabel'] = self::format_number($tile['step'], $numbering);
             $tiles[] = $tile;
         }
         $total = count($tiles);
+        $steps = self::format_number($total, $numbering);
         foreach ($tiles as $i => $tile) {
-            $tiles[$i]['steps'] = $total;
+            $tiles[$i]['steps'] = $steps;
             $tiles[$i]['islast'] = $i == $total - 1;
             $tiles[$i]['side'] = $i % 2 ? 'end' : 'start';
         }
         return $tiles;
+    }
+
+    /**
+     * Tiles split into groups: a section with a group name starts a new group.
+     *
+     * @param array $tiles from export_tiles()
+     * @return array groups, each with its name, tiles and how many of them are complete
+     */
+    public static function group_tiles(array $tiles): array {
+        $groups = [];
+        $current = null;
+        foreach ($tiles as $tile) {
+            if ($current === null || $tile['groupname'] !== '') {
+                if ($current !== null) {
+                    $groups[] = $current;
+                }
+                $current = ['name' => $tile['groupname'], 'tiles' => [], 'done' => 0, 'count' => 0];
+            }
+            $current['tiles'][] = $tile;
+            $current['count']++;
+            if (!empty($tile['progress']['complete'])) {
+                $current['done']++;
+            }
+        }
+        if ($current !== null) {
+            $groups[] = $current;
+        }
+        foreach ($groups as $i => $group) {
+            $groups[$i]['id'] = 'formatium-group-' . $i;
+            $groups[$i]['hasname'] = $group['name'] !== '';
+        }
+        return $groups;
+    }
+
+    /**
+     * Dates of the sections when the course gives them dates: one after another from the course start.
+     *
+     * @return array section id => [start, end] (no entry for sections without time)
+     */
+    protected function section_dates(): array {
+        if ($this->dates !== null) {
+            return $this->dates;
+        }
+        $this->dates = [];
+        $course = $this->format->get_course();
+        if (($course->sectiondates ?? self::DATES_NONE) !== self::DATES_WEEKLY || empty($course->startdate)) {
+            return $this->dates;
+        }
+        $start = usergetmidnight($course->startdate);
+        foreach ($this->format->get_modinfo()->get_listed_section_info_all() as $section) {
+            if (!$section->section) {
+                continue;
+            }
+            $weeks = (int) ($this->format->get_format_options($section)['duration'] ?? 1);
+            if ($weeks <= 0) {
+                continue;
+            }
+            $end = $start + $weeks * WEEKSECS;
+            $this->dates[$section->id] = [$start, $end - 1];
+            $start = $end;
+        }
+        return $this->dates;
     }
 
     /**
@@ -237,7 +408,25 @@ class tiles {
             'lockinfo' => $lockinfo,
             'hiddenfromstudents' => !$section->visible,
             'activities' => count($this->section_cms($section)),
+            'groupname' => format_string(trim((string) ($options['groupname'] ?? '')), true, ['context' => $context]),
         ];
+
+        // Dates: a date range, "This week" (which is also the current section when the teacher set none) and "Opens on".
+        $dates = $this->section_dates()[$section->id] ?? null;
+        if ($dates) {
+            [$start, $end] = $dates;
+            $format = get_string('strftimedateshort', 'langconfig');
+            $tile['daterange'] = get_string('daterange', 'format_formatium',
+                ['start' => userdate($start, $format), 'end' => userdate($end, $format)]);
+            $now = time();
+            $tile['isthisweek'] = $now >= $start && $now <= $end;
+            if ($start > $now) {
+                $tile['opens'] = userdate($start, $format);
+            }
+            if (empty($course->marker) && $tile['isthisweek']) {
+                $tile['iscurrent'] = true;
+            }
+        }
         $image = $this->image_url($section);
         if ($image) {
             $tile['imageurl'] = $image->out(false);
@@ -340,12 +529,117 @@ class tiles {
             }
         }
         $percent = $total ? (int) floor($done * 100 / $total) : 0;
+        $complete = $total && $done == $total;
+        // A label that changes with the progress: start, how many are done, done.
+        if (!$total) {
+            $label = '';
+        } else if ($complete) {
+            $label = get_string('progress_done', 'format_formatium');
+        } else if (!$done) {
+            $label = get_string('progress_start', 'format_formatium');
+        } else {
+            $label = get_string('progress_some', 'format_formatium', ['done' => $done, 'total' => $total]);
+        }
         return [
             'total' => $total,
             'done' => $done,
             'percent' => $percent,
-            'complete' => $total && $done == $total,
+            'complete' => $complete,
             'started' => $done > 0,
+            'label' => $label,
+        ];
+    }
+
+    /**
+     * The section page the user visited last, when the user can still see it.
+     *
+     * @return array|null
+     */
+    public function export_last_section(): ?array {
+        if (!isloggedin() || isguestuser()) {
+            return null;
+        }
+        $sectionid = (int) get_user_preferences(self::PREF_LASTSECTION . $this->format->get_courseid(), 0);
+        $section = $sectionid ? $this->format->get_modinfo()->get_section_info_by_id($sectionid) : null;
+        if (!$section || !$section->uservisible || !$section->section) {
+            return null;
+        }
+        return [
+            'url' => $this->format->get_view_url($section, ['navigation' => true])->out(false),
+            'name' => $this->format->get_section_name($section),
+            'sectionid' => $section->id,
+        ];
+    }
+
+    /**
+     * Remember the section page the user is visiting.
+     *
+     * @param int $sectionid
+     * @return void
+     */
+    public function remember_section(int $sectionid): void {
+        if (!isloggedin() || isguestuser()) {
+            return;
+        }
+        $name = self::PREF_LASTSECTION . $this->format->get_courseid();
+        if ((int) get_user_preferences($name, 0) !== $sectionid) {
+            set_user_preference($name, $sectionid);
+        }
+    }
+
+    /**
+     * Data of the course banner: image, focal point, summary and contacts.
+     *
+     * @param \renderer_base $output
+     * @return array
+     */
+    public function export_banner(\renderer_base $output): array {
+        $course = $this->format->get_course();
+        $element = new \core_course_list_element($course);
+        $imageurl = '';
+        foreach ($element->get_course_overviewfiles() as $file) {
+            if ($file->is_valid_image()) {
+                $imageurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
+                    $file->get_filearea(), null, $file->get_filepath(), $file->get_filename())->out(false);
+                break;
+            }
+        }
+        $context = \context_course::instance($course->id);
+        $summary = '';
+        if ((string) $course->summary !== '') {
+            $text = file_rewrite_pluginfile_urls($course->summary, 'pluginfile.php', $context->id, 'course', 'summary', null);
+            $text = format_text($text, $course->summaryformat, ['context' => $context]);
+            $summary = shorten_text(trim(preg_replace('/\s+/u', ' ', html_to_text($text, 0, false))), 220);
+        }
+        global $DB;
+        $contacts = [];
+        $list = array_slice($element->get_course_contacts(), 0, 4, true);
+        $users = [];
+        if ($list) {
+            // The contacts come without the fields of their pictures.
+            $fields = \core_user\fields::for_userpic()->get_sql('', false, '', '', false)->selects;
+            [$insql, $params] = $DB->get_in_or_equal(array_keys($list));
+            $users = $DB->get_records_select('user', "id $insql", $params, '', $fields);
+        }
+        foreach ($list as $userid => $contact) {
+            $user = $users[$userid] ?? null;
+            if (!$user) {
+                continue;
+            }
+            $contacts[] = [
+                'name' => $contact['username'],
+                'role' => $contact['rolename'],
+                'url' => (new moodle_url('/user/view.php', ['id' => $user->id, 'course' => $course->id]))->out(false),
+                'picture' => $output->user_picture($user, ['size' => 36, 'link' => false, 'alttext' => false]),
+            ];
+        }
+        return [
+            'imageurl' => $imageurl ?: $output->get_generated_image_for_id($course->id),
+            'hasimage' => $imageurl !== '',
+            'position' => max(0, min(100, (int) ($course->bannerposition ?? 50))),
+            'summary' => $summary,
+            'contacts' => $contacts,
+            'hascontacts' => !empty($contacts),
         ];
     }
 

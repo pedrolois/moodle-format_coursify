@@ -62,12 +62,16 @@ class content extends content_base {
     public function export_for_template(renderer_base $output) {
         if (!$this->is_tiles_page()) {
             $data = parent::export_for_template($output);
-            if ($this->format->get_sectionid() && !$this->format->show_editor()) {
+            $sectionid = $this->format->get_sectionid();
+            if ($sectionid && !$this->format->show_editor()) {
                 $data->formatiumnav = $this->export_section_navigation();
+                $data->formatiumstrip = $this->export_section_strip($sectionid);
+                (new tiles($this->format))->remember_section($sectionid);
             }
             return $data;
         }
 
+        global $PAGE;
         $format = $this->format;
         $modinfo = $format->get_modinfo();
         $course = $format->get_course();
@@ -108,6 +112,17 @@ class content extends content_base {
         if (!empty($course->showcontinue)) {
             $data->continue = $next;
             $data->coursecomplete = !$next && !empty($data->overallprogress['complete']);
+            // Without completion tracking, "Continue" goes back to the last section the user visited.
+            if (!$next && empty($data->overallprogress)) {
+                $last = $tiles->export_last_section();
+                if ($last) {
+                    $data->continue = $last + ['issection' => true];
+                }
+            }
+        }
+        $data->hassummary = !empty($data->overallprogress) || !empty($data->continue) || !empty($data->coursecomplete);
+        if (!empty($course->showbanner)) {
+            $data->banner = $tiles->export_banner($output);
         }
 
         $layout = $course->layout ?? tiles::LAYOUT_GRID;
@@ -115,7 +130,39 @@ class content extends content_base {
         $data->isgrid = $data->layout === tiles::LAYOUT_GRID;
         $data->ispath = $data->layout === tiles::LAYOUT_PATH;
         $data->islist = $data->layout === tiles::LAYOUT_LIST;
+
+        // Groups: a section with a group name starts one; tile titles go one heading level down inside named groups.
+        $data->groups = tiles::group_tiles($data->tiles);
+        $named = count(array_filter($data->groups, fn($group) => $group['hasname'])) > 0;
+        foreach ($data->groups as &$group) {
+            foreach ($group['tiles'] as &$tile) {
+                $tile['headinglevel'] = $named ? 4 : 3;
+            }
+            unset($tile);
+        }
+        unset($group);
+
+        // Filters: all, to do, done; only worth it when progress is shown and there are enough tiles.
+        $data->showfilters = !empty($course->showfilters) && !empty($data->overallprogress) && count($data->tiles) > 3;
+        if ($data->showfilters) {
+            $PAGE->requires->js_call_amd('format_formatium/filters', 'init');
+        }
         return $data;
+    }
+
+    /**
+     * Mini tiles of every section, for the strip at the top of a section page.
+     *
+     * @param int $currentid id of the section being viewed
+     * @return array
+     */
+    protected function export_section_strip(int $currentid): array {
+        $tiles = (new tiles($this->format))->export_tiles();
+        foreach ($tiles as &$tile) {
+            $tile['iscurrentpage'] = $tile['id'] == $currentid;
+        }
+        unset($tile);
+        return ['tiles' => $tiles, 'courseurl' => course_get_url($this->format->get_course())->out(false)];
     }
 
     /**

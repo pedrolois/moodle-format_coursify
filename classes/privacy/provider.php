@@ -16,20 +16,45 @@
 
 namespace format_formatium\privacy;
 
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\writer;
+use format_formatium\local\tiles;
+
 /**
- * Privacy provider: the format stores no personal data.
+ * Privacy provider: the format keeps, as a user preference, the last section page of each course the user visited.
  *
  * @package   format_formatium
  * @copyright 2026 Pedro Lois {@link https://github.com/pedrolois}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\null_provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\user_preference_provider {
     /**
-     * Reason why no data is stored.
+     * Data the plugin stores.
      *
-     * @return string
+     * @param collection $collection
+     * @return collection
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_user_preference(tiles::PREF_LASTSECTION . 'courseid', 'privacy:metadata:preference:lastsection');
+        return $collection;
+    }
+
+    /**
+     * Export the user preferences of the plugin.
+     *
+     * @param int $userid
+     * @return void
+     */
+    public static function export_user_preferences(int $userid) {
+        foreach (get_user_preferences(null, null, $userid) as $name => $value) {
+            if (strpos($name, tiles::PREF_LASTSECTION) !== 0) {
+                continue;
+            }
+            $courseid = (int) substr($name, strlen(tiles::PREF_LASTSECTION));
+            writer::export_user_preference('format_formatium', $name, $value,
+                get_string('privacy:lastsection', 'format_formatium', ['course' => $courseid, 'section' => $value]));
+        }
     }
 }

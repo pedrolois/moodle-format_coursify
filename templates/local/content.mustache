@@ -46,6 +46,32 @@
 {{#tilesmode}}
 <div id="course-format-{{uniqid}}" class="formatium">
     <h2 class="visually-hidden">{{{title}}}</h2>
+    {{#banner}}
+    <section class="formatium-banner{{^hasimage}} formatium-banner--generated{{/hasimage}}"
+             style="background-image: url('{{imageurl}}'); background-position: center {{position}}%;"
+             aria-label="{{#str}}coursebanner, format_formatium{{/str}}">
+        <div class="formatium-banner__scrim">
+            {{#summary}}<p class="formatium-banner__summary">{{summary}}</p>{{/summary}}
+            {{#hascontacts}}
+            <ul class="formatium-banner__contacts" aria-label="{{#str}}coursecontacts, format_formatium{{/str}}">
+                {{#contacts}}
+                <li>
+                    <a href="{{url}}" class="formatium-banner__contact">
+                        {{{picture}}}
+                        <span><span class="formatium-banner__contactname">{{name}}</span><span class="formatium-banner__contactrole">{{role}}</span></span>
+                    </a>
+                </li>
+                {{/contacts}}
+            </ul>
+            {{/hascontacts}}
+            {{#hassummary}}
+            <div class="formatium-banner__summarybox">
+                {{> format_formatium/local/course_summary }}
+            </div>
+            {{/hassummary}}
+        </div>
+    </section>
+    {{/banner}}
     {{#initialsection}}
     <ul class="{{format}} section-list formatium-general" data-for="course_sectionlist">
         {{$ core_courseformat/local/content/section }}
@@ -56,56 +82,29 @@
     </ul>
     {{/initialsection}}
 
-    {{#overallprogress}}
+    {{^banner}}
+    {{#hassummary}}
     <div class="formatium-summary">
-        <div class="formatium-summary__progress">
-            <div class="formatium-summary__label">
-                <span>{{#str}}courseprogress, format_formatium{{/str}}</span>
-                <strong>{{percent}}%</strong>
-            </div>
-            <div class="progress formatium-bar" role="progressbar" aria-label="{{#str}}courseprogress, format_formatium{{/str}}"
-                 aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar" style="width: {{percent}}%"></div>
-            </div>
-            <div class="formatium-summary__count small text-muted">
-                {{#str}}activitiesdone, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}
-            </div>
-        </div>
-        {{#continue}}
-        <a class="btn btn-primary formatium-continue" href="{{url}}">
-            <span class="formatium-continue__text">
-                <span class="formatium-continue__label">{{#str}}continue, format_formatium{{/str}}</span>
-                <span class="formatium-continue__name">{{name}}</span>
-            </span>
-            <i class="fa fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
-        {{/continue}}
-        {{#coursecomplete}}
-        <div class="formatium-done">
-            <i class="fa fa-solid fa-trophy" aria-hidden="true"></i>
-            <span>{{#str}}coursecomplete, format_formatium{{/str}}</span>
-        </div>
-        {{/coursecomplete}}
+        {{> format_formatium/local/course_summary }}
     </div>
-    {{/overallprogress}}
-    {{^overallprogress}}
-    {{#continue}}
-    <div class="formatium-summary">
-        <a class="btn btn-primary formatium-continue" href="{{url}}">
-            <span class="formatium-continue__text">
-                <span class="formatium-continue__label">{{#str}}continue, format_formatium{{/str}}</span>
-                <span class="formatium-continue__name">{{name}}</span>
-            </span>
-            <i class="fa fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
+    {{/hassummary}}
+    {{/banner}}
+
+    {{#showfilters}}
+    <div class="formatium-filters" role="group" aria-label="{{#str}}filtertiles, format_formatium{{/str}}" data-region="formatium-filters">
+        <button type="button" class="btn btn-sm formatium-filter" data-filter="all" aria-pressed="true">{{#str}}filter_all, format_formatium{{/str}}</button>
+        <button type="button" class="btn btn-sm formatium-filter" data-filter="todo" aria-pressed="false">{{#str}}filter_todo, format_formatium{{/str}}</button>
+        <button type="button" class="btn btn-sm formatium-filter" data-filter="done" aria-pressed="false">{{#str}}filter_done, format_formatium{{/str}}</button>
     </div>
-    {{/continue}}
-    {{/overallprogress}}
+    {{/showfilters}}
 
     {{#hastiles}}
+    <div class="formatium-tiles" data-region="formatium-tiles">
     {{#isgrid}}{{> format_formatium/local/layout_grid }}{{/isgrid}}
     {{#ispath}}{{> format_formatium/local/layout_path }}{{/ispath}}
     {{#islist}}{{> format_formatium/local/layout_list }}{{/islist}}
+    <p class="formatium-empty text-muted" data-region="formatium-nomatch" hidden>{{#str}}nomatch, format_formatium{{/str}}</p>
+    </div>
     {{/hastiles}}
     {{^hastiles}}
     <p class="formatium-empty text-muted">{{#str}}notiles, format_formatium{{/str}}</p>
@@ -118,6 +117,29 @@ require(['core_courseformat/local/content'], function(component) {
 {{/js}}
 {{/tilesmode}}
 {{^tilesmode}}
+{{#formatiumstrip}}
+<nav class="formatium-strip" aria-label="{{#str}}sectionnavigation, format_formatium{{/str}}">
+    <a class="formatium-strip__all" href="{{courseurl}}" title="{{#str}}alltiles, format_formatium{{/str}}">
+        <i class="fa fa-solid fa-table-cells-large" aria-hidden="true"></i>
+        <span class="visually-hidden">{{#str}}alltiles, format_formatium{{/str}}</span>
+    </a>
+    <ol class="formatium-strip__list">
+        {{#tiles}}
+        <li class="formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}">
+            {{#url}}<a class="formatium-strip__item" href="{{url}}"{{#iscurrentpage}} aria-current="page"{{/iscurrentpage}} title="{{name}}">{{/url}}
+            {{^url}}<span class="formatium-strip__item" aria-disabled="true" title="{{name}} ({{#str}}locked, format_formatium{{/str}})">{{/url}}
+                <span class="formatium-strip__chip" aria-hidden="true">
+                    {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
+                    {{^locked}}{{#progress.complete}}<i class="fa fa-solid fa-check"></i>{{/progress.complete}}{{^progress.complete}}{{steplabel}}{{/progress.complete}}{{/locked}}
+                </span>
+                <span class="formatium-strip__name">{{name}}</span>
+            {{#url}}</a>{{/url}}
+            {{^url}}</span>{{/url}}
+        </li>
+        {{/tiles}}
+    </ol>
+</nav>
+{{/formatiumstrip}}
 {{> core_courseformat/local/content }}
 {{#formatiumnav}}
 <nav class="formatium-sectionnav" aria-label="{{#str}}sectionnavigation, format_formatium{{/str}}">

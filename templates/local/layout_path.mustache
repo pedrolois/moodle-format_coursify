@@ -17,24 +17,31 @@
 {{!
     @template format_formatium/local/layout_path
 
-    Tiles as a learning path: numbered steps along a line, the cards alternating sides on wide screens.
+    Tiles as a learning path: numbered steps along a line, the cards alternating sides on wide screens. Group names
+    are milestones on the line.
 
     Example context (json):
     {
-        "tiles": [
-            {"id": 35, "num": 1, "step": 1, "steps": 2, "side": "start", "name": "Getting started", "url": "#",
-             "summary": "First steps.", "color": "blue", "icon": "rocket", "activities": 4,
-             "progress": {"total": 4, "done": 4, "percent": 100, "complete": true, "started": true} },
-            {"id": 36, "num": 2, "step": 2, "steps": 2, "side": "end", "islast": true, "name": "Advanced", "url": "#",
-             "summary": "", "color": "default", "icon": "", "activities": 3, "isnext": true,
-             "progress": {"total": 3, "done": 0, "percent": 0, "started": false} }
+        "groups": [
+            {"id": "formatium-group-0", "name": "Unit 1", "hasname": true, "done": 1, "count": 1, "tiles": [
+                {"id": 35, "num": 1, "step": 1, "steplabel": "1", "steps": "2", "side": "start", "name": "Getting started",
+                 "url": "#", "summary": "First steps.", "color": "blue", "icon": "rocket", "activities": 4,
+                 "progress": {"total": 4, "done": 4, "percent": 100, "complete": true, "started": true, "label": "Done"} }
+            ]}
         ]
     }
 }}
 <ol class="formatium-path" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+    {{#groups}}
+    {{#hasname}}
+    <li class="formatium-path__group" data-region="formatium-group">
+        {{> format_formatium/local/group_heading }}
+    </li>
+    {{/hasname}}
     {{#tiles}}
     <li class="formatium-step formatium-tile--{{color}} formatium-step--{{side}}{{#locked}} formatium-tile--locked{{/locked}}{{#isnext}} formatium-tile--next{{/isnext}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}{{#islast}} formatium-step--last{{/islast}}"
-        data-sectionid="{{id}}" data-number="{{num}}">
+        data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
+        data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
         <div class="formatium-step__node" aria-hidden="true">
             {{#progress}}
             {{#total}}
@@ -53,7 +60,7 @@
                 {{#progress.complete}}<i class="fa fa-solid fa-check"></i>{{/progress.complete}}
                 {{^progress.complete}}
                 {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
-                {{^icon}}<span class="formatium-tile__number">{{step}}</span>{{/icon}}
+                {{^icon}}<span class="formatium-tile__number">{{steplabel}}</span>{{/icon}}
                 {{/progress.complete}}
                 {{/locked}}
             </span>
@@ -63,7 +70,7 @@
             {{#imageurl}}<span class="formatium-step__image" style="background-image: url('{{imageurl}}')"></span>{{/imageurl}}
             <span class="formatium-step__content">
                 <span class="formatium-step__label">
-                    {{#str}}stepof, format_formatium, { "step": {{step}}, "steps": {{steps}} }{{/str}}
+                    {{#str}}stepof, format_formatium, { "step": "{{steplabel}}", "steps": "{{steps}}" }{{/str}}
                     {{#locked}}· {{#str}}locked, format_formatium{{/str}}{{/locked}}
                     {{#progress.complete}}· {{#str}}tilecomplete, format_formatium{{/str}}{{/progress.complete}}
                 </span>
@@ -73,11 +80,12 @@
                 {{#lockinfo}}<span class="formatium-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
                 <span class="formatium-step__meta">
                     {{^locked}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/locked}}
-                    {{#progress}}{{#total}} · {{#str}}tileprogress, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}{{/total}}{{/progress}}
+                    {{#progress.label}} · {{progress.label}}{{/progress.label}}
                 </span>
             </span>
         {{#url}}</a>{{/url}}
         {{^url}}</div>{{/url}}
     </li>
     {{/tiles}}
+    {{/groups}}
 </ol>

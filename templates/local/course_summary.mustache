@@ -1,0 +1,60 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_formatium/local/course_summary
+
+    Progress of the course, the button to continue and the "course complete" message.
+
+    Example context (json):
+    {
+        "overallprogress": {"total": 10, "done": 4, "percent": 40},
+        "continue": {"url": "#", "name": "Quiz 1"}
+    }
+}}
+{{#overallprogress}}
+<div class="formatium-summary__progress">
+    <div class="formatium-summary__label">
+        <span>{{#str}}courseprogress, format_formatium{{/str}}</span>
+        <strong>{{percent}}%</strong>
+    </div>
+    <div class="progress formatium-bar" role="progressbar" aria-label="{{#str}}courseprogress, format_formatium{{/str}}"
+         aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar" style="width: {{percent}}%"></div>
+    </div>
+    <div class="formatium-summary__count small">
+        {{#str}}activitiesdone, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}
+    </div>
+</div>
+{{/overallprogress}}
+{{#continue}}
+<a class="btn btn-primary formatium-continue" href="{{url}}">
+    <span class="formatium-continue__text">
+        <span class="formatium-continue__label">
+            {{#issection}}{{#str}}resume, format_formatium{{/str}}{{/issection}}
+            {{^issection}}{{#str}}continue, format_formatium{{/str}}{{/issection}}
+        </span>
+        <span class="formatium-continue__name">{{name}}</span>
+    </span>
+    <i class="fa fa-solid fa-arrow-right" aria-hidden="true"></i>
+</a>
+{{/continue}}
+{{#coursecomplete}}
+<div class="formatium-done">
+    <i class="fa fa-solid fa-trophy" aria-hidden="true"></i>
+    <span>{{#str}}coursecomplete, format_formatium{{/str}}</span>
+</div>
+{{/coursecomplete}}

@@ -17,22 +17,28 @@
 {{!
     @template format_formatium/local/layout_grid
 
-    Tiles as a grid of cards.
+    Tiles as a grid of cards, by groups.
 
     Example context (json):
     {
         "columns": 3,
-        "tiles": [
-            {"id": 35, "num": 1, "name": "Getting started", "url": "#", "summary": "First steps.", "color": "blue",
-             "icon": "rocket", "activities": 4, "isnext": true,
-             "progress": {"total": 4, "done": 2, "percent": 50, "started": true} }
+        "groups": [
+            {"id": "formatium-group-0", "name": "", "hasname": false, "tiles": [
+                {"id": 35, "num": 1, "steplabel": "1", "headinglevel": 3, "name": "Getting started", "url": "#",
+                 "summary": "First steps.", "color": "blue", "icon": "rocket", "activities": 4, "isnext": true,
+                 "progress": {"total": 4, "done": 2, "percent": 50, "started": true, "label": "2 of 4"} }
+            ]}
         ]
     }
 }}
+{{#groups}}
+<section class="formatium-groupblock" data-region="formatium-group"{{#hasname}} aria-labelledby="{{id}}"{{/hasname}}>
+{{#hasname}}{{> format_formatium/local/group_heading }}{{/hasname}}
 <ul class="formatium-grid formatium-grid--cols-{{columns}}" aria-label="{{#str}}tiles, format_formatium{{/str}}">
     {{#tiles}}
     <li class="formatium-tile formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#isnext}} formatium-tile--next{{/isnext}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
-        data-sectionid="{{id}}" data-number="{{num}}">
+        data-sectionid="{{id}}" data-number="{{num}}" data-region="formatium-tile"
+        data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
         {{#url}}<a class="formatium-tile__link" href="{{url}}">{{/url}}
         {{^url}}<div class="formatium-tile__link" aria-disabled="true">{{/url}}
             <div class="formatium-tile__media{{#imageurl}} formatium-tile__media--image{{/imageurl}}"
@@ -40,7 +46,7 @@
                 {{^imageurl}}
                 <span class="formatium-tile__icon" aria-hidden="true">
                     {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
-                    {{^icon}}<span class="formatium-tile__number">{{step}}</span>{{/icon}}
+                    {{^icon}}<span class="formatium-tile__number">{{steplabel}}</span>{{/icon}}
                 </span>
                 {{/imageurl}}
                 {{#locked}}
@@ -58,12 +64,15 @@
             </div>
             <div class="formatium-tile__body">
                 {{> format_formatium/local/tile_badges }}
-                <h3 class="formatium-tile__title">{{name}}</h3>
+                <h{{headinglevel}} class="formatium-tile__title">{{name}}</h{{headinglevel}}>
                 {{#summary}}<p class="formatium-tile__summary">{{summary}}</p>{{/summary}}
                 {{#lockinfo}}<div class="formatium-tile__lockinfo">{{{lockinfo}}}</div>{{/lockinfo}}
                 <div class="formatium-tile__footer">
                     <span class="formatium-tile__count">
-                        {{^locked}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/locked}}
+                        {{^locked}}
+                        {{#progress.label}}{{progress.label}}{{/progress.label}}
+                        {{^progress.label}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/progress.label}}
+                        {{/locked}}
                     </span>
                     {{#progress}}{{> format_formatium/local/tile_ring }}{{/progress}}
                 </div>
@@ -73,3 +82,5 @@
     </li>
     {{/tiles}}
 </ul>
+</section>
+{{/groups}}
