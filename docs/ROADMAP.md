@@ -29,9 +29,9 @@ This roadmap comes from a study of the six most installed course formats on Mood
 | Numbering style | Buttons | Numbers, letters, Roman numerals | Next |
 | Course index mode, General header | Flexible sections | Full, sections only, or hidden. General header can be hidden | Next |
 | Filter chips | Tiles | All / To do / Done, and by group | Next |
-| Activities in a modal (page, PDF, video) | Tiles | `core/modal` plus an external function, accessible, works on phones | Later |
-| Live progress after manual completion | Tiles | Uses the core completion event, with no polling | Later |
-| Back to section on activity pages | Flexible sections, Multitopic, Onetopic | Uses a hook and an aligned template | Later |
+| Activities in a modal (page, PDF, video) | Tiles | `core/modal` and a web service that logs the view; closing it reloads the activity, so completion shows straight away | Done |
+| Live progress after manual completion | Tiles | The activity and the course index update without a reload | Done |
+| Back to section on activity pages | Flexible sections, Multitopic, Onetopic | Not needed: the 5.3 breadcrumbs link the section, and core already has activity navigation | Dropped |
 | Subsection display (cards / list) | Onetopic | Subsections shown as mini tiles | Later |
 | Inline activity links in summaries | Onetopic | Linked by activity id, with completion state | Maybe |
 | Style tokens editor | Onetopic | Validated tokens turned into CSS variables. No raw CSS | Maybe |

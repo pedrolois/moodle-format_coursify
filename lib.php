@@ -224,6 +224,7 @@ class format_coursify extends core_courseformat\base {
                 'showprogress' => ['default' => (int) ($config->showprogress ?? 1), 'type' => PARAM_BOOL],
                 'showcontinue' => ['default' => (int) ($config->showcontinue ?? 1), 'type' => PARAM_BOOL],
                 'showfilters' => ['default' => 1, 'type' => PARAM_BOOL],
+                'activitymodal' => ['default' => 1, 'type' => PARAM_BOOL],
                 'sectiondates' => ['default' => tiles::DATES_NONE, 'type' => PARAM_ALPHA],
                 'courseindex' => ['default' => 1, 'type' => PARAM_BOOL],
             ];
@@ -242,6 +243,7 @@ class format_coursify extends core_courseformat\base {
                 'showprogress' => $yesno,
                 'showcontinue' => $yesno,
                 'showfilters' => $yesno,
+                'activitymodal' => $yesno,
                 'sectiondates' => tiles::dates_options(),
                 'courseindex' => $yesno,
             ];

@@ -26,6 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['activitiescount'] = '{$a} activities';
 $string['activitiesdone'] = '{$a->done} of {$a->total} activities completed';
+$string['activitymodal'] = 'Open activities in a window';
+$string['activitymodal_help'] = 'Pages, PDF files and YouTube or Vimeo links open in a window over the course, so learners do not lose their place. Opening one counts as viewing it, for completion too. Other activities open as usual.';
 $string['alltiles'] = 'All sections';
 $string['bannerposition'] = 'Banner image position';
 $string['bannerposition_help'] = 'Which part of the course image the banner shows, when the image is taller than the banner.';
@@ -111,6 +113,7 @@ $string['numbering_letter'] = 'Letters (A, B, C)';
 $string['numbering_number'] = 'Numbers (1, 2, 3)';
 $string['numbering_roman'] = 'Roman numerals (I, II, III)';
 $string['oneweek'] = '1 week';
+$string['openfullpage'] = 'Open the full page';
 $string['opens'] = 'Opens {$a}';
 $string['palette_calm'] = 'Calm';
 $string['palette_forest'] = 'Forest';

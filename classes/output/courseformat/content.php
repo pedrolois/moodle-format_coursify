@@ -60,6 +60,10 @@ class content extends content_base {
      * @return \stdClass
      */
     public function export_for_template(renderer_base $output) {
+        global $PAGE;
+        if (!$this->format->show_editor() && !empty($this->format->get_course()->activitymodal)) {
+            $PAGE->requires->js_call_amd('format_coursify/activity_modal', 'init');
+        }
         if (!$this->is_tiles_page()) {
             $data = parent::export_for_template($output);
             $sectionid = $this->format->get_sectionid();
@@ -71,7 +75,6 @@ class content extends content_base {
             return $data;
         }
 
-        global $PAGE;
         $format = $this->format;
         $modinfo = $format->get_modinfo();
         $course = $format->get_course();
