@@ -1,0 +1,359 @@
+/* Formatium course format. Colours come from the theme (Bootstrap variables), so dark mode and brand colours follow. */
+
+.formatium {
+    --formatium-gap: 1.25rem;
+    --formatium-radius: var(--bs-border-radius-lg, .75rem);
+}
+
+.formatium .formatium-general {
+    margin-bottom: 1.5rem;
+}
+
+/* Progress of the course and the next activity to do. */
+.formatium-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--formatium-radius);
+    background: var(--bs-body-bg);
+}
+
+.formatium-summary__progress {
+    flex: 1 1 16rem;
+    min-width: 0;
+}
+
+.formatium-summary__label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .35rem;
+}
+
+.formatium-bar {
+    height: .5rem;
+}
+
+.formatium-summary__count {
+    margin-top: .35rem;
+}
+
+.formatium .formatium-continue {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .85rem;
+    max-width: 100%;
+    padding: .6rem 1.1rem;
+    text-align: left;
+}
+
+.formatium-continue__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.formatium-continue__label {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    opacity: .85;
+}
+
+.formatium-continue__name {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.formatium-done {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    color: var(--bs-success);
+}
+
+/* Grid of tiles: auto-fills the width, or a fixed number of columns on wide screens. */
+.formatium-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--formatium-gap);
+    padding: 0;
+    margin: 0 0 1.5rem;
+    list-style: none;
+}
+
+@media (min-width: 768px) {
+    .formatium-grid--cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .formatium-grid--cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 992px) {
+    .formatium-grid--cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Accent colour of each tile. */
+.formatium-tile {
+    --formatium-accent: var(--bs-primary);
+    --formatium-accent-rgb: var(--bs-primary-rgb);
+    min-width: 0;
+}
+
+.formatium-tile--blue { --formatium-accent: var(--bs-blue); }
+.formatium-tile--indigo { --formatium-accent: var(--bs-indigo); }
+.formatium-tile--purple { --formatium-accent: var(--bs-purple); }
+.formatium-tile--pink { --formatium-accent: var(--bs-pink); }
+.formatium-tile--red { --formatium-accent: var(--bs-red); }
+.formatium-tile--orange { --formatium-accent: var(--bs-orange); }
+.formatium-tile--yellow { --formatium-accent: var(--bs-yellow); }
+.formatium-tile--green { --formatium-accent: var(--bs-green); }
+.formatium-tile--teal { --formatium-accent: var(--bs-teal); }
+.formatium-tile--cyan { --formatium-accent: var(--bs-cyan); }
+.formatium-tile--gray { --formatium-accent: var(--bs-gray-600); }
+
+.formatium-tile__link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--formatium-radius);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+a.formatium-tile__link:hover,
+a.formatium-tile__link:focus-visible {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    border-color: var(--formatium-accent);
+    box-shadow: 0 .5rem 1.25rem rgba(0, 0, 0, .1);
+    transform: translateY(-2px);
+}
+
+a.formatium-tile__link:focus-visible {
+    outline: 3px solid var(--formatium-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .formatium-tile__link {
+        transition: none;
+    }
+
+    a.formatium-tile__link:hover,
+    a.formatium-tile__link:focus-visible {
+        transform: none;
+    }
+}
+
+.formatium-tile--current .formatium-tile__link {
+    border-color: var(--formatium-accent);
+    box-shadow: 0 0 0 1px var(--formatium-accent);
+}
+
+.formatium-tile__media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 7;
+    background-color: color-mix(in srgb, var(--formatium-accent) 14%, var(--bs-body-bg));
+    background-position: center;
+    background-size: cover;
+    border-bottom: 4px solid var(--formatium-accent);
+}
+
+.formatium-tile__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.6rem;
+    color: #fff;
+    background: var(--formatium-accent);
+    border-radius: 50%;
+}
+
+.formatium-tile__number {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.formatium-tile__lock,
+.formatium-tile__check {
+    position: absolute;
+    top: .6rem;
+    right: .6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.formatium-tile__lock {
+    background: rgba(0, 0, 0, .6);
+}
+
+.formatium-tile__check {
+    background: var(--bs-success);
+}
+
+.formatium-tile__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: .35rem;
+    padding: .9rem 1rem 1rem;
+}
+
+.formatium-tile__badges:empty {
+    display: none;
+}
+
+.formatium-tile__title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.formatium-tile__summary {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    font-size: .9rem;
+    color: var(--bs-secondary-color);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.formatium-tile__lockinfo {
+    font-size: .85rem;
+    color: var(--bs-secondary-color);
+}
+
+.formatium-tile__lockinfo ul {
+    padding-left: 1.1rem;
+    margin: 0;
+}
+
+.formatium-tile__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding-top: .5rem;
+    margin-top: auto;
+    font-size: .85rem;
+    color: var(--bs-secondary-color);
+}
+
+.formatium-tile--locked .formatium-tile__media {
+    filter: grayscale(.85);
+}
+
+.formatium-tile--locked .formatium-tile__title {
+    color: var(--bs-secondary-color);
+}
+
+/* Progress ring of a tile. */
+.formatium-ring {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 2.6rem;
+    height: 2.6rem;
+}
+
+.formatium-ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.formatium-ring circle {
+    fill: none;
+    stroke-width: 3.5;
+}
+
+.formatium-ring__track {
+    stroke: var(--bs-border-color);
+}
+
+.formatium-ring__value {
+    stroke: var(--formatium-accent);
+    stroke-linecap: round;
+}
+
+.formatium-tile--complete .formatium-ring__value {
+    stroke: var(--bs-success);
+}
+
+.formatium-ring__text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .62rem;
+    font-weight: 700;
+    color: var(--bs-body-color);
+}
+
+/* Section pages: previous tile, all tiles, next tile. */
+.formatium-sectionnav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: .75rem;
+    margin: 1.5rem 0;
+}
+
+.formatium-sectionnav__side {
+    min-width: 0;
+}
+
+.formatium-sectionnav__side .btn {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.formatium-sectionnav__side--end {
+    text-align: right;
+}
+
+@media (max-width: 575.98px) {
+    .formatium-sectionnav {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .formatium-sectionnav > .btn-link {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+}
