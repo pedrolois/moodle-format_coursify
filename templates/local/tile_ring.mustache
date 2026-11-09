@@ -1,0 +1,37 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_formatium/local/tile_ring
+
+    Progress ring of a tile (the context is the progress of the tile).
+
+    Example context (json):
+    {"total": 4, "done": 1, "percent": 25, "started": true}
+}}
+{{#total}}
+<span class="formatium-ring" role="img"
+      aria-label="{{#str}}tileprogress, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}">
+    <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+        <circle class="formatium-ring__track" cx="18" cy="18" r="15.5" pathLength="100"></circle>
+        {{#started}}
+        <circle class="formatium-ring__value" cx="18" cy="18" r="15.5" pathLength="100"
+                stroke-dasharray="{{percent}} 100"></circle>
+        {{/started}}
+    </svg>
+    <span class="formatium-ring__text" aria-hidden="true">{{percent}}%</span>
+</span>
+{{/total}}

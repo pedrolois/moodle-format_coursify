@@ -1,6 +1,7 @@
 /* Formatium course format. Colours come from the theme (Bootstrap variables), so dark mode and brand colours follow. */
 
 .formatium {
+    --formatium-accent: var(--bs-primary);
     --formatium-gap: 1.25rem;
     --formatium-radius: var(--bs-border-radius-lg, .75rem);
 }
@@ -108,8 +109,6 @@
 
 /* Accent colour of each tile. */
 .formatium-tile {
-    --formatium-accent: var(--bs-primary);
-    --formatium-accent-rgb: var(--bs-primary-rgb);
     min-width: 0;
 }
 
@@ -355,5 +354,344 @@ a.formatium-tile__link:focus-visible {
     .formatium-sectionnav > .btn-link {
         grid-column: 1 / -1;
         grid-row: 2;
+    }
+}
+
+/* "Up next": the tile with the next activity to do. */
+.formatium-badge-next {
+    color: #fff;
+    background: var(--formatium-accent, var(--bs-primary));
+}
+
+.formatium-tile--next .formatium-tile__link {
+    border-color: var(--formatium-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--formatium-accent) 35%, transparent);
+}
+
+.formatium-tile__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+}
+
+/* Learning path: numbered steps along a line. */
+.formatium-path {
+    --formatium-node: 3.5rem;
+    position: relative;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    list-style: none;
+}
+
+.formatium-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--formatium-node) minmax(0, 1fr);
+    gap: 0 1rem;
+    align-items: start;
+    padding-bottom: 1.5rem;
+}
+
+/* The line to the next step. */
+.formatium-step::before {
+    position: absolute;
+    top: var(--formatium-node);
+    bottom: 0;
+    left: calc(var(--formatium-node) / 2 - 2px);
+    width: 4px;
+    content: "";
+    background: var(--bs-border-color);
+    border-radius: 2px;
+}
+
+.formatium-step--last::before {
+    display: none;
+}
+
+.formatium-step.formatium-tile--complete::before {
+    background: var(--formatium-accent);
+}
+
+.formatium-step__node {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    grid-row: 1;
+    grid-column: 1;
+    align-items: center;
+    justify-content: center;
+    width: var(--formatium-node);
+    height: var(--formatium-node);
+}
+
+.formatium-step__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.formatium-step__ring circle {
+    fill: none;
+    stroke-width: 3;
+}
+
+.formatium-step__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--formatium-node) - .9rem);
+    height: calc(var(--formatium-node) - .9rem);
+    font-size: 1.15rem;
+    color: #fff;
+    background: var(--formatium-accent);
+    border-radius: 50%;
+}
+
+.formatium-step.formatium-tile--complete .formatium-step__icon {
+    background: var(--bs-success);
+}
+
+.formatium-step.formatium-tile--locked .formatium-step__icon {
+    color: var(--bs-secondary-color);
+    background: var(--bs-secondary-bg);
+}
+
+.formatium-step.formatium-tile--next .formatium-step__icon {
+    box-shadow: 0 0 0 .35rem color-mix(in srgb, var(--formatium-accent) 25%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .formatium-step.formatium-tile--next .formatium-step__icon {
+        animation: formatium-pulse 2s ease-in-out infinite;
+    }
+}
+
+@keyframes formatium-pulse {
+    50% {
+        box-shadow: 0 0 0 .6rem color-mix(in srgb, var(--formatium-accent) 10%, transparent);
+    }
+}
+
+.formatium-step__card {
+    display: flex;
+    grid-row: 1;
+    grid-column: 2;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-left: 4px solid var(--formatium-accent);
+    border-radius: var(--formatium-radius, .75rem);
+    transition: box-shadow .15s ease;
+}
+
+a.formatium-step__card:hover,
+a.formatium-step__card:focus-visible {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    box-shadow: 0 .5rem 1.25rem rgba(0, 0, 0, .1);
+}
+
+a.formatium-step__card:focus-visible {
+    outline: 3px solid var(--formatium-accent);
+    outline-offset: 2px;
+}
+
+.formatium-step.formatium-tile--next .formatium-step__card {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--formatium-accent) 35%, transparent);
+}
+
+.formatium-step.formatium-tile--locked .formatium-step__card {
+    border-left-color: var(--bs-border-color);
+}
+
+.formatium-step__image {
+    flex: 0 0 8rem;
+    background-position: center;
+    background-size: cover;
+}
+
+.formatium-step__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: .3rem;
+    min-width: 0;
+    padding: .85rem 1rem;
+}
+
+.formatium-step__label {
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--formatium-accent);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.formatium-step.formatium-tile--locked .formatium-step__label,
+.formatium-step.formatium-tile--locked .formatium-step__title {
+    color: var(--bs-secondary-color);
+}
+
+.formatium-step__title {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.formatium-step__summary,
+.formatium-step__meta {
+    font-size: .875rem;
+    color: var(--bs-secondary-color);
+}
+
+/* Wide screens: the line in the middle and the cards alternating sides. */
+@media (min-width: 992px) {
+    .formatium-step {
+        grid-template-columns: minmax(0, 1fr) var(--formatium-node) minmax(0, 1fr);
+        gap: 0 1.5rem;
+    }
+
+    .formatium-step::before {
+        left: calc(50% - 2px);
+    }
+
+    .formatium-step__node {
+        grid-column: 2;
+    }
+
+    .formatium-step--start .formatium-step__card {
+        flex-direction: row-reverse;
+        grid-column: 1;
+        text-align: right;
+        border-right: 4px solid var(--formatium-accent);
+        border-left: 1px solid var(--bs-border-color);
+    }
+
+    .formatium-step--start.formatium-tile--locked .formatium-step__card {
+        border-right-color: var(--bs-border-color);
+    }
+
+    .formatium-step--start .formatium-tile__badges {
+        justify-content: flex-end;
+    }
+
+    .formatium-step--end .formatium-step__card {
+        grid-column: 3;
+    }
+}
+
+/* Compact list. */
+.formatium-list {
+    padding: 0;
+    margin: 0 0 1.5rem;
+    overflow: hidden;
+    list-style: none;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--formatium-radius, .75rem);
+}
+
+.formatium-row + .formatium-row {
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.formatium-row__link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem 1rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    background: var(--bs-body-bg);
+    border-left: 4px solid var(--formatium-accent);
+}
+
+a.formatium-row__link:hover,
+a.formatium-row__link:focus-visible {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--formatium-accent) 6%, var(--bs-body-bg));
+}
+
+a.formatium-row__link:focus-visible {
+    outline: 3px solid var(--formatium-accent);
+    outline-offset: -3px;
+}
+
+.formatium-row.formatium-tile--locked .formatium-row__link {
+    border-left-color: var(--bs-border-color);
+}
+
+.formatium-row__icon {
+    display: flex;
+    flex: 0 0 2.75rem;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: var(--formatium-accent);
+    background-position: center;
+    background-size: cover;
+    border-radius: var(--bs-border-radius);
+}
+
+.formatium-row.formatium-tile--complete .formatium-row__icon:not(.formatium-row__icon--image) {
+    background-color: var(--bs-success);
+}
+
+.formatium-row.formatium-tile--locked .formatium-row__icon {
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-secondary-bg);
+}
+
+.formatium-row__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: .15rem;
+    min-width: 0;
+}
+
+.formatium-row__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .25rem .5rem;
+    font-weight: 600;
+}
+
+.formatium-row.formatium-tile--locked .formatium-row__title {
+    color: var(--bs-secondary-color);
+}
+
+.formatium-row__summary {
+    overflow: hidden;
+    font-size: .875rem;
+    color: var(--bs-secondary-color);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.formatium-row__meta {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: .75rem;
+    font-size: .85rem;
+    color: var(--bs-secondary-color);
+}
+
+.formatium-row__chevron {
+    color: var(--bs-secondary-color);
+}
+
+@media (max-width: 575.98px) {
+    .formatium-row__count {
+        display: none;
     }
 }

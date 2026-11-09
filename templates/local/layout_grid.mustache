@@ -1,0 +1,75 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_formatium/local/layout_grid
+
+    Tiles as a grid of cards.
+
+    Example context (json):
+    {
+        "columns": 3,
+        "tiles": [
+            {"id": 35, "num": 1, "name": "Getting started", "url": "#", "summary": "First steps.", "color": "blue",
+             "icon": "rocket", "activities": 4, "isnext": true,
+             "progress": {"total": 4, "done": 2, "percent": 50, "started": true} }
+        ]
+    }
+}}
+<ul class="formatium-grid formatium-grid--cols-{{columns}}" aria-label="{{#str}}tiles, format_formatium{{/str}}">
+    {{#tiles}}
+    <li class="formatium-tile formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#isnext}} formatium-tile--next{{/isnext}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
+        data-sectionid="{{id}}" data-number="{{num}}">
+        {{#url}}<a class="formatium-tile__link" href="{{url}}">{{/url}}
+        {{^url}}<div class="formatium-tile__link" aria-disabled="true">{{/url}}
+            <div class="formatium-tile__media{{#imageurl}} formatium-tile__media--image{{/imageurl}}"
+                 {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
+                {{^imageurl}}
+                <span class="formatium-tile__icon" aria-hidden="true">
+                    {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
+                    {{^icon}}<span class="formatium-tile__number">{{step}}</span>{{/icon}}
+                </span>
+                {{/imageurl}}
+                {{#locked}}
+                <span class="formatium-tile__lock" title="{{#str}}locked, format_formatium{{/str}}">
+                    <i class="fa fa-solid fa-lock" aria-hidden="true"></i>
+                    <span class="visually-hidden">{{#str}}locked, format_formatium{{/str}}</span>
+                </span>
+                {{/locked}}
+                {{#progress.complete}}
+                <span class="formatium-tile__check" title="{{#str}}tilecomplete, format_formatium{{/str}}">
+                    <i class="fa fa-solid fa-check" aria-hidden="true"></i>
+                    <span class="visually-hidden">{{#str}}tilecomplete, format_formatium{{/str}}</span>
+                </span>
+                {{/progress.complete}}
+            </div>
+            <div class="formatium-tile__body">
+                {{> format_formatium/local/tile_badges }}
+                <h3 class="formatium-tile__title">{{name}}</h3>
+                {{#summary}}<p class="formatium-tile__summary">{{summary}}</p>{{/summary}}
+                {{#lockinfo}}<div class="formatium-tile__lockinfo">{{{lockinfo}}}</div>{{/lockinfo}}
+                <div class="formatium-tile__footer">
+                    <span class="formatium-tile__count">
+                        {{^locked}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/locked}}
+                    </span>
+                    {{#progress}}{{> format_formatium/local/tile_ring }}{{/progress}}
+                </div>
+            </div>
+        {{#url}}</a>{{/url}}
+        {{^url}}</div>{{/url}}
+    </li>
+    {{/tiles}}
+</ul>

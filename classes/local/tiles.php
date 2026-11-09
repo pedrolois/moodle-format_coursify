@@ -37,6 +37,24 @@ class tiles {
     /** Accent colours a tile can have (Bootstrap colours, so they follow the theme). */
     const COLORS = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'gray'];
 
+    /** Layout: grid of tiles. */
+    const LAYOUT_GRID = 'grid';
+
+    /** Layout: learning path, one step after another. */
+    const LAYOUT_PATH = 'path';
+
+    /** Layout: compact list. */
+    const LAYOUT_LIST = 'list';
+
+    /** Palettes: colours given in turn to the tiles that have no colour of their own. */
+    const PALETTES = [
+        'rainbow' => ['blue', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'indigo'],
+        'ocean' => ['blue', 'cyan', 'teal', 'indigo'],
+        'sunset' => ['orange', 'red', 'pink', 'purple'],
+        'forest' => ['green', 'teal', 'yellow', 'cyan'],
+        'calm' => ['indigo', 'purple', 'blue', 'gray'],
+    ];
+
     /** Font Awesome icons a tile can have. */
     const ICONS = [
         'book', 'book-open', 'graduation-cap', 'lightbulb', 'flask', 'calculator', 'code', 'laptop', 'chart-line',
@@ -81,6 +99,32 @@ class tiles {
             3 => 3,
             4 => 4,
         ];
+    }
+
+    /**
+     * Options of the layout of the course page.
+     *
+     * @return array
+     */
+    public static function layout_options(): array {
+        return [
+            self::LAYOUT_GRID => get_string('layout_grid', 'format_formatium'),
+            self::LAYOUT_PATH => get_string('layout_path', 'format_formatium'),
+            self::LAYOUT_LIST => get_string('layout_list', 'format_formatium'),
+        ];
+    }
+
+    /**
+     * Options of the palette.
+     *
+     * @return array
+     */
+    public static function palette_options(): array {
+        $options = ['' => get_string('palette_none', 'format_formatium')];
+        foreach (array_keys(self::PALETTES) as $palette) {
+            $options[$palette] = get_string('palette_' . $palette, 'format_formatium');
+        }
+        return $options;
     }
 
     /**
@@ -131,12 +175,24 @@ class tiles {
      */
     public function export_tiles(): array {
         $modinfo = $this->format->get_modinfo();
+        $palette = self::PALETTES[$this->format->get_course()->tilepalette ?? ''] ?? [];
         $tiles = [];
         foreach ($modinfo->get_listed_section_info_all() as $section) {
             if (!$section->section || !$this->format->is_section_visible($section)) {
                 continue;
             }
-            $tiles[] = $this->export_tile($section);
+            $tile = $this->export_tile($section);
+            if ($palette && $tile['color'] === 'default') {
+                $tile['color'] = $palette[count($tiles) % count($palette)];
+            }
+            $tile['step'] = count($tiles) + 1;
+            $tiles[] = $tile;
+        }
+        $total = count($tiles);
+        foreach ($tiles as $i => $tile) {
+            $tiles[$i]['steps'] = $total;
+            $tiles[$i]['islast'] = $i == $total - 1;
+            $tiles[$i]['side'] = $i % 2 ? 'end' : 'start';
         }
         return $tiles;
     }
@@ -229,7 +285,8 @@ class tiles {
                     return [
                         'url' => $cm->url->out(false),
                         'name' => $cm->get_formatted_name(),
-                        'section' => $this->format->get_section_name($cm->get_section_info()),
+                        'section' => $this->format->get_section_name($section),
+                        'sectionid' => $section->id,
                         'iconurl' => $cm->get_icon_url()->out(false),
                     ];
                 }

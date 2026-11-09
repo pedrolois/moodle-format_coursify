@@ -100,10 +100,21 @@ class content extends content_base {
             }
             unset($tile);
         }
-        if (!empty($course->showcontinue)) {
-            $data->continue = $tiles->export_continue();
-            $data->coursecomplete = !$data->continue && !empty($data->overallprogress['complete']);
+        $next = $tiles->export_continue();
+        foreach ($data->tiles as &$tile) {
+            $tile['isnext'] = $next && $next['sectionid'] == $tile['id'];
         }
+        unset($tile);
+        if (!empty($course->showcontinue)) {
+            $data->continue = $next;
+            $data->coursecomplete = !$next && !empty($data->overallprogress['complete']);
+        }
+
+        $layout = $course->layout ?? tiles::LAYOUT_GRID;
+        $data->layout = array_key_exists($layout, tiles::layout_options()) ? $layout : tiles::LAYOUT_GRID;
+        $data->isgrid = $data->layout === tiles::LAYOUT_GRID;
+        $data->ispath = $data->layout === tiles::LAYOUT_PATH;
+        $data->islist = $data->layout === tiles::LAYOUT_LIST;
         return $data;
     }
 

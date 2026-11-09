@@ -212,6 +212,8 @@ class format_formatium extends core_courseformat\base {
         if ($options === false) {
             $config = get_config('format_formatium');
             $options = [
+                'layout' => ['default' => $config->layout ?? tiles::LAYOUT_GRID, 'type' => PARAM_ALPHA],
+                'tilepalette' => ['default' => $config->tilepalette ?? '', 'type' => PARAM_ALPHA],
                 'tilecolumns' => ['default' => (int) ($config->tilecolumns ?? 0), 'type' => PARAM_INT],
                 'showprogress' => ['default' => (int) ($config->showprogress ?? 1), 'type' => PARAM_BOOL],
                 'showcontinue' => ['default' => (int) ($config->showcontinue ?? 1), 'type' => PARAM_BOOL],
@@ -220,6 +222,20 @@ class format_formatium extends core_courseformat\base {
         if ($foreditform && !isset($options['tilecolumns']['label'])) {
             $yesno = [0 => new lang_string('no'), 1 => new lang_string('yes')];
             $options = array_merge_recursive($options, [
+                'layout' => [
+                    'label' => new lang_string('layout', 'format_formatium'),
+                    'element_type' => 'select',
+                    'element_attributes' => [tiles::layout_options()],
+                    'help' => 'layout',
+                    'help_component' => 'format_formatium',
+                ],
+                'tilepalette' => [
+                    'label' => new lang_string('tilepalette', 'format_formatium'),
+                    'element_type' => 'select',
+                    'element_attributes' => [tiles::palette_options()],
+                    'help' => 'tilepalette',
+                    'help_component' => 'format_formatium',
+                ],
                 'tilecolumns' => [
                     'label' => new lang_string('tilecolumns', 'format_formatium'),
                     'element_type' => 'select',
@@ -343,7 +359,12 @@ class format_formatium extends core_courseformat\base {
                 }
             }
         }
-        return $this->update_format_options($data);
+        $changed = $this->update_format_options($data);
+        // A course coming from the Tiles format keeps its tile photos, icons and colour.
+        if ($oldcourse !== null && ($oldcourse['format'] ?? '') === 'tiles') {
+            \format_formatium\local\tiles_importer::import($this->courseid, $oldcourse);
+        }
+        return $changed;
     }
 
     /**

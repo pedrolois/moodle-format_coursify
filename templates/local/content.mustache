@@ -103,67 +103,9 @@
     {{/overallprogress}}
 
     {{#hastiles}}
-    <ul class="formatium-grid formatium-grid--cols-{{columns}}" aria-label="{{#str}}tiles, format_formatium{{/str}}">
-        {{#tiles}}
-        <li class="formatium-tile formatium-tile--{{color}}{{#locked}} formatium-tile--locked{{/locked}}{{#iscurrent}} formatium-tile--current{{/iscurrent}}{{#progress.complete}} formatium-tile--complete{{/progress.complete}}"
-            data-sectionid="{{id}}" data-number="{{num}}">
-            {{#url}}<a class="formatium-tile__link" href="{{url}}">{{/url}}
-            {{^url}}<div class="formatium-tile__link" aria-disabled="true">{{/url}}
-                <div class="formatium-tile__media{{#imageurl}} formatium-tile__media--image{{/imageurl}}"
-                     {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
-                    {{^imageurl}}
-                    <span class="formatium-tile__icon" aria-hidden="true">
-                        {{#icon}}<i class="fa fa-solid fa-{{icon}}"></i>{{/icon}}
-                        {{^icon}}<span class="formatium-tile__number">{{num}}</span>{{/icon}}
-                    </span>
-                    {{/imageurl}}
-                    {{#locked}}
-                    <span class="formatium-tile__lock" title="{{#str}}locked, format_formatium{{/str}}">
-                        <i class="fa fa-solid fa-lock" aria-hidden="true"></i>
-                        <span class="visually-hidden">{{#str}}locked, format_formatium{{/str}}</span>
-                    </span>
-                    {{/locked}}
-                    {{#progress.complete}}
-                    <span class="formatium-tile__check" title="{{#str}}tilecomplete, format_formatium{{/str}}">
-                        <i class="fa fa-solid fa-check" aria-hidden="true"></i>
-                        <span class="visually-hidden">{{#str}}tilecomplete, format_formatium{{/str}}</span>
-                    </span>
-                    {{/progress.complete}}
-                </div>
-                <div class="formatium-tile__body">
-                    <div class="formatium-tile__badges">
-                        {{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_formatium{{/str}}</span>{{/iscurrent}}
-                        {{#hiddenfromstudents}}<span class="badge text-bg-secondary">{{#str}}hiddenfromstudents{{/str}}</span>{{/hiddenfromstudents}}
-                    </div>
-                    <h3 class="formatium-tile__title">{{name}}</h3>
-                    {{#summary}}<p class="formatium-tile__summary">{{summary}}</p>{{/summary}}
-                    {{#lockinfo}}<div class="formatium-tile__lockinfo">{{{lockinfo}}}</div>{{/lockinfo}}
-                    <div class="formatium-tile__footer">
-                        <span class="formatium-tile__count">
-                            {{^locked}}{{#str}}activitiescount, format_formatium, {{activities}}{{/str}}{{/locked}}
-                        </span>
-                        {{#progress}}
-                        {{#total}}
-                        <span class="formatium-ring" role="img"
-                              aria-label="{{#str}}tileprogress, format_formatium, { "done": {{done}}, "total": {{total}} }{{/str}}">
-                            <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false">
-                                <circle class="formatium-ring__track" cx="18" cy="18" r="15.5" pathLength="100"></circle>
-                                {{#started}}
-                                <circle class="formatium-ring__value" cx="18" cy="18" r="15.5" pathLength="100"
-                                        stroke-dasharray="{{percent}} 100"></circle>
-                                {{/started}}
-                            </svg>
-                            <span class="formatium-ring__text" aria-hidden="true">{{percent}}%</span>
-                        </span>
-                        {{/total}}
-                        {{/progress}}
-                    </div>
-                </div>
-            {{#url}}</a>{{/url}}
-            {{^url}}</div>{{/url}}
-        </li>
-        {{/tiles}}
-    </ul>
+    {{#isgrid}}{{> format_formatium/local/layout_grid }}{{/isgrid}}
+    {{#ispath}}{{> format_formatium/local/layout_path }}{{/ispath}}
+    {{#islist}}{{> format_formatium/local/layout_list }}{{/islist}}
     {{/hastiles}}
     {{^hastiles}}
     <p class="formatium-empty text-muted">{{#str}}notiles, format_formatium{{/str}}</p>

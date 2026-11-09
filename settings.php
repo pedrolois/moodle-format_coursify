@@ -31,6 +31,20 @@ if ($ADMIN->fulltree) {
         get_string('settings_defaults_desc', 'format_formatium')
     ));
     $settings->add(new admin_setting_configselect(
+        'format_formatium/layout',
+        get_string('layout', 'format_formatium'),
+        get_string('layout_help', 'format_formatium'),
+        \format_formatium\local\tiles::LAYOUT_GRID,
+        \format_formatium\local\tiles::layout_options()
+    ));
+    $settings->add(new admin_setting_configselect(
+        'format_formatium/tilepalette',
+        get_string('tilepalette', 'format_formatium'),
+        get_string('tilepalette_help', 'format_formatium'),
+        '',
+        \format_formatium\local\tiles::palette_options()
+    ));
+    $settings->add(new admin_setting_configselect(
         'format_formatium/tilecolumns',
         get_string('tilecolumns', 'format_formatium'),
         get_string('tilecolumns_help', 'format_formatium'),

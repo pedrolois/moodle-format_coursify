@@ -4,7 +4,14 @@ Formatium shows a course as a grid of tiles, one per section. Each tile opens it
 
 ## Features
 
+- **Three layouts:**
+  - **Grid** of cards.
+  - **Learning path:** numbered steps along a line, showing completed steps, the next one and locked ones.
+  - **List:** one compact row per section.
 - **Tiles** with an image, an accent colour from the theme, or an icon. Tiles without any of these show their number.
+- **Colour palettes** (rainbow, ocean, sunset, forest, calm). They colour every section without its own colour, so a course looks good in one click.
+- **"Up next" badge** on the section that holds the next activity to do.
+- **Import from the Tiles format.** Switching a course from Tiles to Formatium keeps its tile photos, icons and base colour. To switch many courses at once, run `php course/format/formatium/cli/import_tiles.php --all`.
 - **Progress:**
   - each tile has a ring showing how much of the section is done;
   - a bar above the tiles shows the progress of the whole course;
@@ -29,6 +36,8 @@ Copy the folder to `course/format/formatium`, then visit *Site administration > 
 
 - **Site defaults:** *Site administration > Plugins > Course formats > Formatium*.
 - **Per course:** *Course settings > Course format*. The options are:
+  - layout;
+  - colour palette;
   - tiles per row;
   - show progress;
   - show "Continue".
