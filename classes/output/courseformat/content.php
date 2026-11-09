@@ -131,6 +131,23 @@ class content extends content_base {
         $data->ispath = $data->layout === tiles::LAYOUT_PATH;
         $data->islist = $data->layout === tiles::LAYOUT_LIST;
         $data->isphoto = ($course->tilestyle ?? tiles::STYLE_CARD) === tiles::STYLE_PHOTO;
+        $data->ismap = $data->layout === tiles::LAYOUT_MAP;
+        if ($data->ismap) {
+            global $USER;
+            $theme = $course->maptheme ?? 'road';
+            $data->maptheme = in_array($theme, tiles::MAP_THEMES) ? $theme : 'road';
+            $picture = new \core\output\user_picture($USER);
+            $picture->size = 100;
+            $data->mapavatar = $picture->get_url($PAGE)->out(false);
+            // The first tile of each named group shows the name of the group.
+            $previous = null;
+            foreach ($data->tiles as &$tile) {
+                $tile['mapgroup'] = ($tile['groupname'] !== '' && $tile['groupname'] !== $previous) ? $tile['groupname'] : '';
+                $previous = $tile['groupname'] !== '' ? $tile['groupname'] : $previous;
+            }
+            unset($tile);
+            $PAGE->requires->js_call_amd('format_formatium/map', 'init');
+        }
 
         // Groups: a section with a group name starts one; tile titles go one heading level down inside named groups.
         $data->groups = tiles::group_tiles($data->tiles);

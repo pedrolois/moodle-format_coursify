@@ -46,6 +46,12 @@ class tiles {
     /** Layout: compact list. */
     const LAYOUT_LIST = 'list';
 
+    /** Layout: a winding trail across the page, like a board game. */
+    const LAYOUT_MAP = 'map';
+
+    /** Themes of the map layout. */
+    const MAP_THEMES = ['road', 'river', 'treasure'];
+
     /** Palettes: colours given in turn to the tiles that have no colour of their own. */
     const PALETTES = [
         'rainbow' => ['blue', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'indigo'],
@@ -138,7 +144,21 @@ class tiles {
             self::LAYOUT_GRID => get_string('layout_grid', 'format_formatium'),
             self::LAYOUT_PATH => get_string('layout_path', 'format_formatium'),
             self::LAYOUT_LIST => get_string('layout_list', 'format_formatium'),
+            self::LAYOUT_MAP => get_string('layout_map', 'format_formatium'),
         ];
+    }
+
+    /**
+     * Options of the theme of the map layout.
+     *
+     * @return array
+     */
+    public static function maptheme_options(): array {
+        $options = [];
+        foreach (self::MAP_THEMES as $theme) {
+            $options[$theme] = get_string('maptheme_' . $theme, 'format_formatium');
+        }
+        return $options;
     }
 
     /**

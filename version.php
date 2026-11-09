@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'format_formatium';
-$plugin->version   = 2026110903;
+$plugin->version   = 2026110904;
 $plugin->requires  = 2026100500; // Moodle 5.3: anchored drawers, course/section.php pages.
 $plugin->release   = '0.3.0';
 $plugin->maturity  = MATURITY_ALPHA;
