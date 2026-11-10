@@ -93,8 +93,10 @@ class content extends content_base {
 
         // The general section, when it has something to show.
         $general = $modinfo->get_section_info(0);
-        if ($general && $format->is_section_visible($general)
-                && (!empty($modinfo->sections[0]) || trim((string) $general->summary) !== '')) {
+        if (
+            $general && $format->is_section_visible($general)
+                && (!empty($modinfo->sections[0]) || trim((string) $general->summary) !== '')
+        ) {
             $section = new $this->sectionclass($format, $general);
             $data->initialsection = $section->export_for_template($output);
         }

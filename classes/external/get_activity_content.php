@@ -70,8 +70,10 @@ class get_activity_content extends external_api {
         $result = ['type' => self::TYPE_NONE, 'title' => $cm->get_formatted_name(), 'html' => '', 'url' => '',
             'viewurl' => $cm->url ? $cm->url->out(false) : ''];
 
-        if (course_get_format($course)->get_format() !== 'coursify' || !$cm->uservisible
-                || !in_array($cm->modname, ['page', 'url', 'resource'])) {
+        if (
+            course_get_format($course)->get_format() !== 'coursify' || !$cm->uservisible
+                || !in_array($cm->modname, ['page', 'url', 'resource'])
+        ) {
             return $result;
         }
         require_capability('mod/' . $cm->modname . ':view', $context);
@@ -79,8 +81,14 @@ class get_activity_content extends external_api {
 
         if ($cm->modname === 'page') {
             require_once($CFG->dirroot . '/mod/page/lib.php');
-            $content = file_rewrite_pluginfile_urls($instance->content, 'pluginfile.php', $context->id, 'mod_page',
-                'content', $instance->revision);
+            $content = file_rewrite_pluginfile_urls(
+                $instance->content,
+                'pluginfile.php',
+                $context->id,
+                'mod_page',
+                'content',
+                $instance->revision
+            );
             $result['type'] = self::TYPE_HTML;
             $result['html'] = format_text($content, $instance->contentformat, ['context' => $context, 'noclean' => true]);
             page_view($instance, $course, $cm, $context);
@@ -96,15 +104,27 @@ class get_activity_content extends external_api {
             url_view($instance, $course, $cm, $context);
         } else {
             require_once($CFG->dirroot . '/mod/resource/lib.php');
-            $files = get_file_storage()->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC',
-                false);
+            $files = get_file_storage()->get_area_files(
+                $context->id,
+                'mod_resource',
+                'content',
+                0,
+                'sortorder DESC, id ASC',
+                false
+            );
             $file = reset($files);
             if (!$file || $file->get_mimetype() !== 'application/pdf') {
                 return $result;
             }
             $result['type'] = self::TYPE_PDF;
-            $result['url'] = \moodle_url::make_pluginfile_url($context->id, 'mod_resource', 'content', $instance->revision,
-                $file->get_filepath(), $file->get_filename())->out(false);
+            $result['url'] = \moodle_url::make_pluginfile_url(
+                $context->id,
+                'mod_resource',
+                'content',
+                $instance->revision,
+                $file->get_filepath(),
+                $file->get_filename()
+            )->out(false);
             resource_view($instance, $course, $cm, $context);
         }
         return $result;

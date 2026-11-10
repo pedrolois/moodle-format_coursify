@@ -37,9 +37,9 @@
 }}
 <div class="coursify-map coursify-map--{{maptheme}}{{#mapshape}} coursify-map--shape-{{mapshape}}{{/mapshape}}" data-region="coursify-map">
     <svg class="coursify-map__trail" aria-hidden="true" focusable="false">
-        <path class="coursify-map__base" data-path="all"></path>
-        <path class="coursify-map__done" data-path="done"></path>
-        <path class="coursify-map__line" data-path="all"></path>
+        <path class="coursify-map__base" data-path="all" d=""></path>
+        <path class="coursify-map__done" data-path="done" d=""></path>
+        <path class="coursify-map__line" data-path="all" d=""></path>
     </svg>
     <ol class="coursify-map__list" aria-label="{{#str}}tiles, format_coursify{{/str}}">
         {{#tiles}}
@@ -53,8 +53,8 @@
                       {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
                     {{#progressring}}{{#progress}}{{#total}}
                     <svg class="coursify-map__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
-                        <circle class="coursify-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
-                        {{#started}}<circle class="coursify-ring__value" cx="18" cy="18" r="16.5" pathLength="100" stroke-dasharray="{{percent}} 100"></circle>{{/started}}
+                        <circle class="coursify-ring__track" cx="18" cy="18" r="15.9155"></circle>
+                        {{#started}}<circle class="coursify-ring__value" cx="18" cy="18" r="15.9155" stroke-dasharray="{{percent}} 100"></circle>{{/started}}
                     </svg>
                     {{/total}}{{/progress}}{{/progressring}}
                     {{^imageurl}}

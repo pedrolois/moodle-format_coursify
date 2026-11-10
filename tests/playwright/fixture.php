@@ -87,10 +87,16 @@ if ($action === 'reset') {
     $student = $DB->get_record('user', ['username' => COURSIFY_E2E . 'student']);
     $cmids = array_keys(get_fast_modinfo($course)->get_cms());
     [$insql, $params] = $DB->get_in_or_equal($cmids);
-    $DB->delete_records_select('course_modules_completion', "userid = ? AND coursemoduleid $insql",
-        array_merge([$student->id], $params));
-    $DB->delete_records_select('course_modules_viewed', "userid = ? AND coursemoduleid $insql",
-        array_merge([$student->id], $params));
+    $DB->delete_records_select(
+        'course_modules_completion',
+        "userid = ? AND coursemoduleid $insql",
+        array_merge([$student->id], $params)
+    );
+    $DB->delete_records_select(
+        'course_modules_viewed',
+        "userid = ? AND coursemoduleid $insql",
+        array_merge([$student->id], $params)
+    );
     // Section 1 complete, as at the start of the run.
     $completion = new completion_info($course);
     foreach (get_fast_modinfo($course)->get_section_info(1)->get_sequence_cm_infos() as $cm) {

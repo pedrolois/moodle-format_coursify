@@ -53,8 +53,12 @@ class provider implements
                 continue;
             }
             $courseid = (int) substr($name, strlen(tiles::PREF_LASTSECTION));
-            writer::export_user_preference('format_coursify', $name, $value,
-                get_string('privacy:lastsection', 'format_coursify', ['course' => $courseid, 'section' => $value]));
+            writer::export_user_preference(
+                'format_coursify',
+                $name,
+                $value,
+                get_string('privacy:lastsection', 'format_coursify', ['course' => $courseid, 'section' => $value])
+            );
         }
     }
 }

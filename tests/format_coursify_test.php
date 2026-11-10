@@ -77,13 +77,17 @@ final class format_coursify_test extends \advanced_testcase {
      */
     public function test_form_options(): void {
         $format = course_get_format((object) ['id' => SITEID, 'format' => 'coursify']);
-        foreach (['layout', 'tilestyle', 'maptheme', 'tilepalette', 'tilecolumns', 'numbering', 'showbanner',
+        foreach (
+            ['layout', 'tilestyle', 'maptheme', 'tilepalette', 'tilecolumns', 'numbering', 'showbanner',
                 'bannerposition', 'showprogress', 'showcontinue', 'showfilters', 'activitymodal', 'sectiondates',
-                'courseindex'] as $name) {
+                'courseindex'] as $name
+        ) {
             $this->assertArrayHasKey('label', $format->course_format_options(true)[$name], $name);
         }
-        $this->assertSame(['tilecolor', 'tileicon', 'groupname', 'duration'],
-            array_keys($format->section_format_options(true)));
+        $this->assertSame(
+            ['tilecolor', 'tileicon', 'groupname', 'duration'],
+            array_keys($format->section_format_options(true))
+        );
     }
 
     /**

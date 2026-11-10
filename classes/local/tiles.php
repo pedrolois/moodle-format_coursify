@@ -463,8 +463,14 @@ class tiles {
 
         $summary = '';
         if ((string) $section->summary !== '') {
-            $text = file_rewrite_pluginfile_urls($section->summary, 'pluginfile.php', $context->id, 'course', 'section',
-                $section->id);
+            $text = file_rewrite_pluginfile_urls(
+                $section->summary,
+                'pluginfile.php',
+                $context->id,
+                'course',
+                'section',
+                $section->id
+            );
             $text = format_text($text, $section->summaryformat, ['context' => $context]);
             $summary = shorten_text(trim(preg_replace('/\s+/u', ' ', html_to_text($text, 0, false))), 160);
         }
@@ -496,8 +502,11 @@ class tiles {
         if ($dates) {
             [$start, $end] = $dates;
             $format = get_string('strftimedateshort', 'langconfig');
-            $tile['daterange'] = get_string('daterange', 'format_coursify',
-                ['start' => userdate($start, $format), 'end' => userdate($end, $format)]);
+            $tile['daterange'] = get_string(
+                'daterange',
+                'format_coursify',
+                ['start' => userdate($start, $format), 'end' => userdate($end, $format)]
+            );
             $now = time();
             $tile['isthisweek'] = $now >= $start && $now <= $end;
             if ($start > $now) {
@@ -679,8 +688,14 @@ class tiles {
         $imageurl = '';
         foreach ($element->get_course_overviewfiles() as $file) {
             if ($file->is_valid_image()) {
-                $imageurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
-                    $file->get_filearea(), null, $file->get_filepath(), $file->get_filename())->out(false);
+                $imageurl = moodle_url::make_pluginfile_url(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    null,
+                    $file->get_filepath(),
+                    $file->get_filename()
+                )->out(false);
                 break;
             }
         }
@@ -776,8 +791,14 @@ class tiles {
         if ($this->images === null) {
             $this->images = [];
             $context = \context_course::instance($this->format->get_courseid());
-            $files = get_file_storage()->get_area_files($context->id, 'format_coursify', self::FILEAREA, false,
-                'itemid, filepath, filename', false);
+            $files = get_file_storage()->get_area_files(
+                $context->id,
+                'format_coursify',
+                self::FILEAREA,
+                false,
+                'itemid, filepath, filename',
+                false
+            );
             foreach ($files as $file) {
                 if (!isset($this->images[$file->get_itemid()]) && $file->is_valid_image()) {
                     $this->images[$file->get_itemid()] = $file;
@@ -788,7 +809,13 @@ class tiles {
         if (!$file) {
             return null;
         }
-        return moodle_url::make_pluginfile_url($file->get_contextid(), 'format_coursify', self::FILEAREA,
-            $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+        return moodle_url::make_pluginfile_url(
+            $file->get_contextid(),
+            'format_coursify',
+            self::FILEAREA,
+            $file->get_itemid(),
+            $file->get_filepath(),
+            $file->get_filename()
+        );
     }
 }

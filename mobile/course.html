@@ -1,4 +1,4 @@
-{{!
+<!--
     This file is part of Moodle - http://moodle.org/
 
     Moodle is free software: you can redistribute it and/or modify
@@ -13,18 +13,10 @@
 
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-}}
-{{!
-    @template format_coursify/mobile_course
 
-    Course page in the Moodle app (an Angular template: the app fills it with the sections of the course, and
-    CONTENT_OTHERDATA.coursify has the look and progress of each tile). Mustache only switches its delimiters, so
-    the Angular expressions reach the app as they are.
-
-    Example context (json):
-    {}
-}}
-{{=<% %>=}}
+    Course page of Coursify in the Moodle app. It is an Angular template, sent to the app as it is: the app fills it
+    with the sections of the course, and CONTENT_OTHERDATA.coursify has the look and progress of each tile.
+-->
 <div class="coursify-app" *ngIf="CONTENT_OTHERDATA.coursify as cf">
 
     <!-- Course page: progress, Continue, the general section and the tiles. -->

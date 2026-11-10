@@ -22,13 +22,13 @@
     Example context (json):
     {"isnext": true, "iscurrent": false, "hiddenfromstudents": false, "daterange": "3 March - 9 March", "isthisweek": true}
 }}
-<div class="coursify-tile__badges">
+<span class="coursify-tile__badges">
     {{#isnext}}<span class="badge coursify-badge-next">{{#str}}upnext, format_coursify{{/str}}</span>{{/isnext}}
     {{#isthisweek}}<span class="badge text-bg-info">{{#str}}thisweek, format_coursify{{/str}}</span>{{/isthisweek}}
     {{^isthisweek}}{{#iscurrent}}<span class="badge text-bg-primary">{{#str}}current, format_coursify{{/str}}</span>{{/iscurrent}}{{/isthisweek}}
     {{#opens}}<span class="badge text-bg-light border">{{#str}}opens, format_coursify, {{opens}}{{/str}}</span>{{/opens}}
     {{#hiddenfromstudents}}<span class="badge text-bg-secondary">{{#str}}hiddenfromstudents{{/str}}</span>{{/hiddenfromstudents}}
-</div>
+</span>
 {{#daterange}}
 <span class="coursify-tile__dates"><i class="fa fa-regular fa-calendar" aria-hidden="true"></i> {{daterange}}</span>
 {{/daterange}}

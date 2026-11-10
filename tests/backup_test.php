@@ -53,8 +53,14 @@ final class backup_test extends \advanced_testcase {
         get_file_storage()->create_file_from_string(['contextid' => $context->id, 'component' => 'format_coursify',
             'filearea' => tiles::FILEAREA, 'itemid' => $section->id, 'filepath' => '/', 'filename' => 'tile.png'], 'image');
 
-        $backup = new \backup_controller(\backup::TYPE_1COURSE, $course->id, \backup::FORMAT_MOODLE, \backup::INTERACTIVE_NO,
-            \backup::MODE_GENERAL, $USER->id);
+        $backup = new \backup_controller(
+            \backup::TYPE_1COURSE,
+            $course->id,
+            \backup::FORMAT_MOODLE,
+            \backup::INTERACTIVE_NO,
+            \backup::MODE_GENERAL,
+            $USER->id
+        );
         $backup->execute_plan();
         $file = $backup->get_results()['backup_destination'];
         $backup->destroy();
@@ -62,8 +68,14 @@ final class backup_test extends \advanced_testcase {
         $folder = 'coursify_backup_test';
         $file->extract_to_pathname(get_file_packer('application/vnd.moodle.backup'), make_backup_temp_directory($folder));
         $newid = \restore_dbops::create_new_course('Restored', 'restored', $course->category);
-        $restore = new \restore_controller($folder, $newid, \backup::INTERACTIVE_NO, \backup::MODE_GENERAL, $USER->id,
-            \backup::TARGET_NEW_COURSE);
+        $restore = new \restore_controller(
+            $folder,
+            $newid,
+            \backup::INTERACTIVE_NO,
+            \backup::MODE_GENERAL,
+            $USER->id,
+            \backup::TARGET_NEW_COURSE
+        );
         $restore->execute_precheck();
         $restore->execute_plan();
         $restore->destroy();
@@ -78,8 +90,14 @@ final class backup_test extends \advanced_testcase {
         $this->assertSame('flask', $options['tileicon']);
         $this->assertSame('Unit 1', $options['groupname']);
         $this->assertEquals(2, $options['duration']);
-        $files = get_file_storage()->get_area_files(\context_course::instance($newid)->id, 'format_coursify', tiles::FILEAREA,
-            $newsection->id, 'id', false);
+        $files = get_file_storage()->get_area_files(
+            \context_course::instance($newid)->id,
+            'format_coursify',
+            tiles::FILEAREA,
+            $newsection->id,
+            'id',
+            false
+        );
         $this->assertCount(1, $files);
         $this->assertSame('tile.png', reset($files)->get_filename());
     }

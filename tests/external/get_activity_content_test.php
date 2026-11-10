@@ -59,8 +59,11 @@ final class get_activity_content_test extends \advanced_testcase {
         $events = array_filter($sink->get_events(), fn($event) => $event instanceof \mod_page\event\course_module_viewed);
         $this->assertCount(1, $events);
         $sink->close();
-        $this->assertEquals(COMPLETION_COMPLETE, $DB->get_field('course_modules_completion', 'completionstate',
-            ['coursemoduleid' => $page->cmid, 'userid' => $student->id]));
+        $this->assertEquals(COMPLETION_COMPLETE, $DB->get_field(
+            'course_modules_completion',
+            'completionstate',
+            ['coursemoduleid' => $page->cmid, 'userid' => $student->id]
+        ));
     }
 
     /**

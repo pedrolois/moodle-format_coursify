@@ -36,7 +36,7 @@ class mobile {
      * @return array
      */
     public static function mobile_course_view(array $args): array {
-        global $OUTPUT;
+        global $CFG;
         $courseid = (int) $args['courseid'];
         // Access to the course: enrolled, guest access or the capability to view it, as on the website.
         require_login($courseid, false, null, false, true);
@@ -90,7 +90,8 @@ class mobile {
             'templates' => [
                 [
                     'id' => 'main',
-                    'html' => $OUTPUT->render_from_template('format_coursify/mobile_course', []),
+                    // An Angular template, sent as it is (mobile/course.html).
+                    'html' => file_get_contents($CFG->dirroot . '/course/format/coursify/mobile/course.html'),
                 ],
             ],
             'javascript' => '',

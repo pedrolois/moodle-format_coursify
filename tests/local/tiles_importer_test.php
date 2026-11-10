@@ -56,9 +56,11 @@ final class tiles_importer_test extends \advanced_testcase {
         $image = imagecreatetruecolor(30, 20);
         ob_start();
         imagepng($image);
-        get_file_storage()->create_file_from_string(['contextid' => $context->id, 'component' => 'format_tiles',
+        get_file_storage()->create_file_from_string(
+            ['contextid' => $context->id, 'component' => 'format_tiles',
             'filearea' => 'tilephoto', 'itemid' => $section1->id, 'filepath' => '/tilephoto/', 'filename' => 'photo.png'],
-            ob_get_clean());
+            ob_get_clean()
+        );
 
         $counts = tiles_importer::import($course->id, ['basecolour' => '#1670CC', 'defaulttileicon' => 'mortar-board']);
         $this->assertSame(1, $counts['photos']);
