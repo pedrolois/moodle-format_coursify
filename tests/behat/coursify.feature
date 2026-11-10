@@ -35,11 +35,12 @@ Feature: Learners see a Coursify course as tiles and open its sections
   @javascript
   Scenario: The tile shows the progress of its section
     Given I am on the "C1" "Course" page logged in as "student1"
-    And I should see "Start" in the "[data-number='1']" "css_element"
+    And "[data-number='1'][data-status='todo']" "css_element" should exist
     When I am on the "First page" "page activity" page
     And I press "Mark as done"
+    And I wait until the page is ready
     And I am on the "C1" "Course" page
-    Then I should see "Done" in the "[data-number='1']" "css_element"
+    Then "[data-number='1'][data-status='done']" "css_element" should exist
     And I should see "Second page" in the ".coursify-continue" "css_element"
 
   Scenario: A teacher gives a tile its colour and a group
