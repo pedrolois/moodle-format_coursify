@@ -32,6 +32,7 @@ Feature: Learners see a Coursify course as tiles and open its sections
     When I click on "All sections" "link" in the ".coursify-sectionnav" "css_element"
     Then I should see "Course progress"
 
+  @javascript
   Scenario: The tile shows the progress of its section
     Given I am on the "C1" "Course" page logged in as "student1"
     And I should see "Start" in the "[data-number='1']" "css_element"
