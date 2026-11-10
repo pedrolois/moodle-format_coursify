@@ -23,6 +23,7 @@
     Example context (json):
     {
         "maptheme": "road",
+        "mapshape": "square",
         "mapavatar": "",
         "tiles": [
             {"id": 35, "num": 1, "steplabel": "1", "steps": "2", "name": "Getting started", "url": "#", "color": "blue",
@@ -34,7 +35,7 @@
         ]
     }
 }}
-<div class="coursify-map coursify-map--{{maptheme}}" data-region="coursify-map">
+<div class="coursify-map coursify-map--{{maptheme}}{{#mapshape}} coursify-map--shape-{{mapshape}}{{/mapshape}}" data-region="coursify-map">
     <svg class="coursify-map__trail" aria-hidden="true" focusable="false">
         <path class="coursify-map__base" data-path="all"></path>
         <path class="coursify-map__done" data-path="done"></path>
@@ -50,12 +51,12 @@
             {{^url}}<div class="coursify-map__link" aria-disabled="true">{{/url}}
                 <span class="coursify-map__node{{#imageurl}} coursify-map__node--image{{/imageurl}}" data-region="coursify-map-node"
                       {{#imageurl}}style="background-image: url('{{imageurl}}')"{{/imageurl}}>
-                    {{#progress}}{{#total}}
+                    {{#progressring}}{{#progress}}{{#total}}
                     <svg class="coursify-map__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
                         <circle class="coursify-ring__track" cx="18" cy="18" r="16.5" pathLength="100"></circle>
                         {{#started}}<circle class="coursify-ring__value" cx="18" cy="18" r="16.5" pathLength="100" stroke-dasharray="{{percent}} 100"></circle>{{/started}}
                     </svg>
-                    {{/total}}{{/progress}}
+                    {{/total}}{{/progress}}{{/progressring}}
                     {{^imageurl}}
                     <span class="coursify-map__icon" aria-hidden="true">
                         {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
@@ -74,7 +75,7 @@
                     {{/imageurl}}
                     {{#isnext}}
                     <span class="coursify-map__avatar" aria-hidden="true">
-                        {{#mapavatar}}<img src="{{mapavatar}}" alt="">{{/mapavatar}}
+                        {{#mapavatar}}<img src="{{mapavatar}}" alt="">{{/mapavatar}}{{^mapavatar}}<i class="fa fa-solid fa-user"></i>{{/mapavatar}}
                     </span>
                     {{/isnext}}
                 </span>
@@ -89,6 +90,7 @@
                         {{^locked}}{{#progress.label}}{{progress.label}}{{/progress.label}}{{/locked}}
                         {{#daterange}}· {{daterange}}{{/daterange}}
                     </span>
+                    {{^progressring}}{{^locked}}{{#progress}}{{> format_coursify/local/tile_progress }}{{/progress}}{{/locked}}{{/progressring}}
                     {{#lockinfo}}<span class="visually-hidden">{{{lockinfo}}}</span>{{/lockinfo}}
                 </span>
             {{#url}}</a>{{/url}}

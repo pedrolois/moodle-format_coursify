@@ -43,6 +43,7 @@
         data-sectionid="{{id}}" data-number="{{num}}" data-region="coursify-tile"
         data-status="{{#locked}}locked{{/locked}}{{^locked}}{{#progress.complete}}done{{/progress.complete}}{{^progress.complete}}todo{{/progress.complete}}{{/locked}}">
         <div class="coursify-step__node" aria-hidden="true">
+            {{#progressring}}
             {{#progress}}
             {{#total}}
             <svg class="coursify-step__ring" viewBox="0 0 36 36" focusable="false">
@@ -54,6 +55,7 @@
             </svg>
             {{/total}}
             {{/progress}}
+            {{/progressring}}
             <span class="coursify-step__icon">
                 {{#locked}}<i class="fa fa-solid fa-lock"></i>{{/locked}}
                 {{^locked}}
@@ -78,6 +80,7 @@
                 <span class="coursify-step__title h5">{{name}}</span>
                 {{#summary}}<span class="coursify-step__summary">{{summary}}</span>{{/summary}}
                 {{#lockinfo}}<span class="coursify-tile__lockinfo">{{{lockinfo}}}</span>{{/lockinfo}}
+                {{^progressring}}{{^locked}}{{#progress}}{{> format_coursify/local/tile_progress }}{{/progress}}{{/locked}}{{/progressring}}
                 <span class="coursify-step__meta">
                     {{^locked}}{{#str}}activitiescount, format_coursify, {{activities}}{{/str}}{{/locked}}
                     {{#progress.label}} · {{progress.label}}{{/progress.label}}

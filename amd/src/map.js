@@ -108,11 +108,18 @@ const draw = map => {
         return;
     }
     const width = map.clientWidth;
+    // Some themes size their background with the width of the map, such as the squares of the chess board.
+    map.style.setProperty('--coursify-map-width', `${width}px`);
     placeStops(map, stops, columnsFor(width));
     const box = map.getBoundingClientRect();
+    // Screen sizes over CSS sizes: below 1 when the map is drawn smaller, as in the preview of the settings.
+    const scale = box.width && map.offsetWidth ? box.width / map.offsetWidth : 1;
     const points = stops.map(stop => {
         const node = stop.querySelector(SELECTORS.NODE).getBoundingClientRect();
-        return {x: node.left - box.left + node.width / 2, y: node.top - box.top + node.height / 2};
+        return {
+            x: (node.left - box.left + node.width / 2) / scale,
+            y: (node.top - box.top + node.height / 2) / scale,
+        };
     });
     // The trail goes on to the finish flag, after the last stop.
     const finish = map.querySelector(SELECTORS.FINISH);

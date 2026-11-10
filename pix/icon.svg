@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <!-- Same frame as the other plugins: blue on the left, purple on the right. -->
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1668e3"/>
+      <stop offset="1" stop-color="#7a3fd1"/>
+    </linearGradient>
+    <linearGradient id="blueHalf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2167e0"/>
+      <stop offset="1" stop-color="#1747b8"/>
+    </linearGradient>
+    <linearGradient id="purpleHalf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f44d6"/>
+      <stop offset="1" stop-color="#5a2fb8"/>
+    </linearGradient>
+    <clipPath id="tileclip">
+      <rect x="14" y="14" width="484" height="484" rx="48"/>
+    </clipPath>
+    <filter id="tagshadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#2a1a6e" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Tile: white, thick blue-to-purple frame -->
+  <rect x="14" y="14" width="484" height="484" rx="48" fill="#ffffff"/>
+  <!-- Bottom band with the author name -->
+  <rect x="14" y="420" width="484" height="78" fill="url(#frame)" clip-path="url(#tileclip)"/>
+  <rect x="14" y="14" width="484" height="484" rx="48" fill="none" stroke="url(#frame)" stroke-width="14"/>
+  <text x="256" y="469" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="700"
+    letter-spacing="0.6" fill="#ffffff">PEDRO LUIS GARCIA LEIVA</text>
+
+  <!-- Dashed trail with arrows along the bottom, from the knight badge to the planet badge -->
+  <g fill="none" stroke="#7a3fd1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M108 304 C120 380 200 410 256 410 C312 410 392 380 404 336" stroke-width="5" stroke-dasharray="9 9"/>
+    <path d="M-6 -7 L4 0 L-6 7" stroke-width="5" transform="translate(166 385) rotate(32)"/>
+    <path d="M-6 -7 L4 0 L-6 7" stroke-width="5" transform="translate(346 385) rotate(-32)"/>
+  </g>
+
+  <!-- Shield: blue rim, white stripe, body split blue | purple -->
+  <g transform="translate(256 222) scale(1.06) translate(-256 -230)">
+    <path d="M256 56 L404 100 Q412 103 412 112 L412 230 Q412 334 256 404 Q100 334 100 230 L100 112 Q100 103 108 100 Z"
+      fill="#1b4fc4"/>
+    <path d="M256 68 L400 110 L400 230 Q400 326 256 390 Q112 326 112 230 L112 110 Z" fill="#ffffff"/>
+    <path d="M256 80 L388 119 L388 230 Q388 318 256 376 Z" fill="url(#purpleHalf)"/>
+    <path d="M256 80 L124 119 L124 230 Q124 318 256 376 Z" fill="url(#blueHalf)"/>
+
+    <!-- The course as tiles: one per section, each with its colour and progress -->
+    <g>
+      <g transform="translate(160 110)">
+        <rect width="78" height="64" rx="9" fill="#ffffff"/>
+        <rect x="6" y="6" width="66" height="34" rx="6" fill="#ff9f1a"/>
+        <circle cx="39" cy="23" r="9" fill="none" stroke="#ffffff" stroke-width="4"/>
+        <rect x="6" y="46" width="66" height="7" rx="3.5" fill="#e3e8f5"/>
+        <rect x="6" y="46" width="66" height="7" rx="3.5" fill="#2ec27e"/>
+      </g>
+      <g transform="translate(248 110)">
+        <rect width="78" height="64" rx="9" fill="#ffffff"/>
+        <rect x="6" y="6" width="66" height="34" rx="6" fill="#ff5d8f"/>
+        <path d="M30 23 L37 30 L49 16" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"
+          stroke-linejoin="round"/>
+        <rect x="6" y="46" width="66" height="7" rx="3.5" fill="#e3e8f5"/>
+        <rect x="6" y="46" width="40" height="7" rx="3.5" fill="#2ec27e"/>
+      </g>
+      <g transform="translate(160 182)" opacity="0.9">
+        <rect width="78" height="64" rx="9" fill="#ffffff"/>
+        <rect x="6" y="6" width="66" height="34" rx="6" fill="#2ec27e"/>
+        <!-- Pawn -->
+        <circle cx="39" cy="14.5" r="4.6" fill="#ffffff"/>
+        <path d="M35.5 19.5 H42.5 L41 23 Q41.5 27 44 29 L45.5 33 H32.5 L34 29 Q36.5 27 37 23 Z" fill="#ffffff"/>
+        <rect x="6" y="46" width="66" height="7" rx="3.5" fill="#e3e8f5"/>
+        <rect x="6" y="46" width="18" height="7" rx="3.5" fill="#2ec27e"/>
+      </g>
+      <g transform="translate(248 182)" opacity="0.9">
+        <rect width="78" height="64" rx="9" fill="#ffffff"/>
+        <rect x="6" y="6" width="66" height="34" rx="6" fill="#8fb4ff"/>
+        <!-- Locked section -->
+        <rect x="31" y="20" width="16" height="13" rx="2.5" fill="#ffffff"/>
+        <path d="M34 20 V16 Q39 10 44 16 V20" fill="none" stroke="#ffffff" stroke-width="3"/>
+        <rect x="6" y="46" width="66" height="7" rx="3.5" fill="#e3e8f5"/>
+      </g>
+    </g>
+
+    <!-- The learning path joining the tiles -->
+    <path d="M199 250 Q199 262 256 262 Q313 262 313 250" fill="none" stroke="#ffd34d" stroke-width="5"
+      stroke-linecap="round" stroke-dasharray="2 11"/>
+
+    <!-- Name inside the shield, with the small line under it -->
+    <text x="256" y="292" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="29" font-weight="700"
+      letter-spacing="0.5" fill="#ffffff">COURSIFY</text>
+    <text x="256" y="314" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700"
+      letter-spacing="2" fill="#ffffff" fill-opacity="0.95">COURSE FORMAT</text>
+    <line x1="226" y1="330" x2="286" y2="330" stroke="#ffffff" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Chess knight badge on the left rim (the map themes: chess board, parchís, board game...).
+       Knight icon: Font Awesome Free 6.7.2 by @fontawesome, https://fontawesome.com, licence CC BY 4.0. -->
+  <g filter="url(#tagshadow)">
+    <circle cx="98" cy="268" r="36" fill="#ffffff" stroke="url(#frame)" stroke-width="4"/>
+    <path transform="translate(79.5 246.5) scale(0.083)" fill="#5a2fb8" d="M96 48L82.7 61.3C70.7 73.3 64 89.5 64 106.5l0 132.4c0 10.7 5.3 20.7 14.2 26.6l10.6 7c14.3 9.6 32.7 10.7 48.1 3l3.2-1.6c2.6-1.3 5-2.8 7.3-4.5l49.4-37c6.6-5 15.7-5 22.3 0c10.2 7.7 9.9 23.1-.7 30.3L90.4 350C73.9 361.3 64 380 64 400l320 0 28.9-159c2.1-11.3 3.1-22.8 3.1-34.3l0-14.7C416 86 330 0 224 0L83.8 0C72.9 0 64 8.9 64 19.8c0 7.5 4.2 14.3 10.9 17.7L96 48zm24 68a20 20 0 1 1 40 0 20 20 0 1 1 -40 0zM22.6 473.4c-4.2 4.2-6.6 10-6.6 16C16 501.9 26.1 512 38.6 512l370.7 0c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16L384 432 64 432 22.6 473.4z"/>
+  </g>
+  </g>
+
+  <!-- Planet badge on the right rim, where the trail ends (the space mission theme) -->
+  <g filter="url(#tagshadow)">
+    <circle cx="414" cy="300" r="34" fill="#0b1030" stroke="url(#frame)" stroke-width="4"/>
+    <circle cx="398" cy="284" r="1.6" fill="#ffffff"/>
+    <circle cx="432" cy="318" r="1.3" fill="#ffffff"/>
+    <circle cx="428" cy="282" r="1.1" fill="#ffffff"/>
+    <ellipse cx="414" cy="300" rx="25" ry="7" fill="none" stroke="#7cf3ff" stroke-width="3.5" transform="rotate(-18 414 300)"/>
+    <circle cx="414" cy="300" r="14" fill="#ff9f1a"/>
+    <circle cx="409" cy="295" r="5" fill="#ffd08a"/>
+    <path d="M390.2 307.5 A25 7 -18 0 0 437.8 292.5" fill="none" stroke="#7cf3ff" stroke-width="3.5"
+      transform="rotate(0 414 300)"/>
+  </g>
+
+  <!-- Moodle app sticker on the rim of the shield, top right -->
+  <g transform="rotate(-10 412 84)" filter="url(#tagshadow)">
+    <rect x="348" y="62" width="128" height="44" rx="22" fill="#ffffff" stroke="url(#frame)" stroke-width="4"/>
+    <g transform="translate(366 70)">
+      <rect width="18" height="28" rx="4" fill="none" stroke="#1fa2e0" stroke-width="3"/>
+      <line x1="6" y1="23" x2="12" y2="23" stroke="#1fa2e0" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="428" y="93" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800"
+      fill="#5a2fb8">APP</text>
+  </g>
+</svg>

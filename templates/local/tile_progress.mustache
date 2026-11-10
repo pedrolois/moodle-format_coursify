@@ -1,0 +1,40 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_coursify/local/tile_progress
+
+    Progress of a tile in the style chosen for the course: a ring, a bar or the percentage. The context is the
+    progress of the tile; progressring, progressbar and progresspercent come from the course page.
+
+    Example context (json):
+    {"total": 4, "done": 1, "percent": 25, "started": true, "complete": false, "progressbar": true}
+}}
+{{#total}}
+{{#progressring}}{{> format_coursify/local/tile_ring }}{{/progressring}}
+{{#progressbar}}
+<span class="coursify-pbar{{#complete}} coursify-pbar--done{{/complete}}" role="progressbar"
+      aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"
+      aria-label="{{#str}}tileprogress, format_coursify, { "done": {{done}}, "total": {{total}} }{{/str}}">
+    <span class="coursify-pbar__track"><span class="coursify-pbar__value" style="width: {{percent}}%"></span></span>
+    <span class="coursify-pbar__text" aria-hidden="true">{{percent}}%</span>
+</span>
+{{/progressbar}}
+{{#progresspercent}}
+<span class="coursify-ppct{{#complete}} coursify-ppct--done{{/complete}}" role="img"
+      aria-label="{{#str}}tileprogress, format_coursify, { "done": {{done}}, "total": {{total}} }{{/str}}">{{percent}}%</span>
+{{/progresspercent}}
+{{/total}}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="none">
+  <!-- Far range, blue, with snow on the highest peaks. -->
+  <path d="M0 300V170l90-60 70 45 110-115 95 90 80-55 120 125 110-150 105 105 85-50 120 110 90-75 125 90v260z" fill="#90a4c8"/>
+  <path d="M240 64l30-24 30 31-14-6-16 12-14-9zM674 60l36-50 34 44-17-7-17 13-16-11zM1033 136l42-60-5 52-19-7z" fill="#fff"/>
+  <!-- Near range, green. -->
+  <path d="M0 300V230l140-70 90 55 150-90 120 100 130-70 140 95 120-60 150 80 160-55v175z" fill="#5d8f3e"/>
+  <!-- Meadow. -->
+  <path d="M0 300v-40l200-30 220 25 240-35 260 30 280-20v70z" fill="#7cb04f"/>
+</svg>

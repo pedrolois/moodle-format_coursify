@@ -128,6 +128,12 @@ class content extends content_base {
             $data->banner = $tiles->export_banner($output);
         }
 
+        $style = $course->progressstyle ?? 'ring';
+        $style = in_array($style, tiles::PROGRESS_STYLES) ? $style : 'ring';
+        $data->progressring = $style === 'ring';
+        $data->progressbar = $style === 'bar';
+        $data->progresspercent = $style === 'percent';
+
         $layout = $course->layout ?? tiles::LAYOUT_GRID;
         $data->layout = array_key_exists($layout, tiles::layout_options()) ? $layout : tiles::LAYOUT_GRID;
         $data->isgrid = $data->layout === tiles::LAYOUT_GRID;
@@ -139,9 +145,15 @@ class content extends content_base {
             global $USER;
             $theme = $course->maptheme ?? 'road';
             $data->maptheme = in_array($theme, tiles::MAP_THEMES) ? $theme : 'road';
-            $picture = new \core\output\user_picture($USER);
-            $picture->size = 100;
-            $data->mapavatar = $picture->get_url($PAGE)->out(false);
+            $shape = $course->mapshape ?? 'round';
+            $data->mapshape = !in_array($data->maptheme, tiles::MAP_OWN_SHAPE) && in_array($shape, tiles::MAP_SHAPES)
+                ? $shape : '';
+            // The picture of the learner, or a person icon when there is none (the default picture is too light).
+            if (!empty($USER->picture)) {
+                $picture = new \core\output\user_picture($USER);
+                $picture->size = 100;
+                $data->mapavatar = $picture->get_url($PAGE)->out(false);
+            }
             // The first tile of each named group shows the name of the group.
             $previous = null;
             foreach ($data->tiles as &$tile) {

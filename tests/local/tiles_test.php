@@ -131,8 +131,8 @@ final class tiles_test extends \advanced_testcase {
         $tiles = (new tiles(course_get_format($course->id)))->export_tiles();
         $this->assertCount(4, $tiles);
 
-        // Own colour and icon; the palette colours the others in turn.
-        $this->assertSame('red', $tiles[0]['color']);
+        // The palette colours every tile in turn, also the ones with a colour of their own.
+        $this->assertSame('blue', $tiles[0]['color']);
         $this->assertSame('rocket', $tiles[0]['icon']);
         $this->assertSame('Unit 1', $tiles[0]['groupname']);
         $this->assertSame('cyan', $tiles[1]['color']);

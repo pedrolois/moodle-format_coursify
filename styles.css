@@ -84,6 +84,7 @@
 /* Grid of tiles: auto-fills the width, or a fixed number of columns on wide screens. */
 .coursify-grid {
     display: grid;
+    /* stylelint-disable-next-line csstree/validator */
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
     gap: var(--coursify-gap);
     padding: 0;
@@ -112,17 +113,39 @@
     min-width: 0;
 }
 
-.coursify-tile--blue { --coursify-accent: var(--bs-blue); }
-.coursify-tile--indigo { --coursify-accent: var(--bs-indigo); }
-.coursify-tile--purple { --coursify-accent: var(--bs-purple); }
-.coursify-tile--pink { --coursify-accent: var(--bs-pink); }
-.coursify-tile--red { --coursify-accent: var(--bs-red); }
-.coursify-tile--orange { --coursify-accent: var(--bs-orange); }
-.coursify-tile--yellow { --coursify-accent: var(--bs-yellow); }
-.coursify-tile--green { --coursify-accent: var(--bs-green); }
-.coursify-tile--teal { --coursify-accent: var(--bs-teal); }
-.coursify-tile--cyan { --coursify-accent: var(--bs-cyan); }
-.coursify-tile--gray { --coursify-accent: var(--bs-gray-600); }
+.coursify-tile--blue {
+    --coursify-accent: var(--bs-blue);
+}
+.coursify-tile--indigo {
+    --coursify-accent: var(--bs-indigo);
+}
+.coursify-tile--purple {
+    --coursify-accent: var(--bs-purple);
+}
+.coursify-tile--pink {
+    --coursify-accent: var(--bs-pink);
+}
+.coursify-tile--red {
+    --coursify-accent: var(--bs-red);
+}
+.coursify-tile--orange {
+    --coursify-accent: var(--bs-orange);
+}
+.coursify-tile--yellow {
+    --coursify-accent: var(--bs-yellow);
+}
+.coursify-tile--green {
+    --coursify-accent: var(--bs-green);
+}
+.coursify-tile--teal {
+    --coursify-accent: var(--bs-teal);
+}
+.coursify-tile--cyan {
+    --coursify-accent: var(--bs-cyan);
+}
+.coursify-tile--gray {
+    --coursify-accent: var(--bs-gray-600);
+}
 
 .coursify-tile__link {
     position: relative;
@@ -1048,6 +1071,22 @@ a.coursify-strip__item:focus-visible {
     border-radius: 50%;
 }
 
+/* On photos the bar and the percentage sit on a light chip, like the ring. */
+.coursify-grid--photo .coursify-pbar,
+.coursify-grid--photo .coursify-ppct {
+    padding: .2rem .5rem;
+    background: rgba(255, 255, 255, .92);
+    border-radius: 1rem;
+}
+
+.coursify-grid--photo .coursify-pbar {
+    width: 8rem;
+}
+
+.coursify-grid--photo .coursify-ppct {
+    color: var(--coursify-accent);
+}
+
 .coursify-grid--photo .coursify-tile__lock,
 .coursify-grid--photo .coursify-tile__check {
     top: .6rem;
@@ -1213,6 +1252,10 @@ a.coursify-map__link:hover .coursify-map__node {
     background: var(--bs-secondary-bg);
 }
 
+.coursify-map__node--image {
+    border-color: var(--coursify-accent);
+}
+
 .coursify-map__stop.coursify-tile--locked .coursify-map__node--image {
     filter: grayscale(1);
 }
@@ -1256,6 +1299,20 @@ a.coursify-map__link:hover .coursify-map__node {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: rotate(45deg);
+}
+
+/* Without a picture: a white person on a dark shade of the section colour. */
+.coursify-map__avatar:not(:has(img)) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--coursify-accent) 55%, #000);
+}
+
+.coursify-map__avatar .fa-user {
+    font-size: 1.1rem;
+    color: #fff;
     transform: rotate(45deg);
 }
 
@@ -1342,7 +1399,12 @@ a.coursify-map__link:hover .coursify-map__node {
 .coursify-map--river {
     --coursify-map-trail: #9fd3f5;
     --coursify-map-done: #2f8fd8;
-    background: linear-gradient(180deg, color-mix(in srgb, #3fa96b 10%, var(--bs-body-bg)), color-mix(in srgb, #3fa96b 18%, var(--bs-body-bg)));
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, #3fa96b 10%, var(--bs-body-bg)),
+            color-mix(in srgb, #3fa96b 18%, var(--bs-body-bg))
+        );
 }
 
 .coursify-map--river .coursify-map__base {
@@ -1419,10 +1481,598 @@ a.coursify-map__link:hover .coursify-map__node {
     transform: rotate(-45deg);
 }
 
+/* Theme: board game, a track of coloured squares on a green board; each stop is a level shield. */
+.coursify-map--board {
+    --coursify-map-trail: #fff;
+    --coursify-map-done: #ffd23f;
+    background:
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, .05) 0 1.25rem, transparent 1.25rem 2.5rem),
+        linear-gradient(160deg, #2f9e6b, #1d7a52);
+    border: .35rem solid #145c3d;
+}
+
+/* A white track cut into squares by thin dark lines; squares already done turn yellow. */
+.coursify-map--board .coursify-map__base {
+    stroke: #fff;
+    stroke-width: 40;
+}
+
+.coursify-map--board .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 40;
+}
+
+.coursify-map--board .coursify-map__line {
+    stroke: #145c3d;
+    stroke-width: 42;
+    stroke-linecap: butt;
+    stroke-dasharray: 3 33;
+}
+
+.coursify-map--board .coursify-map__node {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    filter: drop-shadow(0 .3rem .35rem rgba(0, 0, 0, .35));
+    clip-path: polygon(50% 0, 100% 14%, 100% 58%, 50% 100%, 0 58%, 0 14%);
+}
+
+.coursify-map--board .coursify-map__icon {
+    border-radius: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--coursify-accent) 75%, #fff), var(--coursify-accent));
+    box-shadow: inset 0 0 0 .3rem rgba(255, 255, 255, .55);
+    font-size: 1.9rem;
+}
+
+.coursify-map--board .coursify-map__ring {
+    display: none;
+}
+
+.coursify-map--board .coursify-map__label {
+    color: #fff;
+    background: rgba(0, 0, 0, .35);
+}
+
+.coursify-map--board .coursify-map__step {
+    color: #ffd23f;
+}
+
+.coursify-map--board .coursify-map__meta {
+    color: rgba(255, 255, 255, .85);
+}
+
+.coursify-map--board .coursify-map__finish {
+    color: #145c3d;
+    background: #ffd23f;
+    border-color: #fff;
+}
+
+/* Theme: space mission, a glowing orbit through a starry sky; stops are planets and the finish a rocket. */
+.coursify-map--space {
+    --coursify-map-trail: rgba(160, 190, 255, .35);
+    --coursify-map-done: #7cf3ff;
+    color: #e8ecff;
+    background:
+        radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 30% 72%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 55% 35%, #fff 50%, transparent 51%),
+        radial-gradient(2px 2px at 78% 12%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 88% 64%, #fff 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 44% 90%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 67% 82%, #fff 50%, transparent 51%),
+        radial-gradient(ellipse at 20% 0%, rgba(122, 63, 209, .55), transparent 60%),
+        radial-gradient(ellipse at 90% 100%, rgba(22, 104, 227, .5), transparent 55%),
+        #0b1030;
+    background-size:
+        220px 220px,
+        260px 260px,
+        180px 180px,
+        300px 300px,
+        240px 240px,
+        200px 200px,
+        280px 280px,
+        100% 100%,
+        100% 100%,
+        100% 100%;
+}
+
+.coursify-map--space .coursify-map__base {
+    stroke: var(--coursify-map-trail);
+    stroke-width: 3;
+    stroke-dasharray: 1 12;
+}
+
+.coursify-map--space .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 4;
+    filter: drop-shadow(0 0 6px #7cf3ff);
+}
+
+.coursify-map--space .coursify-map__line {
+    display: none;
+}
+
+.coursify-map--space .coursify-map__node {
+    border-color: rgba(255, 255, 255, .15);
+    background-color: transparent;
+    box-shadow: 0 0 1.5rem color-mix(in srgb, var(--coursify-accent) 70%, transparent);
+}
+
+/* The ring of the planet. */
+.coursify-map--space .coursify-map__node::after {
+    position: absolute;
+    left: -22%;
+    width: 144%;
+    height: 34%;
+    content: "";
+    border: .22rem solid rgba(255, 255, 255, .55);
+    border-radius: 50%;
+    transform: rotate(-18deg);
+    pointer-events: none;
+}
+
+.coursify-map--space .coursify-map__icon {
+    background:
+        radial-gradient(
+            circle at 32% 30%,
+            color-mix(in srgb, var(--coursify-accent) 45%, #fff),
+            var(--coursify-accent) 55%,
+            color-mix(in srgb, var(--coursify-accent) 60%, #000)
+        );
+}
+
+.coursify-map--space .coursify-map__label {
+    color: #e8ecff;
+    background: rgba(11, 16, 48, .75);
+    border: 1px solid rgba(124, 243, 255, .25);
+}
+
+.coursify-map--space .coursify-map__step {
+    color: #7cf3ff;
+}
+
+.coursify-map--space .coursify-map__meta {
+    color: rgba(232, 236, 255, .75);
+}
+
+.coursify-map--space .coursify-map__stop.coursify-tile--locked .coursify-map__title,
+.coursify-map--board .coursify-map__stop.coursify-tile--locked .coursify-map__title {
+    color: rgba(255, 255, 255, .7);
+}
+
+.coursify-map--space .coursify-map__finish {
+    color: #0b1030;
+    background: #7cf3ff;
+    border-color: #fff;
+    box-shadow: 0 0 1rem #7cf3ff;
+}
+
+.coursify-map--space .coursify-map__finish i::before {
+    content: "\f135";
+}
+
+/* Theme: mountain trek, a trail between snowy peaks; each stop is a small mountain with snow on top. */
+.coursify-map--mountain {
+    --coursify-map-trail: #8b5e34;
+    --coursify-map-done: #e76f51;
+    background:
+        radial-gradient(circle at 85% 14%, #fff6c9 0 2.2rem, rgba(255, 246, 201, .35) 2.3rem 3.4rem, transparent 3.5rem),
+        url([[pix:format_coursify|map/mountains]]) bottom / 100% 58% no-repeat,
+        linear-gradient(to bottom, #8ecae6, #cfe9f6 70%);
+}
+
+/* The trail is a brown climbing rope: a dark core with lighter twists along it. */
+.coursify-map--mountain .coursify-map__base {
+    stroke: #5a3517;
+    stroke-width: 11;
+}
+
+.coursify-map--mountain .coursify-map__line {
+    stroke: #b07a45;
+    stroke-width: 7;
+    stroke-linecap: butt;
+    stroke-dasharray: 7 5;
+}
+
+/* The part done is the rope already climbed, in a bright red. */
+.coursify-map--mountain .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 4;
+    stroke-dasharray: 7 5;
+}
+
+/* A peak with a smaller one at its side. */
+.coursify-map--mountain .coursify-map__node {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    clip-path: polygon(0 100%, 30% 34%, 40% 46%, 60% 4%, 100% 100%);
+    filter: drop-shadow(0 .3rem .3rem rgba(0, 0, 0, .3));
+}
+
+/* Snow on the peaks. */
+.coursify-map--mountain .coursify-map__node::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: #fff;
+    clip-path: polygon(48% 29%, 60% 4%, 72% 29%, 66% 25%, 60% 33%, 54% 25%);
+    pointer-events: none;
+}
+
+.coursify-map--mountain .coursify-map__icon {
+    align-items: flex-end;
+    padding-bottom: .6rem;
+    border-radius: 0;
+    background:
+        linear-gradient(
+            160deg,
+            color-mix(in srgb, var(--coursify-accent) 70%, #fff),
+            var(--coursify-accent) 60%,
+            color-mix(in srgb, var(--coursify-accent) 70%, #000)
+        );
+    font-size: 1.3rem;
+}
+
+.coursify-map--mountain .coursify-map__ring,
+.coursify-map--mountain .coursify-map__avatar {
+    z-index: 1;
+}
+
+.coursify-map--mountain .coursify-map__ring {
+    display: none;
+}
+
+.coursify-map--mountain .coursify-map__label {
+    background: rgba(255, 255, 255, .9);
+}
+
+.coursify-map--mountain .coursify-map__finish {
+    color: #fff;
+    background: #e76f51;
+    border-color: #fff;
+}
+
+.coursify-map--mountain .coursify-map__finish i::before {
+    content: "\f6fc";
+}
+
+/* Theme: chess board, a trail across a board; each stop is a chess piece, from the pawn to the king. */
+.coursify-map--chess {
+    --coursify-map-trail: rgba(255, 255, 255, .55);
+    --coursify-map-done: #f4c430;
+    color: #f5efe6;
+    background-color: #f0d9b5;
+    /* stylelint-disable-next-line csstree/validator */
+    background-image: repeating-conic-gradient(#b58863 0 25%, #f0d9b5 0 50%);
+    /* Eight squares across, as on a real board: the pattern repeats every two squares. map.js gives the width. */
+    background-size: calc(var(--coursify-map-width, 40rem) / 4) calc(var(--coursify-map-width, 40rem) / 4);
+    border: .6rem solid #5b3a1e;
+    box-shadow: inset 0 0 0 .2rem #8b5a2b, 0 .5rem 1.2rem rgba(0, 0, 0, .25);
+}
+
+.coursify-map--chess .coursify-map__base {
+    stroke: rgba(40, 25, 10, .55);
+    stroke-width: 6;
+    stroke-dasharray: 14 10;
+}
+
+.coursify-map--chess .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 7;
+}
+
+.coursify-map--chess .coursify-map__line {
+    display: none;
+}
+
+/* Each stop is a square of the board with its piece on it. */
+.coursify-map--chess .coursify-map__node {
+    border: .3rem solid #3b2412;
+    background-color: color-mix(in srgb, var(--coursify-accent) 35%, #2b1a0c);
+    box-shadow: 0 .4rem .8rem rgba(0, 0, 0, .45);
+}
+
+.coursify-map--chess .coursify-map__node--image {
+    /* The piece takes the place of the section image (given inline). */
+    /* stylelint-disable-next-line declaration-no-important */
+    background-image: none !important;
+}
+
+.coursify-map--chess .coursify-map__node::before {
+    position: absolute;
+    z-index: 1;
+    font-family: "Font Awesome 6 Free";
+    font-size: 2.6rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    content: "\f443";
+    text-shadow: 0 .15rem 0 #3b2412, 0 0 .6rem rgba(0, 0, 0, .5);
+}
+
+.coursify-map--chess .coursify-map__stop:nth-child(6n + 2) .coursify-map__node::before {
+    content: "\f441";
+}
+
+.coursify-map--chess .coursify-map__stop:nth-child(6n + 3) .coursify-map__node::before {
+    content: "\f43a";
+}
+
+.coursify-map--chess .coursify-map__stop:nth-child(6n + 4) .coursify-map__node::before {
+    content: "\f447";
+}
+
+.coursify-map--chess .coursify-map__stop:nth-child(6n + 5) .coursify-map__node::before {
+    content: "\f445";
+}
+
+/* The last stop is always the king. */
+.coursify-map--chess .coursify-map__stop:last-child .coursify-map__node::before {
+    content: "\f43f";
+    color: #f4c430;
+}
+
+.coursify-map--chess .coursify-tile--locked .coursify-map__node::before {
+    color: rgba(255, 255, 255, .45);
+}
+
+.coursify-map--chess .coursify-tile--complete .coursify-map__node::before {
+    color: #f4c430;
+}
+
+/* The icon or number of the section gives way to the piece. */
+.coursify-map--chess .coursify-map__icon {
+    font-size: 0;
+    background: transparent;
+}
+
+.coursify-map--chess .coursify-map__label {
+    color: #f5efe6;
+    background: rgba(43, 26, 12, .88);
+}
+
+.coursify-map--chess .coursify-map__step {
+    color: #f4c430;
+}
+
+.coursify-map--chess .coursify-map__meta,
+.coursify-map--chess .coursify-map__stop.coursify-tile--locked .coursify-map__title {
+    color: rgba(245, 239, 230, .75);
+}
+
+.coursify-map--chess .coursify-map__finish {
+    color: #2b1a0c;
+    background: #f4c430;
+    border-color: #fff;
+}
+
+.coursify-map--chess .coursify-map__finish i::before {
+    content: "\f521";
+}
+
+/* Shapes of the stops, for the themes whose stops have no shape of their own. */
+.coursify-map--shape-square .coursify-map__node,
+.coursify-map--shape-square .coursify-map__icon {
+    border-radius: 1.1rem;
+}
+
+.coursify-map--shape-square .coursify-map__ring {
+    display: none;
+}
+
+.coursify-map--shape-triangle .coursify-map__node {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    clip-path: polygon(50% 2%, 100% 96%, 0 96%);
+    filter: drop-shadow(0 .3rem .4rem rgba(0, 0, 0, .3));
+}
+
+.coursify-map--shape-triangle .coursify-map__icon {
+    align-items: flex-end;
+    padding-bottom: .9rem;
+    border-radius: 0;
+}
+
+.coursify-map--shape-triangle .coursify-map__ring {
+    display: none;
+}
+
+/* Theme: parchís, a track of squares between the four coloured homes of the board; each stop is a token. */
+.coursify-map--parchis {
+    --coursify-map-trail: #fffdf5;
+    --coursify-map-done: #ffd23f;
+    background-color: #fdf6e3;
+    background-image:
+        radial-gradient(circle, rgba(255, 255, 255, .55) 0 32%, transparent 33%),
+        radial-gradient(circle, rgba(255, 255, 255, .55) 0 32%, transparent 33%),
+        radial-gradient(circle, rgba(255, 255, 255, .55) 0 32%, transparent 33%),
+        radial-gradient(circle, rgba(255, 255, 255, .55) 0 32%, transparent 33%),
+        linear-gradient(#e63946, #e63946),
+        linear-gradient(#1d6fd8, #1d6fd8),
+        linear-gradient(#f4c430, #f4c430),
+        linear-gradient(#2a9d4b, #2a9d4b);
+    background-repeat: no-repeat;
+    background-position: 0 0, 100% 0, 0 100%, 100% 100%, 0 0, 100% 0, 0 100%, 100% 100%;
+    background-size: 7rem 7rem;
+    border: .5rem solid #3d2b1f;
+}
+
+/* The track: cream squares with dark lines between them, on a dark edge. */
+.coursify-map--parchis .coursify-map__base {
+    stroke: var(--coursify-map-trail);
+    stroke-width: 44;
+}
+
+.coursify-map--parchis .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 44;
+    opacity: .85;
+}
+
+.coursify-map--parchis .coursify-map__line {
+    stroke: #3d2b1f;
+    stroke-width: 46;
+    stroke-linecap: butt;
+    stroke-dasharray: 2.5 34;
+}
+
+.coursify-map--parchis .coursify-map__trail {
+    filter: drop-shadow(0 0 1.5px #3d2b1f);
+}
+
+/* Each stop is a token: a disc of the section colour with a raised rim and a hollow in the middle. */
+.coursify-map--parchis .coursify-map__node {
+    border: .3rem solid #fff;
+    box-shadow: 0 .35rem 0 color-mix(in srgb, var(--coursify-accent) 55%, #000), 0 .6rem .9rem rgba(0, 0, 0, .35);
+}
+
+.coursify-map--parchis .coursify-map__icon {
+    background:
+        radial-gradient(
+            circle,
+            color-mix(in srgb, var(--coursify-accent) 80%, #000) 0 36%,
+            var(--coursify-accent) 38% 62%,
+            color-mix(in srgb, var(--coursify-accent) 70%, #fff) 64%
+        );
+    font-size: 1.4rem;
+}
+
+.coursify-map--parchis .coursify-map__ring {
+    display: none;
+}
+
+.coursify-map--parchis .coursify-map__label {
+    background: rgba(255, 253, 245, .95);
+    border: 1px solid #e6d8b8;
+}
+
+.coursify-map--parchis .coursify-map__finish {
+    color: #fff;
+    background-color: #e63946;
+    /* stylelint-disable-next-line csstree/validator */
+    background-image: conic-gradient(#e63946 0 25%, #1d6fd8 0 50%, #2a9d4b 0 75%, #f4c430 0);
+    border-color: #fff;
+}
+
+/* Theme: minimal, a thin dashed line on a plain background. */
+.coursify-map--minimal {
+    --coursify-map-trail: var(--bs-border-color);
+    --coursify-map-done: var(--bs-primary);
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+}
+
+.coursify-map--minimal .coursify-map__base {
+    stroke: var(--coursify-map-trail);
+    stroke-width: 3;
+    stroke-dasharray: 8 8;
+}
+
+.coursify-map--minimal .coursify-map__done {
+    stroke: var(--coursify-map-done);
+    stroke-width: 3;
+}
+
+.coursify-map--minimal .coursify-map__line {
+    display: none;
+}
+
+.coursify-map--minimal .coursify-map__node {
+    --coursify-map-node: 4rem;
+    box-shadow: none;
+    border: 2px solid var(--coursify-accent);
+}
+
+.coursify-map--minimal .coursify-map__icon {
+    color: var(--coursify-accent);
+    background: var(--bs-body-bg);
+    font-size: 1.2rem;
+}
+
+.coursify-map--minimal .coursify-map__label {
+    background: transparent;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .coursify-map__node {
         transition: none;
     }
+}
+
+/* Progress of a tile as a bar or as the percentage, the other styles of the ring. */
+.coursify-pbar {
+    display: flex;
+    flex: 1 1 6rem;
+    gap: .5rem;
+    align-items: center;
+    min-width: 5rem;
+    max-width: 12rem;
+}
+
+.coursify-pbar__track {
+    flex: 1 1 auto;
+    height: .5rem;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--coursify-accent) 18%, var(--bs-body-bg));
+    border-radius: 1rem;
+}
+
+.coursify-pbar__value {
+    display: block;
+    height: 100%;
+    background: var(--coursify-accent);
+    border-radius: 1rem;
+    transition: width .3s ease;
+}
+
+.coursify-pbar--done .coursify-pbar__value {
+    background: var(--bs-success);
+}
+
+.coursify-pbar__text {
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--bs-secondary-color);
+}
+
+.coursify-ppct {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: .15rem .55rem;
+    font-size: .8rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--coursify-accent);
+    border-radius: 1rem;
+}
+
+.coursify-ppct--done {
+    background: var(--bs-success);
+}
+
+/* In the path and the map the bar goes under the text of the step. */
+.coursify-step__content .coursify-pbar,
+.coursify-map__label .coursify-pbar {
+    width: 100%;
+    max-width: none;
+    margin-top: .35rem;
+}
+
+.coursify-map__label .coursify-ppct,
+.coursify-step__content .coursify-ppct {
+    align-self: center;
+    margin-top: .35rem;
+}
+
+.coursify-step__content .coursify-ppct {
+    align-self: flex-start;
 }
 
 /* Activities shown in a window over the course page. */
@@ -1459,4 +2109,171 @@ a.coursify-map__link:hover .coursify-map__node {
 .coursify-modal__full {
     margin: 1rem 0 0;
     text-align: right;
+}
+
+/* Live preview next to the Coursify settings of the course edit form. */
+.coursify-preview-layout {
+    display: grid;
+    grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+.coursify-preview-settings {
+    min-width: 0;
+}
+/* Labels above their dropdown, so the settings fit in a narrow column. */
+.coursify-preview-settings .fitem.row {
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0.75rem;
+}
+.coursify-preview-settings .fitem.row > [class*="col-md-"] {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+.coursify-preview-settings .fitem.row > .col-form-label,
+.coursify-preview-settings .fitem.row > [class*="col-md-"]:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+.coursify-preview-settings .fitem .form-select,
+.coursify-preview-settings .fitem select {
+    width: 100%;
+    max-width: 100%;
+}
+.coursify-preview-column {
+    position: sticky;
+    top: calc(var(--navbar-height, 60px) + 1rem);
+    min-width: 0;
+}
+.coursify-preview {
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: 0.75rem;
+    background: var(--bs-body-bg, #fff);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+.coursify-preview__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+    background: var(--bs-tertiary-bg, #f8f9fa);
+    font-size: 0.875rem;
+}
+.coursify-preview__dots {
+    display: inline-flex;
+    gap: 0.3rem;
+}
+.coursify-preview__dots span {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #ff5f57;
+}
+.coursify-preview__dots span:nth-child(2) {
+    background: #febc2e;
+}
+.coursify-preview__dots span:nth-child(3) {
+    background: #28c840;
+}
+.coursify-preview__status {
+    margin-left: auto;
+    color: var(--bs-secondary-color, #6c757d);
+}
+.coursify-preview__viewport {
+    height: 70vh;
+    max-height: 640px;
+    overflow: hidden auto;
+    padding: 1rem;
+    transition: opacity 0.2s ease;
+}
+/* The course page is drawn at about half its size, as it would look on a wide screen. */
+.coursify-preview__canvas {
+    zoom: 0.55;
+}
+.coursify-preview--loading .coursify-preview__viewport {
+    opacity: 0.45;
+}
+.coursify-preview__hint {
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+@media (max-width: 1199.98px) {
+    .coursify-preview-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .coursify-preview-column {
+        position: static;
+    }
+    .coursify-preview__canvas {
+        zoom: 0.5;
+    }
+}
+.coursify-preview-settings .fitem.row > [class*="col-md-"]:first-child {
+    justify-content: flex-start;
+}
+.coursify-preview-settings .fitem.row label,
+.coursify-preview-settings .fitem.row .col-form-label {
+    /* The theme pads form labels with !important. */
+    /* stylelint-disable-next-line declaration-no-important */
+    padding-left: 0 !important;
+    margin: 0;
+    padding-right: 0;
+}
+.coursify-preview-settings .fitem.row .form-label-addon {
+    /* stylelint-disable-next-line declaration-no-important */
+    margin-left: 0.25rem !important;
+}
+/* What changed last: a chip in the bar and a pulsing outline on the part of the page it affects. */
+.coursify-preview__change {
+    padding: 0.1rem 0.6rem;
+    border-radius: 1rem;
+    background: #fff3cd;
+    color: #664d03;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+.coursify-preview-flash {
+    animation: coursify-preview-flash 2.4s ease-out 1;
+    border-radius: 0.5rem;
+}
+
+@keyframes coursify-preview-flash {
+    0%,
+    40% {
+        outline: 6px solid #ffb703;
+        outline-offset: 4px;
+        box-shadow: 0 0 0 14px rgba(255, 183, 3, 0.35);
+    }
+    100% {
+        outline: 6px solid rgba(255, 183, 3, 0);
+        outline-offset: 4px;
+        box-shadow: 0 0 0 14px rgba(255, 183, 3, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coursify-preview-flash {
+        animation: none;
+        outline: 6px solid #ffb703;
+        outline-offset: 4px;
+    }
+}
+.coursify-preview-settings .fitem[hidden] {
+    /* Rows hidden by the form rules stay hidden although the theme shows rows with !important. */
+    /* stylelint-disable-next-line declaration-no-important */
+    display: none !important;
 }

@@ -36,6 +36,9 @@ use format_coursify\local\tiles;
  * course page is the standard Moodle course editor, so drag and drop, bulk editing and subsections all keep working.
  */
 class format_coursify extends core_courseformat\base {
+    /** @var bool the course page is rendered for the preview of the course edit form */
+    protected $preview = false;
+
     /**
      * The format uses sections.
      *
@@ -213,15 +216,18 @@ class format_coursify extends core_courseformat\base {
         $config = get_config('format_coursify');
         if ($options === false) {
             $options = [
+                // The settings of each layout come right after the layout, then the ones of every layout.
                 'layout' => ['default' => $config->layout ?? tiles::LAYOUT_GRID, 'type' => PARAM_ALPHA],
-                'tilepalette' => ['default' => $config->tilepalette ?? '', 'type' => PARAM_ALPHA],
                 'tilecolumns' => ['default' => (int) ($config->tilecolumns ?? 0), 'type' => PARAM_INT],
                 'tilestyle' => ['default' => $config->tilestyle ?? tiles::STYLE_CARD, 'type' => PARAM_ALPHA],
                 'maptheme' => ['default' => 'road', 'type' => PARAM_ALPHA],
+                'mapshape' => ['default' => 'round', 'type' => PARAM_ALPHA],
+                'tilepalette' => ['default' => $config->tilepalette ?? '', 'type' => PARAM_ALPHA],
                 'numbering' => ['default' => tiles::NUMBERING_NUMBER, 'type' => PARAM_ALPHA],
                 'showbanner' => ['default' => (int) ($config->showbanner ?? 1), 'type' => PARAM_BOOL],
                 'bannerposition' => ['default' => 50, 'type' => PARAM_INT],
                 'showprogress' => ['default' => (int) ($config->showprogress ?? 1), 'type' => PARAM_BOOL],
+                'progressstyle' => ['default' => 'ring', 'type' => PARAM_ALPHA],
                 'showcontinue' => ['default' => (int) ($config->showcontinue ?? 1), 'type' => PARAM_BOOL],
                 'showfilters' => ['default' => 1, 'type' => PARAM_BOOL],
                 'activitymodal' => ['default' => 1, 'type' => PARAM_BOOL],
@@ -237,10 +243,12 @@ class format_coursify extends core_courseformat\base {
                 'tilecolumns' => tiles::column_options(),
                 'tilestyle' => tiles::style_options(),
                 'maptheme' => tiles::maptheme_options(),
+                'mapshape' => tiles::mapshape_options(),
                 'numbering' => tiles::numbering_options(),
                 'showbanner' => $yesno,
                 'bannerposition' => tiles::position_options(),
                 'showprogress' => $yesno,
+                'progressstyle' => tiles::progressstyle_options(),
                 'showcontinue' => $yesno,
                 'showfilters' => $yesno,
                 'activitymodal' => $yesno,
@@ -307,7 +315,7 @@ class format_coursify extends core_courseformat\base {
      * @return array
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
-        global $COURSE;
+        global $COURSE, $PAGE;
         if ($forsection) {
             $mform->addElement('header', 'coursifytile', get_string('tile', 'format_coursify'));
             $mform->setExpanded('coursifytile', true);
@@ -330,7 +338,73 @@ class format_coursify extends core_courseformat\base {
             $mform->setDefault('numsections', get_config('moodlecourse')->numsections);
             array_unshift($elements, $element);
         }
+        if (!$forsection) {
+            // Only the settings that change something with the chosen layout and options are shown.
+            $rules = [
+                'tilecolumns' => ['layout', 'neq', tiles::LAYOUT_GRID],
+                'tilestyle' => ['layout', 'neq', tiles::LAYOUT_GRID],
+                'maptheme' => ['layout', 'neq', tiles::LAYOUT_MAP],
+                'mapshape' => ['layout', 'neq', tiles::LAYOUT_MAP],
+                'bannerposition' => ['showbanner', 'eq', 0],
+                'showfilters' => ['showprogress', 'eq', 0],
+                'progressstyle' => ['showprogress', 'eq', 0],
+            ];
+            foreach ($rules as $name => [$dependent, $condition, $value]) {
+                if ($mform->elementExists($name) && $mform->elementExists($dependent)) {
+                    $mform->hideIf($name, $dependent, $condition, $value);
+                }
+            }
+            // The themes with stops of their own shape do not use the shape setting.
+            if ($mform->elementExists('mapshape') && $mform->elementExists('maptheme')) {
+                $mform->hideIf('mapshape', 'maptheme', 'in', implode('|', tiles::MAP_OWN_SHAPE));
+            }
+        }
+        if (!$forsection && !empty($COURSE->id) && $COURSE->id != SITEID) {
+            // Existing courses show a live preview of the course page next to the settings.
+            $PAGE->requires->js_call_amd('format_coursify/preview', 'init', [context_course::instance($COURSE->id)->id]);
+        }
         return $elements;
+    }
+
+    /**
+     * Whether the course page is rendered for the preview of the course edit form.
+     *
+     * @return bool
+     */
+    public function is_preview(): bool {
+        return $this->preview;
+    }
+
+    /**
+     * The preview always shows the course as learners see it, also to teachers in edit mode.
+     *
+     * @param array|null $capabilities
+     * @return bool
+     */
+    public function show_editor(?array $capabilities = ['moodle/course:manageactivities']): bool {
+        return !$this->preview && parent::show_editor($capabilities);
+    }
+
+    /**
+     * Use other values for the course format options, only in memory, to preview the course page with them.
+     *
+     * Values that are not a valid choice of their setting are ignored.
+     *
+     * @param array $values option name => value
+     */
+    public function apply_preview_options(array $values): void {
+        $this->preview = true;
+        $course = $this->get_course();
+        foreach ($this->course_format_options(true) as $name => $option) {
+            if (!array_key_exists($name, $values) || ($option['element_type'] ?? '') !== 'select') {
+                continue;
+            }
+            $choices = $option['element_attributes'][0] ?? [];
+            $value = clean_param($values[$name], $option['type']);
+            if (array_key_exists($value, $choices)) {
+                $course->$name = $value;
+            }
+        }
     }
 
     /**
@@ -484,4 +558,28 @@ function format_coursify_pluginfile($course, $cm, $context, $filearea, $args, $f
         return false;
     }
     send_stored_file($file, DAYSECS, 0, $forcedownload, $options);
+}
+
+/**
+ * Course page rendered with the settings being edited, for the preview of the course edit form.
+ *
+ * @param array $args context and options (JSON of the format settings chosen in the form)
+ * @return string HTML of the course page
+ */
+function format_coursify_output_fragment_preview($args) {
+    global $PAGE;
+    $context = $args['context'];
+    if ($context->contextlevel != CONTEXT_COURSE) {
+        throw new coding_exception('The preview needs a course context');
+    }
+    require_capability('moodle/course:update', $context);
+    $course = get_course($context->instanceid);
+    $course->format = 'coursify';
+    $format = course_get_format($course);
+    $options = json_decode($args['options'] ?? '', true);
+    $format->apply_preview_options(is_array($options) ? $options : []);
+
+    $renderer = $PAGE->get_renderer('format_coursify');
+    $class = $format->get_output_classname('content');
+    return html_writer::div($renderer->render(new $class($format)), 'course-content');
 }

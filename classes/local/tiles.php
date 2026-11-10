@@ -50,9 +50,18 @@ class tiles {
     const LAYOUT_MAP = 'map';
 
     /** Themes of the map layout. */
-    const MAP_THEMES = ['road', 'river', 'treasure'];
+    const MAP_THEMES = ['road', 'river', 'treasure', 'board', 'space', 'mountain', 'chess', 'parchis', 'minimal'];
 
-    /** Palettes: colours given in turn to the tiles that have no colour of their own. */
+    /** Styles of the progress of each tile. */
+    const PROGRESS_STYLES = ['ring', 'bar', 'percent'];
+
+    /** Shapes of the stops of the map. */
+    const MAP_SHAPES = ['round', 'square', 'triangle'];
+
+    /** Map themes whose stops have a shape of their own: shields, planets, mountains, chess pieces and tokens. */
+    const MAP_OWN_SHAPE = ['board', 'space', 'mountain', 'chess', 'parchis'];
+
+    /** Palettes: colours given in turn to every tile, over the colours of the sections. */
     const PALETTES = [
         'rainbow' => ['blue', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'indigo'],
         'ocean' => ['blue', 'cyan', 'teal', 'indigo'],
@@ -101,6 +110,9 @@ class tiles {
     /** @var completion_info|null completion of the course, null when not tracked for this user */
     protected $completion = null;
 
+    /** @var bool progress of a sample learner, for the preview of the settings to teachers */
+    protected $sample = false;
+
     /** @var \stored_file[] tile images by section id */
     protected $images = null;
 
@@ -117,6 +129,10 @@ class tiles {
         // Progress is shown only to the users whose completion is tracked (enrolled learners).
         if ($completion->is_enabled() && isloggedin() && !isguestuser() && $completion->is_tracked_user($USER->id)) {
             $this->completion = $completion;
+        } else if ($completion->is_enabled() && $format instanceof \format_coursify && $format->is_preview()) {
+            // Teachers preview the course with the progress of a learner half way through it.
+            $this->completion = $completion;
+            $this->sample = true;
         }
     }
 
@@ -146,6 +162,32 @@ class tiles {
             self::LAYOUT_LIST => get_string('layout_list', 'format_coursify'),
             self::LAYOUT_MAP => get_string('layout_map', 'format_coursify'),
         ];
+    }
+
+    /**
+     * Options of the style of the progress of each tile.
+     *
+     * @return array
+     */
+    public static function progressstyle_options(): array {
+        $options = [];
+        foreach (self::PROGRESS_STYLES as $style) {
+            $options[$style] = get_string('progressstyle_' . $style, 'format_coursify');
+        }
+        return $options;
+    }
+
+    /**
+     * Options of the shape of the stops of the map layout.
+     *
+     * @return array
+     */
+    public static function mapshape_options(): array {
+        $options = [];
+        foreach (self::MAP_SHAPES as $shape) {
+            $options[$shape] = get_string('mapshape_' . $shape, 'format_coursify');
+        }
+        return $options;
     }
 
     /**
@@ -327,7 +369,7 @@ class tiles {
                 continue;
             }
             $tile = $this->export_tile($section);
-            if ($palette && $tile['color'] === 'default') {
+            if ($palette) {
                 $tile['color'] = $palette[count($tiles) % count($palette)];
             }
             $tile['step'] = count($tiles) + 1;
@@ -698,8 +740,30 @@ class tiles {
      * @return bool
      */
     protected function completed(cm_info $cm): bool {
+        if ($this->sample) {
+            return $this->sample_completed($cm);
+        }
         $state = (int) $this->completion->get_data($cm, true)->completionstate;
         return $state === COMPLETION_COMPLETE || $state === COMPLETION_COMPLETE_PASS;
+    }
+
+    /**
+     * Whether the sample learner of the preview has completed an activity: the whole first section, two thirds of
+     * the second, one third of the third and nothing after it.
+     *
+     * @param cm_info $cm
+     * @return bool
+     */
+    protected function sample_completed(cm_info $cm): bool {
+        $modinfo = $this->format->get_modinfo();
+        $sections = array_values(array_filter(array_keys($modinfo->sections), fn($num) => $num > 0));
+        $position = array_search($cm->sectionnum, $sections);
+        if ($position === false) {
+            return false;
+        }
+        $share = [1, 2 / 3, 1 / 3][$position] ?? 0;
+        $cmids = array_values($modinfo->sections[$cm->sectionnum]);
+        return array_search($cm->id, $cmids) < (int) ceil(count($cmids) * $share);
     }
 
     /**
