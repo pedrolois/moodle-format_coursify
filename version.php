@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'format_coursify';
-$plugin->version   = 2026111004;
+$plugin->version   = 2026112400;
 $plugin->requires  = 2026100500; // Moodle 5.3: anchored drawers, course/section.php pages.
-$plugin->release   = '0.7.0';
-$plugin->maturity  = MATURITY_ALPHA;
+$plugin->release   = '1.0.0';
+$plugin->maturity  = MATURITY_STABLE;
 $plugin->supported = [503, 503];

@@ -1,0 +1,39 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_coursify/preview
+
+    Column with the live preview of the course page, next to the Coursify settings of the course edit form.
+    The course page is rendered into the canvas by format_coursify/preview.
+
+    Example context (json):
+    {}
+}}
+<div class="coursify-preview-column">
+    <div class="coursify-preview">
+        <div class="coursify-preview__bar">
+            <span class="coursify-preview__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+            <strong class="coursify-preview__title">{{#str}}preview, format_coursify{{/str}}</strong>
+            <span class="coursify-preview__change" hidden></span>
+            <span class="coursify-preview__status" role="status"></span>
+        </div>
+        <div class="coursify-preview__viewport" inert>
+            <div class="coursify-preview__canvas"></div>
+        </div>
+        <p class="coursify-preview__hint small text-muted mb-0">{{#str}}previewhint, format_coursify{{/str}}</p>
+    </div>
+</div>

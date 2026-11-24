@@ -84,10 +84,9 @@ const values = (form) => {
  */
 const build = async(fieldset) => {
     const container = fieldset.querySelector('.fcontainer') || fieldset;
-    const [title, loading, hint] = await Promise.all([
-        getString('preview', 'format_coursify'),
+    const [loading, {html}] = await Promise.all([
         getString('previewloading', 'format_coursify'),
-        getString('previewhint', 'format_coursify'),
+        Templates.renderForPromise('format_coursify/preview', {}),
     ]);
 
     const settings = document.createElement('div');
@@ -96,28 +95,12 @@ const build = async(fieldset) => {
         settings.appendChild(container.firstChild);
     }
 
-    const column = document.createElement('div');
-    column.className = 'coursify-preview-column';
-    column.innerHTML = `
-        <div class="coursify-preview">
-            <div class="coursify-preview__bar">
-                <span class="coursify-preview__dots" aria-hidden="true"><span></span><span></span><span></span></span>
-                <strong class="coursify-preview__title"></strong>
-                <span class="coursify-preview__change" hidden></span>
-                <span class="coursify-preview__status" role="status"></span>
-            </div>
-            <div class="coursify-preview__viewport" inert>
-                <div class="coursify-preview__canvas"></div>
-            </div>
-            <p class="coursify-preview__hint small text-muted mb-0"></p>
-        </div>`;
-    column.querySelector('.coursify-preview__title').textContent = title;
-    column.querySelector('.coursify-preview__hint').textContent = hint;
-
     const layout = document.createElement('div');
     layout.className = 'coursify-preview-layout';
-    layout.append(settings, column);
+    layout.appendChild(settings);
+    Templates.appendNodeContents(layout, html, '');
     container.appendChild(layout);
+    const column = layout.querySelector('.coursify-preview-column');
 
     return {
         preview: column.querySelector('.coursify-preview'),
